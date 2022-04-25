@@ -40,3 +40,39 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
+
+@action('product/<product_id:int>')
+@action.uses('product.html')
+def product(product_id=None):
+    assert product_id is not None
+    return dict(
+        product = dict(
+            name="Product Name",
+            description="This is the product description. ",
+            images=("images/product/image1.png", "images/product/image2.png")
+        ),
+        thoughts=(
+            dict(
+                username="Username1",
+                comment="This is my thought",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second thought",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+        reviews=(
+            dict(
+                username="Username1",
+                comment="This is my review",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second review",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+    )

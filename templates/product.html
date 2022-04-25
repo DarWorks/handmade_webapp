@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTfF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+
+<style>
+  .margin-center-max-width-1000px {
+    margin: auto;
+    max-width: 1000px;
+  }
+
+  .img-preview {
+    float: right;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+
+  .img-preview.selected {
+    border-style: solid;
+    border-width: 4px;
+    border-color: transparent;
+  }
+
+  .rate-button {
+    width:150px;
+    color: white;
+    background-color: red;
+  }
+
+  .buy-button {
+    width:150px;
+    color: white;
+    background-color: green;
+  }
+
+  .subtitle-margin {
+    margin-top: 45px;
+  }
+
+  .comment-text {
+    text-align: left;
+  }
+</style>
+
+<script type="text/javascript">
+  function setProductImage(preview, imgSrc) {
+    let e = document.getElementById("product_image");
+    e.src = imgSrc;
+    let blocks = document.getElementsByClassName("img-preview");
+    for (let i = 0; i < blocks.length; i++) {
+      blocks[i].className = "block img-preview";
+    }
+    preview.className = "block img-preview selected";
+  }
+</script>
+
+<body>
+  <!-- body START -->
+    <section class="section margin-center-max-width-1000px">
+      <div class="columns block is-mobile">
+        <div class="column is-half">
+          <div class="columns block is-mobile">
+            <div class="column is-one-quarter">
+              [[for image in product.get("images", ""):]]
+              <div class="block img-preview" onclick="setProductImage(this, '[[=URL('static', image)]]')">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-1by1">
+                      <img src="[[=URL('static', image)]]">
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              [[pass]]
+
+            </div>
+            <div class="column is-three-quarters">
+
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-1by1">
+                    <img id="product_image" src="[[=URL('static', product.get('images',0)[0])]]">
+                  </figure>
+                </div>
+              </div>
+
+            </div>
+          </div>
+      </div>
+
+      <div class="column is-half">
+        <div>[[=product.get("name", "")]]:</div>
+        <div>[[=product.get("description", "")]]</div>
+      </div>
+    </div>
+
+    <section class="section margin-center-max-width-1000px">
+      <div class="columns block is-mobile">
+        <div class="column is-half">
+          <center>
+
+            <button class="button rate-button">Rate</button>
+            <br/>
+            <h1 class="subtitle subtitle-margin">Thoughts</h1>
+
+            [[for thought in thoughts:]]
+            <div class="block">
+              <div class="columns block is-mobile">
+                <div class="column is-one-quarter">
+                  <div class="card">
+                    <div class="card-image">
+                      <figure class="image is-1by1">
+                        <img src="[[=URL('static', thought.get('profile_pic', ''))]]">
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-two-quarters comment-text">
+                  @[[=thought.get("username", "")]] [[=thought.get("comment", "")]]
+                </div>
+              </div>
+            </div>
+            [[pass]]
+
+          </center>
+        </div>
+        <div class="column is-half">
+          <center>
+
+            <button class="button buy-button">Buy</button>
+            <br/>
+            <h1 class="subtitle subtitle-margin">Reviews</h1>
+
+            [[for review in reviews:]]
+            <div class="block">
+              <div class="columns block is-mobile">
+                <div class="column is-one-quarter">
+                  <div class="card">
+                    <div class="card-image">
+                      <figure class="image is-1by1">
+                        <img src="[[=URL('static', review.get('profile_pic', ''))]]">
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-two-quarters comment-text">
+                  @[[=review.get("username", "")]] [[=review.get("comment", "")]]
+                </div>
+              </div>
+            </div>
+            [[pass]]
+
+          </center>
+        </div>
+      </div>
+    </section>
+  </section>
+  <!-- body END -->
+
+
+
+</body>
+
+</html>
