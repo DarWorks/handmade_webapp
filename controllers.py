@@ -40,3 +40,8 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
+
+@action('home')
+@action.uses('home.html', db, auth)
+def index():
+    return dict()
