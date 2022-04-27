@@ -34,14 +34,9 @@ from .models import get_user_email
 url_signer = URLSigner(session)
 
 @action('index')
-@action.uses('index.html', db, auth)
+@action.uses('index.html', url_signer, auth.user, db, session)
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
-
-@action('home')
-@action.uses('home.html', db, auth)
-def index():
-    return dict()
