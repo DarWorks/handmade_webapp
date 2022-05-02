@@ -68,7 +68,7 @@ def product(username=None):
             ),
             dict(
                 id="123",
-                seller="SellerUsernames",
+                seller="SellerUsername",
                 image="images/product/image1.png"
             )
         ),
