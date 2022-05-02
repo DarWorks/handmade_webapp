@@ -40,3 +40,43 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
+
+@action('product/<seller_name>/<product_id:int>')
+@action.uses('product.html')
+def product(seller_name=None, product_id=None):
+    assert product_id is not None
+    assert seller_name is not None
+    # TODO: grab product data from DB using product id and confirm that seller name matches
+    # Then serialize the data in the format that is used in the html template like shown below
+    return dict(
+        product = dict(
+            name="Product Name",
+            seller="SellerUsername",
+            description="This is the product description. ",
+            images=("images/product/image1.png", "images/product/image2.png")
+        ),
+        thoughts=(
+            dict(
+                username="Username1",
+                comment="This is my thought",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second thought",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+        reviews=(
+            dict(
+                username="Username1",
+                comment="This is my review",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second review",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+    )
