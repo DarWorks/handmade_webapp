@@ -41,6 +41,52 @@ def index():
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
+@action('profile/<username>')
+@action.uses('profile.html')
+def product(username=None):
+    assert username is not None
+    # TODO: grab product data from DB using username
+    # Then serialize the data in the format that is used in the html template like shown below
+    # NOTE: we only need the first image for each product
+    return dict(
+        isAccountOwner=True,
+        profile = dict(
+            username= username,
+            total_credits=112,
+            profile_pic= "images/profile/image1.png"
+        ),
+        selling = (
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsernames",
+                image="images/product/image1.png"
+            )
+        ),
+        purchased = (
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            )
+        )
+    )
+
+
 @action('product/<seller_name>/<product_id:int>')
 @action.uses('product.html')
 def product(seller_name=None, product_id=None):
