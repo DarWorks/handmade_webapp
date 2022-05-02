@@ -34,7 +34,7 @@ from .models import get_user_email
 url_signer = URLSigner(session)
 
 @action('index')
-@action.uses('index.html', db, auth)
+@action.uses('index.html', db, auth, url_signer)
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
@@ -42,14 +42,17 @@ def index():
     )
 
 @action('profile/<username>')
-@action.uses('profile.html')
-def product(username=None):
+@action.uses('profile.html', auth, url_signer)
+def profile(username=None):
     assert username is not None
+    user = auth.get_user()
     # TODO: grab product data from DB using username
     # Then serialize the data in the format that is used in the html template like shown below
     # NOTE: we only need the first image for each product
+    # ALSO ADD username field in auth
     return dict(
-        isAccountOwner=True,
+        my_callback_url = URL('my_callback', signer=url_signer),
+        isAccountOwner= (user is not None) and (user.get('username', '') == username),
         profile = dict(
             username= username,
             total_credits=112,
@@ -88,13 +91,14 @@ def product(username=None):
 
 
 @action('product/<seller_name>/<product_id:int>')
-@action.uses('product.html')
+@action.uses('product.html', auth, url_signer)
 def product(seller_name=None, product_id=None):
     assert product_id is not None
     assert seller_name is not None
     # TODO: grab product data from DB using product id and confirm that seller name matches
     # Then serialize the data in the format that is used in the html template like shown below
     return dict(
+        my_callback_url = URL('my_callback', signer=url_signer),
         product = dict(
             name="Product Name",
             seller="SellerUsername",
