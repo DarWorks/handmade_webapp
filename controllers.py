@@ -87,3 +87,94 @@ def pay():
         cancel_url=full_url(URL('index')),
     )
     return dict(ok=True, session_id=stripe_session.id)
+
+@action('profile/<username>')
+@action.uses('profile.html', auth, url_signer)
+def profile(username=None):
+    assert username is not None
+    user = auth.get_user()
+    # TODO: grab product data from DB using username
+    # Then serialize the data in the format that is used in the html template like shown below
+    # NOTE: we only need the first image for each product
+    # ALSO ADD username field in auth
+    return dict(
+        my_callback_url = URL('my_callback', signer=url_signer),
+        isAccountOwner= (user is not None) and (user.get('username', '') == username),
+        profile = dict(
+            username= username,
+            total_credits=112,
+            profile_pic= "images/profile/image1.png"
+        ),
+        selling = (
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            )
+        ),
+        purchased = (
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            ),
+            dict(
+                id="123",
+                seller="SellerUsername",
+                image="images/product/image1.png"
+            )
+        )
+    )
+
+
+@action('product/<seller_name>/<product_id:int>')
+@action.uses('product.html', auth, url_signer)
+def product(seller_name=None, product_id=None):
+    assert product_id is not None
+    assert seller_name is not None
+    # TODO: grab product data from DB using product id and confirm that seller name matches
+    # Then serialize the data in the format that is used in the html template like shown below
+    return dict(
+        my_callback_url = URL('my_callback', signer=url_signer),
+        product = dict(
+            name="Product Name",
+            seller="SellerUsername",
+            description="This is the product description. ",
+            images=("images/product/image1.png", "images/product/image2.png")
+        ),
+        thoughts=(
+            dict(
+                username="Username1",
+                comment="This is my thought",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second thought",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+        reviews=(
+            dict(
+                username="Username1",
+                comment="This is my review",
+                profile_pic="images/profile/image1.png"
+            ),
+            dict(
+                username="Username2",
+                comment="This is my second review",
+                profile_pic="images/profile/image2.jpg"
+            )
+        ),
+    )
+
