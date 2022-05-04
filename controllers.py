@@ -38,18 +38,6 @@ from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
 
-<<<<<<< HEAD
-@action('homepage')
-@action.uses('homepage.html',  url_signer, db, auth)
-def index():
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
-@action('index')
-@action.uses('index.html',  url_signer, db, auth)
-=======
 # Reads the stripe keys.
 with open(os.path.join(APP_FOLDER, 'private', 'stripe_keys.json'), 'r') as f:
     STRIPE_KEY_INFO = json.load(f)
@@ -59,9 +47,16 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
+@action('homepage')
+@action.uses('homepage.html',  url_signer, db, auth)
+def index():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
->>>>>>> e199596b5cee61fae901edf6d1d1a2a9f3e68dde
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
