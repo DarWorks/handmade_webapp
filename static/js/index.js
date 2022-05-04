@@ -34,8 +34,8 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-        // Put here any initialization code.
-        // Typically this is a server GET call to load the data.
+      // Put here any initialization code.
+      // Typically this is a server GET call to load the data.
     };
 
     // Call to the initializer.
