@@ -38,15 +38,6 @@ from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
 
-# @action('index')
-# @action.uses('index.html', url_signer,auth.user, db, session)
-# def index():
-#     print("serving!")
-#     return dict(
-#         # COMPLETE: return here any signed URLs you need.
-#         my_callback_url = URL('my_callback', signer=url_signer),
-#     )
-
 # Reads the stripe keys.
 with open(os.path.join(APP_FOLDER, 'private', 'stripe_keys.json'), 'r') as f:
     STRIPE_KEY_INFO = json.load(f)
@@ -55,6 +46,13 @@ stripe.api_key = STRIPE_KEY_INFO['test_private_key']
 def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
+
+###############################################################################
+
+
+#//////////////////////////////////////////////////////////
+# HOMEPAGE
+#//////////////////////////////////////////////////////////
 
 @action('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
@@ -72,8 +70,9 @@ def index():
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
-
-
+#//////////////////////////////////////////////////////////
+# LOGIN/REGISTRATION
+#//////////////////////////////////////////////////////////
 
 @action('loginH')
 @action.uses('loginH.html', url_signer,auth.user, db, session)
@@ -91,6 +90,12 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
+
+
+#//////////////////////////////////////////////////////////
+# SHOPING CART
+#//////////////////////////////////////////////////////////
+      
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
 def shopping_cart():
@@ -123,6 +128,11 @@ def pay():
         cancel_url=full_url(URL('index')),
     )
     return dict(ok=True, session_id=stripe_session.id)
+
+
+#//////////////////////////////////////////////////////////
+# PROFILE PAGE
+#//////////////////////////////////////////////////////////
 
 @action('profile/<username>')
 @action.uses('profile.html', auth, url_signer)
@@ -172,6 +182,18 @@ def profile(username=None):
         )
     )
 
+@action('add_product')
+@action.uses('add_product.html', db, auth, url_signer)
+def add_product():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+
+#//////////////////////////////////////////////////////////
+# PRODUCT PAGE
+#//////////////////////////////////////////////////////////
 
 @action('product/<seller_name>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
