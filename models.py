@@ -20,4 +20,12 @@ def get_time():
 #
 ## always commit your models to avoid problems later
 
+db.define_table(
+    'products',
+    Field('name'),
+    Field('seller'),
+    Field('description'),
+    Field('image')
+)
+
 db.commit()
