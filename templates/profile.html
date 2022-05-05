@@ -1,0 +1,99 @@
+
+[[extend 'layout.html']]
+
+<style>
+[v-cloak] {
+     display: none;
+}
+.margin-center-max-width-1000px {
+  margin: auto;
+  max-width: 1000px;
+}
+
+.product-images-container {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 220px;
+}
+
+.product-image:not(:last-child){
+  padding-right: 8%;
+}
+
+.product-image img{
+  height: 210px;
+}
+
+
+</style>
+
+
+<div class="section margin-center-max-width-1000px" id="vue-target" v-cloak>
+  <div class="columns block is-mobile">
+    <div class="column is-one-third">
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-1by1">
+                <img src="[[=URL('static', profile.get('profile_pic', ''))]]">
+              </figure>
+            </div>
+          </div>
+          <br/>
+
+          <center><h1 class="subtitle">[[=profile.get('username', '')]]</h1></center>
+          [[if isAccountOwner:]]
+          <center><h1 class="subsubsubtitle">Total Credits: [[=profile.get('total_credits', 0)]]</h1></center>
+          [[pass]]
+  </div>
+
+  <div class="column is-two-thirds">
+    <h1 class="title">Selling</h1>
+    <nav class="level is-mobile has-text-white product-images-container" >
+
+      [[for prod in selling:]]
+      <div class="level-item level-left product-image">
+        <div class="card">
+          <div class="card-image">
+            <!-- <figure class="image is-1by1"> -->
+              <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                <img src="[[=URL('static', prod.get('image', ''))]]">
+              </a>
+            <!-- </figure> -->
+          </div>
+        </div>
+      </div>
+      [[pass]]
+
+    </nav>
+
+    <h1 class="title">Purchased</h1>
+    <nav class="level is-mobile has-text-white product-images-container" >
+
+      [[for prod in purchased:]]
+      <div class="level-item level-left product-image">
+        <div class="card">
+          <div class="card-image">
+            <!-- <figure class="image is-1by1"> -->
+              <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                <img src="[[=URL('static', prod.get('image', ''))]]">
+              </a>
+            <!-- </figure> -->
+          </div>
+        </div>
+      </div>
+      [[pass]]
+
+    </nav>
+
+  </div>
+</div>
+</div>
+
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+  let my_callback_url = "[[=XML(my_callback_url)]]";
+</script>
+<script src="js/profile.js"></script>
+[[end]]

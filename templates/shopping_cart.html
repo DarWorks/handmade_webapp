@@ -1,0 +1,32 @@
+[[extend 'layout.html']]
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<html>
+  <body>
+    <div class="section" id="vue-target" v-cloak>
+        <h1 class="subtitle">Purchase a cool necklace!</h1>
+
+        <button class="button is-link" @click="pay()">
+            <span>Buy </span>
+            <span class="icon is-small"><i class="fa fa-credit-card"></i></span>
+        </button>
+
+    </div>
+
+  </body>
+</html>
+
+
+[[block page_scripts]]
+<script>
+    let pay_url = "[[=XML(pay_url)]]";
+    let stripe_key = "[[=XML(stripe_key)]]";
+</script>  
+<script src="https://js.stripe.com/v3/"></script>
+<script src="js/shopping_cart.js"></script>
+[[end]]
