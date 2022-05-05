@@ -38,6 +38,15 @@ from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
 
+# @action('index')
+# @action.uses('index.html', url_signer,auth.user, db, session)
+# def index():
+#     print("serving!")
+#     return dict(
+#         # COMPLETE: return here any signed URLs you need.
+#         my_callback_url = URL('my_callback', signer=url_signer),
+#     )
+
 # Reads the stripe keys.
 with open(os.path.join(APP_FOLDER, 'private', 'stripe_keys.json'), 'r') as f:
     STRIPE_KEY_INFO = json.load(f)
@@ -63,6 +72,25 @@ def index():
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
+
+
+
+@action('loginH')
+@action.uses('loginH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving login")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+@action('regisH')
+@action.uses('registrationH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving registration")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
 def shopping_cart():
