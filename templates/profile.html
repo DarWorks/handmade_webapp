@@ -23,14 +23,13 @@
 .product-image img{
   height: 210px;
 }
-
-
 </style>
 
-
+<!-- Body -->
 <div class="section margin-center-max-width-1000px" id="vue-target" v-cloak>
-  <div class="columns block is-mobile">
+  <div class="columns block is-mobile is-variable is-8">
     <div class="column is-one-third">
+
           <div class="card">
             <div class="card-image">
               <figure class="image is-1by1">
@@ -41,9 +40,19 @@
           <br/>
 
           <center><h1 class="subtitle">[[=profile.get('username', '')]]</h1></center>
+
           [[if isAccountOwner:]]
           <center><h1 class="subsubsubtitle">Total Credits: [[=profile.get('total_credits', 0)]]</h1></center>
           [[pass]]
+          
+          <br>
+
+          <center><a class="button is-danger" href="[[=URL('add_product')]]">
+            <span class="icon"><i class="fa fa-plus"></i></span>
+            <span>Add Product</span>
+          </a></center>
+
+
   </div>
 
   <div class="column is-two-thirds">

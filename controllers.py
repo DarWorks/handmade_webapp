@@ -47,6 +47,13 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
+###############################################################################
+
+
+#//////////////////////////////////////////////////////////
+# HOMEPAGE
+#//////////////////////////////////////////////////////////
+
 @action('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
 def index():
@@ -62,6 +69,11 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
+
+
+#//////////////////////////////////////////////////////////
+# SHOPING CART
+#//////////////////////////////////////////////////////////
 
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
@@ -95,6 +107,11 @@ def pay():
         cancel_url=full_url(URL('index')),
     )
     return dict(ok=True, session_id=stripe_session.id)
+
+
+#//////////////////////////////////////////////////////////
+# PROFILE PAGE
+#//////////////////////////////////////////////////////////
 
 @action('profile/<username>')
 @action.uses('profile.html', auth, url_signer)
@@ -144,6 +161,18 @@ def profile(username=None):
         )
     )
 
+@action('add_product')
+@action.uses('add_product.html', db, auth, url_signer)
+def add_product():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+
+#//////////////////////////////////////////////////////////
+# PRODUCT PAGE
+#//////////////////////////////////////////////////////////
 
 @action('product/<seller_name>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
