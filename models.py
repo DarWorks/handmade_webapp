@@ -22,10 +22,13 @@ def get_time():
 
 db.define_table(
     'products',
-    Field('name'),
-    Field('seller'),
-    Field('description'),
-    Field('image')
+    Field('name', requires = IS_NOT_EMPTY()),
+    Field('seller', 'reference userProfile', requires = IS_NOT_EMPTY()),
+    Field('description', requires = IS_NOT_EMPTY()),
+    Field('image', requires = IS_NOT_EMPTY()),
+    Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
+    Field('rating', 'decimal', requires = IS_DECIMAL_IN_RANGE(0, 5)),
+    Field('amount', 'int', requires = IS_INT_IN_RANGE(1, 1e6)),
 )
 
 db.commit()
