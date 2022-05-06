@@ -60,9 +60,9 @@ db.define_table(
     Field('seller', 'reference userProfile', requires = IS_NOT_EMPTY()),
     Field('description', requires = IS_NOT_EMPTY()),
     Field('image', requires = IS_NOT_EMPTY()),
-    Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
-    Field('rating', 'decimal', requires = IS_DECIMAL_IN_RANGE(0, 5)),
-    Field('amount', 'int', requires = IS_INT_IN_RANGE(1, 1e6)),
+    Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0.5, 1e6)),
+    Field('rating', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
+    Field('amount', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
 )
 
 db.commit()
