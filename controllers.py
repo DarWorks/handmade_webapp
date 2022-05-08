@@ -47,13 +47,12 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
-@action('index')
-@action.uses('index.html', db, auth, url_signer)
-def index():
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
+=======
+###############################################################################
+
+#//////////////////////////////////////////////////////////
+# HOMEPAGE
+#//////////////////////////////////////////////////////////
 
 @action('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
@@ -63,6 +62,41 @@ def index():
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
+@action('index')
+@action.uses('index.html', db, auth, url_signer)
+def index():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+#//////////////////////////////////////////////////////////
+# LOGIN/REGISTRATION
+#//////////////////////////////////////////////////////////
+
+@action('loginH')
+@action.uses('loginH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving login")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+@action('regisH')
+@action.uses('registrationH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving registration")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+
+#//////////////////////////////////////////////////////////
+# SHOPING CART
+#//////////////////////////////////////////////////////////
+      
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
 def shopping_cart():
@@ -95,6 +129,11 @@ def pay():
         cancel_url=full_url(URL('index')),
     )
     return dict(ok=True, session_id=stripe_session.id)
+
+
+#//////////////////////////////////////////////////////////
+# PROFILE PAGE
+#//////////////////////////////////////////////////////////
 
 @action('profile/<username>')
 @action.uses('profile.html', auth, url_signer)
@@ -144,6 +183,18 @@ def profile(username=None):
         )
     )
 
+@action('add_product')
+@action.uses('add_product.html', db, auth, url_signer)
+def add_product():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+
+#//////////////////////////////////////////////////////////
+# PRODUCT PAGE
+#//////////////////////////////////////////////////////////
 
 @action('product/<seller_name>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
@@ -185,4 +236,3 @@ def product(seller_name=None, product_id=None):
             )
         ),
     )
-
