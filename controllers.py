@@ -56,6 +56,7 @@ def full_url(u):
 @action('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
 def index():
+    # TODO: display products and info from the database later
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
