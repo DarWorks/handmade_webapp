@@ -60,7 +60,8 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <textarea class="textarea" v-model="add_product_description" placeholder="Provide a descirption of the product"></textarea>
+          <textarea class="textarea" v-model="add_product_description"
+            placeholder="Provide a descirption of the product"></textarea>
         </div>
       </div>
     </div>
@@ -96,18 +97,24 @@
     <div class="field-body">
       <div class="field">
 
-        <div class="file is-info">
-          <label class="file-label">
-            <input class="file-input" type="file">
-            <span class="file-cta">
-              <span class="file-label">
-                Choose a file...
+        <div v-if="!product_image1">
+          <div class="file is-info">
+            <label class="file-label">
+              <input class="file-input" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                @change="upload_file($event)">
+              <span class="file-cta">
+                <span class="file-label">
+                  Choose a file...
+                </span>
               </span>
-            </span>
-          </label>
+            </label>
+          </div>
+        </div>
+        
+        <div v-if="product_image1">
+          <img v-if="product_image1" width="200" :src="product_image1" />
         </div>
 
-        
       </div>
     </div>
   </div>
@@ -115,15 +122,23 @@
   <!-- Action to send -->
   <div class="field is-horizontal">
     <div class="field-label"></div>
-      <div class="field-body">
-        <div class="field has-addons has-addons-right">
-          <div class="control">
-            <input type="submit" @click="add_product_info" value="Submit" class="button is-primary">
-          </div>
+    <div class="field-body">
+      <div class="field has-addons has-addons-right">
+
+        <div class="control" v-if="!submitted">
+          <input type="submit" @click="add_product_info" value="Submit Here" class="button is-info">
         </div>
+
+        <div v-if="submitted">
+          <a class="button is-success" href="[[=URL('index')]]">
+            Return to Profile
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
+</div>
 
 </div>
 

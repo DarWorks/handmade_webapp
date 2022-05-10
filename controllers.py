@@ -199,6 +199,7 @@ def add_product_info():
     type=request.json.get('product_type'),
     description=request.json.get('product_description'),
     price=request.json.get('product_price'),
+    image1=request.json.get('product_image1'),
     )
     return dict(id=id)
 
