@@ -46,13 +46,13 @@ let init = (app) => {
     };
 
     app.can_review = function () {
-      // if (!isAuthenticated) {
-      //   window.location.replace("/handmade_webapp/loginH");
-      // }
+      if (!isAuthenticated) {
+        window.location.replace("/handmade_webapp/loginH");
+      }
     }
 
     app.add_review = function () {
-      // if (isAuthenticated) {
+      if (isAuthenticated) {
         if (app.vue.new_review.trim().length > 0) {
           let data = {"review": app.vue.new_review};
           axios.post(post_reviews_url, data).then(function (response) {
@@ -62,9 +62,9 @@ let init = (app) => {
             })
           })
         }
-      // } else {
-      //   window.location.replace("/handmade_webapp/loginH");
-      // }
+      } else {
+        window.location.replace("/handmade_webapp/loginH");
+      }
     };
 
     // This contains all the methods.
