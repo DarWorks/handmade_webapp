@@ -77,7 +77,8 @@
   </div>
 
   <div class="column is-half">
-    <div><b>[[=product.get("name", "")]] <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "")]])</a></b></div>
+    <div><b>[[=product.get("name", "n/a")]] <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
+    <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
     <div>[[=product.get("description", "")]]</div>
   </div>
 </div>
@@ -89,26 +90,37 @@
 
         <button class="button rate-button">Rate</button>
         <br/>
-        <h1 class="subtitle subtitle-margin">Thoughts</h1>
+        <h1 class="subtitle subtitle-margin">Comments</h1>
 
-        [[for thought in thoughts:]]
-        <div class="block">
+        <div class="field">
+          <div class="control is-small">
+            <div class="columns block is-mobile">
+              <div class="column is-two-thirds">
+                <input class="input is-small" v-model="new_comment" @click="can_comment" type="text" placeholder="Add a comment">
+              </div>
+              <div class="column is-one-third">
+                <button class="button is-primary" @click="add_comment" >Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-for="comment in comments" class="block">
           <div class="columns block is-mobile">
             <div class="column is-one-quarter">
               <div class="card">
                 <div class="card-image">
                   <figure class="image is-1by1">
-                    <img src="[[=URL('static', thought.get('profile_pic', ''))]]">
+                    <img :src="comment.profile_pic">
                   </figure>
                 </div>
               </div>
             </div>
             <div class="column is-two-quarters comment-text">
-              @<a href="[[=URL('profile', thought.get('username', ''))]]">[[=thought.get("username", "")]]</a> [[=thought.get("comment", "")]]
+              <a :href="comment.profile_link">@{{comment.username}}</a> {{comment.text}}
             </div>
           </div>
         </div>
-        [[pass]]
 
       </center>
     </div>
@@ -119,24 +131,35 @@
         <br/>
         <h1 class="subtitle subtitle-margin">Reviews</h1>
 
-        [[for review in reviews:]]
-        <div class="block">
+        <div class="field">
+          <div class="control is-small">
+            <div class="columns block is-mobile">
+              <div class="column is-two-thirds">
+                <input class="input is-small" v-model="new_review" @click="can_review" type="text" placeholder="Add a review">
+              </div>
+              <div class="column is-one-third">
+                <button class="button is-primary" @click="add_review" >Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-for="review in reviews" class="block">
           <div class="columns block is-mobile">
             <div class="column is-one-quarter">
               <div class="card">
                 <div class="card-image">
                   <figure class="image is-1by1">
-                    <img src="[[=URL('static', review.get('profile_pic', ''))]]">
+                    <img :src="review.profile_pic">
                   </figure>
                 </div>
               </div>
             </div>
             <div class="column is-two-quarters comment-text">
-              @<a href="[[=URL('profile', review.get('username', ''))]]">[[=review.get("username", "")]]</a> [[=review.get("comment", "")]]
+              <a :href="review.profile_link">@{{review.username}}</a> {{review.text}}
             </div>
           </div>
         </div>
-        [[pass]]
 
       </center>
     </div>
@@ -149,8 +172,13 @@
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
 <script type="text/javascript">
-  var initialProductImage = "[[=URL('static', product.get('images',0)[0])]]"
+  let initialProductImage = "[[=URL('static', product.get('images',0)[0])]]"
   let my_callback_url = "[[=XML(my_callback_url)]]";
+  let get_comments_url = "[[=XML(get_comments_url)]]"
+  let get_reviews_url = "[[=XML(get_reviews_url)]]"
+  let post_comment_url = "[[=XML(post_comment_url)]]"
+  let post_reviews_url = "[[=XML(post_reviews_url)]]"
+  let isAuthenticated = [[=isAuthenticated]]
 </script>
 <script src="js/product.js"></script>
 [[end]]

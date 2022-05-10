@@ -27,7 +27,6 @@ db.define_table(
     Field('username','text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
     Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
     Field('isPersonlized','boolean', default=False),
-
 )
 # 1* unique=TRUE ensures the field entry is unique, but does not display an error prompt within implemented forms
 # the error prompt is implemented here:
@@ -59,12 +58,27 @@ db.define_table(
     Field('name', requires = IS_NOT_EMPTY()),
     Field('seller', 'reference userProfile', requires = IS_NOT_EMPTY()),
     Field('description', requires = IS_NOT_EMPTY()),
-    Field('image', requires = IS_NOT_EMPTY()),
+    Field('image1', requires = IS_NOT_EMPTY()),
+    Field('image2'),
+    Field('image3'),
+    Field('image4'),
     Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0.5, 1e6)),
     Field('rating', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
     Field('amount', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
 )
 
+db.define_table(
+    'comments',
+    Field('user', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('product', 'reference products', require=IS_NOT_EMPTY()),
+    Field('text', requires=IS_NOT_EMPTY())
+)
+
+db.define_table(
+    'reviews',
+    Field('user', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('product', 'reference products', require=IS_NOT_EMPTY()),
+    Field('text', requires=IS_NOT_EMPTY())
+)
+
 db.commit()
-
-
