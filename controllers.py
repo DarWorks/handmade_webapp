@@ -49,22 +49,27 @@ def full_url(u):
 
 ###############################################################################
 
-
 #//////////////////////////////////////////////////////////
 # HOMEPAGE
 #//////////////////////////////////////////////////////////
 
+
 @action('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
 def index():
+    print("serving homepage")
+    # TODO: display products and info from the database later
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
+
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
+    # TODO: this is just a short term solution, needs to be changed
+    redirect(URL('homepage'))
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -73,6 +78,7 @@ def index():
 #//////////////////////////////////////////////////////////
 # LOGIN/REGISTRATION
 #//////////////////////////////////////////////////////////
+
 
 @action('loginH')
 @action.uses('loginH.html', url_signer,auth.user, db, session)
@@ -83,8 +89,9 @@ def index():
         my_callback_url = URL('my_callback', signer=url_signer),
     )
 
+
 @action('regisH')
-@action.uses('registrationH.html', url_signer,auth.user, db, session)
+@action.uses('registrationH.html', url_signer, auth.user, db, session)
 def index():
     print("serving registration")
     return dict(
@@ -94,7 +101,7 @@ def index():
 
 
 #//////////////////////////////////////////////////////////
-# SHOPING CART
+# SHOPPING CART
 #//////////////////////////////////////////////////////////
 
 @action('shopping_cart')
@@ -104,6 +111,7 @@ def shopping_cart():
         pay_url = URL('pay', signer=url_signer),
         stripe_key = STRIPE_KEY_INFO['test_public_key']
     )
+
 
 @action('pay', method="POST")
 @action.uses(db, url_signer)
@@ -134,6 +142,7 @@ def pay():
 #//////////////////////////////////////////////////////////
 # PROFILE PAGE
 #//////////////////////////////////////////////////////////
+
 
 @action('profile/<username>')
 @action.uses('profile.html', auth, url_signer)
@@ -183,6 +192,7 @@ def profile(username=None):
         )
     )
 
+
 @action('add_product')
 @action.uses('add_product.html', db, auth, url_signer)
 def add_product():
@@ -207,6 +217,7 @@ def add_product_info():
 #//////////////////////////////////////////////////////////
 # PRODUCT PAGE
 #//////////////////////////////////////////////////////////
+
 
 @action('product/<seller_name>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
