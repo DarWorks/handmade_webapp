@@ -297,3 +297,20 @@ def review_comment(product_id = None):
         product=product_id,
     )
     return "ok"
+
+@action('search', method=['GET'])
+@action.uses()
+def search():
+    q = request.params.get("q").lower()
+    if len(q) < 2 or q == None:
+        return dict(results=[])
+    prods = db(db.products).select(db.products.ALL, orderby=db.products.name)
+    results = []
+    for p in prods:
+        if q in p.name.lower():
+            seller = db(db.userProfile.id == p.seller).select().first()
+            results.append(dict(
+                name=p.name,
+                redirect_url=URL("product", seller.username, p.id)
+            ))
+    return dict(results=results)
