@@ -187,9 +187,20 @@ def profile(username=None):
 @action.uses('add_product.html', db, auth, url_signer)
 def add_product():
     return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
+        add_product_info_url = URL('add_product_info'),
     )
+
+@action('add_product_info', method=['POST'])
+@action.uses(db)
+def add_product_info():
+    id = db.products.insert(
+    name=request.json.get('product_name'),
+    # ADD REFERENCE TO SELLER ID
+    type=request.json.get('product_type'),
+    description=request.json.get('product_description'),
+    price=request.json.get('product_price'),
+    )
+    return dict(id=id)
 
 
 #//////////////////////////////////////////////////////////
@@ -234,7 +245,6 @@ def product(seller_name=None, product_id=None):
             amount=prod.amount
         )
     )
-
 
 @action('comments/<product_id:int>', method=['GET'])
 @action.uses(db)
