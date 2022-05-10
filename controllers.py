@@ -96,7 +96,7 @@ def index():
 #//////////////////////////////////////////////////////////
 # SHOPING CART
 #//////////////////////////////////////////////////////////
-      
+
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
 def shopping_cart():
@@ -201,38 +201,116 @@ def add_product():
 def product(seller_name=None, product_id=None):
     assert product_id is not None
     assert seller_name is not None
-    # TODO: grab product data from DB using product id and confirm that seller name matches
-    # Then serialize the data in the format that is used in the html template like shown below
+    data = db(db.products.id == product_id).select()
+    prod = data.first()
+    if prod is None:
+        return "404 Not found"
+    data = db(db.userProfile.id == prod.seller).select()
+    sellerProfile = data.first()
+    if sellerProfile is None or sellerProfile.username != seller_name:
+        return "404 Not found"
+    images = []
+    if prod.image1 is not None:
+        images.append(prod.image1)
+    if prod.image2 is not None:
+        images.append(prod.image2)
+    if prod.image3 is not None:
+        images.append(prod.image3)
+    if prod.image4 is not None:
+        images.append(prod.image4)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
+        get_comments_url = URL('comments', product_id),
+        get_reviews_url = URL('reviews', product_id),
+        post_comment_url = URL('comment', product_id),
+        post_reviews_url = URL('review', product_id),
+        isAuthenticated = "true" if auth.get_user() else "false",
         product = dict(
-            name="Product Name",
-            seller="SellerUsername",
-            description="This is the product description. ",
-            images=("images/product/image1.png", "images/product/image2.png")
-        ),
-        thoughts=(
-            dict(
-                username="Username1",
-                comment="This is my thought",
-                profile_pic="images/profile/image1.png"
-            ),
-            dict(
-                username="Username2",
-                comment="This is my second thought",
-                profile_pic="images/profile/image2.jpg"
-            )
-        ),
-        reviews=(
-            dict(
-                username="Username1",
-                comment="This is my review",
-                profile_pic="images/profile/image1.png"
-            ),
-            dict(
-                username="Username2",
-                comment="This is my second review",
-                profile_pic="images/profile/image2.jpg"
-            )
-        ),
+            name=prod.name,
+            seller=sellerProfile.username,
+            description=prod.description,
+            images=images,
+            price=prod.price,
+            amount=prod.amount
+        )
     )
+
+
+@action('comments/<product_id:int>', method=['GET'])
+@action.uses(db)
+def get_comments(product_id = None):
+    assert product_id is not None
+    data = db(db.comments.product == product_id).select()
+    comments = []
+    for e in data:
+        dbq = db(db.userProfile.id == e.user).select()
+        userProfile = dbq.first()
+        comments.append({
+            'username': userProfile.username,
+            'text': e.text,
+            'profile_pic': URL('static', 'images', 'profile', 'image1.png'),
+            'profile_link': URL('profile', userProfile.username),
+        })
+    return dict(comments=comments)
+
+@action('reviews/<product_id:int>', method=['GET'])
+@action.uses(db)
+def get_reviews(product_id = None):
+    assert product_id is not None
+    data = db(db.reviews.product == product_id).select()
+    reviews = []
+    for e in data:
+        dbq = db(db.userProfile.id == e.user).select()
+        userProfile = dbq.first()
+        reviews.append({
+            'username': userProfile.username,
+            'text': e.text,
+            'profile_pic': URL('static', 'images', 'profile', 'image1.png'),
+            'profile_link': URL('profile', userProfile.username),
+        })
+    return dict(reviews=reviews)
+
+@action('comment/<product_id:int>', method=['POST'])
+@action.uses(db, auth.user)
+def post_comment(product_id = None):
+    assert product_id is not None
+    text = request.json["comment"]
+    dbq = db(db.userProfile.id == auth.user.id).select()
+    userProfile = dbq.first()
+    db.comments.insert(
+        text=text,
+        user=auth.user.id,
+        product=product_id,
+    )
+    return "ok"
+
+@action('review/<product_id:int>', method=['POST'])
+@action.uses(db, auth.user)
+def review_comment(product_id = None):
+    assert product_id is not None
+    text = request.json["review"]
+    dbq = db(db.userProfile.id == auth.user.id).select()
+    userProfile = dbq.first()
+    db.reviews.insert(
+        text=text,
+        user=auth.user.id,
+        product=product_id,
+    )
+    return "ok"
+
+@action('search', method=['GET'])
+@action.uses()
+def search():
+    q = request.params.get("q").lower()
+    if len(q) < 2 or q == None:
+        return dict(results=[])
+    prods = db(db.products).select(db.products.ALL, orderby=db.products.name)
+    results = []
+    for p in prods:
+        if q in p.name.lower():
+            seller = db(db.userProfile.id == p.seller).select().first()
+            results.append(dict(
+                name=p.name,
+                redirect_url=URL("product", seller.username, p.id)
+            ))
+    return dict(results=results)
