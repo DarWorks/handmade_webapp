@@ -58,7 +58,7 @@ def full_url(u):
 
 @main_page('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
-def index():
+def home_page():
     print("serving homepage")
     # TODO: display products and info from the database later
     return dict(
