@@ -53,15 +53,6 @@ def full_url(u):
 #//////////////////////////////////////////////////////////
 # HOMEPAGE
 #//////////////////////////////////////////////////////////
-
-@action('homepage')
-@action.uses('homepage.html',  url_signer, db, auth)
-def index():
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
