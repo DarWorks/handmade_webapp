@@ -35,6 +35,7 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 from .settings import APP_FOLDER, APP_NAME
+from .main_page import main_page
 
 url_signer = URLSigner(session)
 
@@ -54,7 +55,7 @@ def full_url(u):
 #//////////////////////////////////////////////////////////
 
 
-@action('homepage')
+@main_page('homepage')
 @action.uses('homepage.html',  url_signer, db, auth)
 def index():
     print("serving homepage")
