@@ -14,5 +14,3 @@ class main_page(action):
         Reloader.register_route(app_name, "/", self.kwargs, func)
         return func
     
-# @action("/hello")
-# @topurlaction("/banana")
