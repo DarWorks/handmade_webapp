@@ -43,8 +43,8 @@ let init = (app) => {
             app.vue.aarontext = false;
         }
         else if (x == 2) {
-            app.vue.aaman = true;
-            app.vue.aamantext = false;
+            app.vue.amaan = true;
+            app.vue.amaantext = false;
         }
         else if (x == 3) {
             app.vue.darien = true;
