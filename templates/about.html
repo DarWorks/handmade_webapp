@@ -15,12 +15,14 @@
             <button class="button has-background-white" v-if="aaron" @click="show(1)">
                 <i class="fa fa-sort-desc"></i>
             </button>
-            <div class="section" v-if="aarontext">
-                This is a section about Aaron
+            <div v-else>
+                <div class="section">
+                    This is a section about Aaron
+                </div>
+                <button class="button has-background-white" @click="hide(1)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
             </div>
-            <button class="button has-background-white" v-if="aarontext" @click="hide(1)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
         </div>
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
@@ -32,12 +34,14 @@
             <button class="button has-background-white" v-if="amaan" @click="show(2)">
                 <i class="fa fa-sort-desc"></i>
             </button>
-            <div class="section" v-if="amaantext">
-                This is a section about Amaan
+            <div v-else>
+                <div class="section">
+                    This is a section about Amaan
+                </div>
+                <button class="button has-background-white" @click="hide(2)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
             </div>
-            <button class="button has-background-white" v-if="amaantext" @click="hide(2)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
         </div>
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
@@ -49,12 +53,14 @@
             <button class="button has-background-white" v-if="darien" @click="show(3)">
                 <i class="fa fa-sort-desc"></i>
             </button>
-            <div class="section" v-if="darientext">
-                This is a section about Darien
+            <div v-else>
+                <div class="section">
+                    This is a section about Darien
+                </div>
+                <button class="button has-background-white" @click="hide(3)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
             </div>
-            <button class="button has-background-white" v-if="darientext" @click="hide(3)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
         </div>
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
@@ -66,12 +72,14 @@
             <button class="button has-background-white" v-if="jonathan" @click="show(4)">
                 <i class="fa fa-sort-desc"></i>
             </button>
-            <div class="section" v-if="jonathantext">
-                This is a section about Jonathan
+            <div v-else>
+                <div class="section">
+                    This is a section about Jonathan
+                </div>
+                <button class="button has-background-white" @click="hide(4)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
             </div>
-            <button class="button has-background-white" v-if="jonathantext" @click="hide(4)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
         </div>
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
@@ -83,12 +91,14 @@
             <button class="button has-background-white" v-if="yashaswi" @click="show(5)">
                 <i class="fa fa-sort-desc"></i>
             </button>
-            <div class="section" v-if="yashaswitext">
-                This is a section about Yashaswi
+            <div v-else>
+                <div class="section">
+                    This is a section about Yashaswi
+                </div>
+                <button class="button has-background-white" @click="hide(5)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
             </div>
-            <button class="button has-background-white" v-if="yashaswitext" @click="hide(5)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
         </div>
     </div>
 </div>
