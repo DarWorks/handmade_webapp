@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <base href="[[=URL('static')]]/">
@@ -104,15 +105,13 @@
     [[include]]
     <!-- end of HTML inserted by extending template -->
     <footer class="footer is-flex">
-      <a class="button is-rounded">
-          FAQ
-      </a>
-      <div class="block is-flex-grow-1">
-
-      </div>
-      <a class="button is-rounded">
-          TOS / Privacy
-      </a>
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="[[=URL('index')]]">Home</a></li>
+          <li><a href="[[=URL('about')]]">About</a></li>
+          <li><a href="[[=URL('faq')]]">FAQ</a></li>
+        </ul>
+      </nav>
     </footer>
   </body>
   <script src="js/sugar.min.js"></script>
@@ -121,4 +120,5 @@
   <script src="js/utils.js"></script>
   <script src="js/header.js"></script>
   [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+
 </html>

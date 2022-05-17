@@ -99,6 +99,16 @@ def index():
         theDB = theDB,
     )
 
+@action('about')
+@action.uses('about.html', db, auth, url_signer)
+def about():
+    return dict()
+
+@action('faq')
+@action.uses('faq.html', db, auth, url_signer)
+def faq():
+    return dict()
+
 #//////////////////////////////////////////////////////////
 # LOGIN/REGISTRATION
 #//////////////////////////////////////////////////////////
