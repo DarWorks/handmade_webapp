@@ -184,24 +184,30 @@ def profile(username=None):
         )
     )
 
-@action('add_product')
+@action('add_product/<username>')
 @action.uses('add_product.html', db, auth, url_signer)
-def add_product():
+def add_product(username=None):
+    assert username is not None
     return dict(
         add_product_info_url = URL('add_product_info'),
+        username=username,
     )
 
-@action('add_product_info', method=['POST'])
+@action('add_product_info/<username>', method=['POST'])
 @action.uses(db)
-def add_product_info():
+def add_product_info(username=None):
+    assert username is not None
+
     id = db.products.insert(
     name=request.json.get('product_name'),
-    # ADD REFERENCE TO SELLER ID
+    seller=username,
     type=request.json.get('product_type'),
     description=request.json.get('product_description'),
     price=request.json.get('product_price'),
     image1=request.json.get('product_image1'),
     )
+
+    redirect(URL('profile', username))
     return dict(id=id)
 
 
