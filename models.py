@@ -19,6 +19,9 @@ def get_user_FirstName():
 def get_user_LastName():
     return auth.current_user.get('last_name') if auth.current_user else None
 
+
+
+
 def get_time():
     return datetime.datetime.utcnow()
 
@@ -28,8 +31,8 @@ db.define_table(
     Field('first_name','text',default="", requires=IS_NOT_EMPTY()),
     Field('last_name','text',default="", requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email, requires=IS_NOT_EMPTY()),
-    Field('username','text', unique=True, requires=IS_NOT_EMPTY()),
-    Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)),
+    Field('username','text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
+    Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
     Field('isPersonlized','boolean', default=False),
     Field('preference1', 'text', default=""),
     Field('preference2', 'text', default=""),
