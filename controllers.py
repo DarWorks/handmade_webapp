@@ -52,6 +52,7 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
+
 ###############################################################################
 
 
@@ -62,10 +63,14 @@ def full_url(u):
 @action.uses('index.html', db, auth, url_signer)
 def index():
     # variables to track current user session for displaying the personalisation promt
+
+    #queriying all users to display  DB for debugging
+    theDB = db(db.userProfile).select().as_list()
+
+    #user session info variables used in index.html
     customerID =0
     isPersonalized =False
     display = False
-    print(customerID)
 
     #querying DB to see if a user with the currect email exists in the DB
     currentUser = db(
@@ -91,6 +96,7 @@ def index():
         isPersonalized= isPersonalized,
         customerID=customerID,
         display=display,
+        theDB = theDB,
     )
 
 #//////////////////////////////////////////////////////////
@@ -164,6 +170,9 @@ def profile(username=None):
     assert username is not None
     user = auth.get_user()
     # TODO: grab product data from DB using username
+
+
+
     # Then serialize the data in the format that is used in the html template like shown below
     # NOTE: we only need the first image for each product
     # ALSO ADD username field in auth
