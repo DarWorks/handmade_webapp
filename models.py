@@ -14,14 +14,12 @@ from pydal.validators import *
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 
-<<<<<<< HEAD
 def get_user_FirstName():
     return auth.current_user.get('first_name') if auth.current_user else None
 def get_user_LastName():
     return auth.current_user.get('last_name') if auth.current_user else None
 
-=======
->>>>>>> 09b87dbb0b69c2d9bfbda96882e22a22bd334629
+
 def get_time():
     return datetime.datetime.utcnow()
 
@@ -30,7 +28,6 @@ db.define_table(
     'userProfile',
     Field('first_name','text',default="", requires=IS_NOT_EMPTY()),
     Field('last_name','text',default="", requires=IS_NOT_EMPTY()),
-<<<<<<< HEAD
     Field('user_email', default=get_user_email, requires=IS_NOT_EMPTY()),
     Field('username','text', unique=True, requires=IS_NOT_EMPTY()),
     Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)),
@@ -39,12 +36,10 @@ db.define_table(
     Field('preference2', 'text', default=""),
     Field('preference3', 'text', default=""),
 
-=======
     Field('user_email', default=get_user_email),
     Field('username','text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
     Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
     Field('isPersonlized','boolean', default=False),
->>>>>>> 09b87dbb0b69c2d9bfbda96882e22a22bd334629
 )
 
 db.userProfile.username.requires= (IS_NOT_IN_DB(db, 'userProfile.username'))
