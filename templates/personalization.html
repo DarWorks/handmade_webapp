@@ -10,7 +10,7 @@
 
 
   <div v-if="!submitted" class="container block">
-    <div class="title">Personalise your Profile</div>
+    <div class="title">Personalize your Profile</div>
     <div class="form">
 
       <!-- This looks like a form, but is not.  We just need the inputs. -->
@@ -81,7 +81,7 @@
 
       <div class="field">
         <div class="control">
-          <input type="submit" @click="add_personalisation" value=" Submit! " class="button is-primary">
+          <input type="submit" @click="add_personalization" value=" Submit! " class="button is-primary">
           <!--<input type="submit" @click="set_add_status(false)" value="Cancel" class="button is-warning">-->
         </div>
       </div>
@@ -95,46 +95,15 @@
   </h3>
 
 
-<!--&lt;!&ndash;Debugging Purposes DB Table &ndash;&gt;-->
-
-  <div class="container block">
-    <table class="table is-striped is-fullwidth">
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Username</th>
-        <th>p1</th>
-        <th>p2</th>
-        <th>p3</th>
-        <th>id</th>
-        <th></th>
-      </tr>
-      <tr v-for="r in rows">
-        <h1>hello</h1>
-        <td>{{r.first_name}}</td>
-        <td>{{r.last_name}}</td>
-        <td>{{r.user_email}}</td>
-        <td>{{r.username}}</td>
-        <td>{{r.preference1}}</td>
-        <td>{{r.preference2}}</td>
-        <td>{{r.preference3}}</td>
-        <td>{{r.id}}</td>
-      </tr>
-    </table>
-  </div>
-
-
-
 </div>
 
 
 
 [[block page_scripts]]
 <script>
-  let  add_personalisation_url= "[[=XML(add_personalisation_url)]]";
+  let  add_personalization_url= "[[=XML(add_personalization_url)]]";
   let load_users_url = "[[=XML(load_users_url)]]";
 
 </script>
-<script src="js/personalisation.js"></script>
+<script src="js/personalization.js"></script>
 [[end]]
