@@ -56,7 +56,6 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
-<<<<<<< HEAD
 
     # 1) queriying all users to display  DB for debugging
     # 2) querying DB to see if a user with the currect email exists in the DB
@@ -82,8 +81,6 @@ def index():
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
-=======
->>>>>>> 09b87dbb0b69c2d9bfbda96882e22a22bd334629
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -332,7 +329,6 @@ def search():
                 redirect_url=URL("product", seller.username, p.id)
             ))
     return dict(results=results)
-<<<<<<< HEAD
 
 
 #//////////////////////////////////////////////////////////
@@ -389,5 +385,4 @@ def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
 
-=======
->>>>>>> 09b87dbb0b69c2d9bfbda96882e22a22bd334629
+removed merge conflicts
