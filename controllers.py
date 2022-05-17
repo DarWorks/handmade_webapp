@@ -370,13 +370,13 @@ def search():
 
 
 #//////////////////////////////////////////////////////////
-# PERSONALISATION PAGE
+# PERSONALIZATION PAGE
 #//////////////////////////////////////////////////////////
 
 
 @action('add_user_personalization')
 @action.uses('personalization.html', db, auth, url_signer)
-def add_personalisation():
+def add_personalization():
     email = get_user_email()
 
     return dict(
@@ -391,7 +391,7 @@ def add_personalisation():
 #todo: define add_personalisation_info function
 @action('add_personalization_info', method=['POST'])
 @action.uses(db, auth )
-def add_personalisation_info():
+def add_personalization_info():
 
     # Current user session details to insert into DB
     email = get_user_email()
