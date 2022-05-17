@@ -78,14 +78,11 @@ def index():
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
     if get_user_email() == None:
-        print("not logged in ")
         display=False
     else:
         if currentUser == None:
-            print("not in DB")
             isPersonalized = False
             display=True
-            print(currentUser)
 
 
     # sending userSession data to conditionally render index.html
@@ -108,28 +105,6 @@ def about():
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
     return dict()
-
-#//////////////////////////////////////////////////////////
-# LOGIN/REGISTRATION
-#//////////////////////////////////////////////////////////
-
-@action('loginH')
-@action.uses('loginH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving login")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
-@action('regisH')
-@action.uses('registrationH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving registration")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
 
 
 #//////////////////////////////////////////////////////////
@@ -381,7 +356,7 @@ def add_personalization():
 
     return dict(
         #signed? URL for the callbacks
-        add_personalisation_url = URL('add_personalization_info'),
+        add_personalization_url = URL('add_personalization_info'),
         load_users_url = URL('load_users', signer=url_signer),
         email = email,
 
@@ -411,6 +386,7 @@ def add_personalization_info():
         balance= 0.0,
         isPersonlized= True,
     )
+
 
     return dict(id =id)
 

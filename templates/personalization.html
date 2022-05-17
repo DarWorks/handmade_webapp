@@ -81,52 +81,16 @@
 
       <div class="field">
         <div class="control">
-          <input type="submit" @click="add_personalisation" value=" Submit! " class="button is-primary">
+          <input type="submit" @click="add_personalization" value=" Submit! " class="button is-primary">
           <!--<input type="submit" @click="set_add_status(false)" value="Cancel" class="button is-warning">-->
         </div>
       </div>
     </div>
   </div>
 
-  <h3 v-if="submitted" > Redirect Here
-      <a class="button is-success" href="[[=URL('index')]]">
-            Return to Homepage
-     </a>
-
-
+  <h3 v-if="submitted">
+      <a class="button is-success" href="[[=URL('index')]]">Return to Homepage</a>
   </h3>
-
-
-<!--Debugging Purposes DB Table -->
-
-  <div class="container block">
-    <h1 class="title">Users</h1>
-    <table class="table is-striped is-fullwidth">
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Username</th>
-        <th>p1</th>
-        <th>p2</th>
-        <th>p3</th>
-        <th>id</th>
-        <th></th>
-      </tr>
-      <tr v-for="r in rows">
-        <h1>hello</h1>
-        <td>{{r.first_name}}</td>
-        <td>{{r.last_name}}</td>
-        <td>{{r.user_email}}</td>
-        <td>{{r.username}}</td>
-        <td>{{r.preference1}}</td>
-        <td>{{r.preference2}}</td>
-        <td>{{r.preference3}}</td>
-        <td>{{r.id}}</td>
-      </tr>
-    </table>
-  </div>
-
 
 
 </div>
@@ -135,7 +99,7 @@
 
 [[block page_scripts]]
 <script>
-  let  add_personalisation_url= "[[=XML(add_personalisation_url)]]";
+  let  add_personalization_url= "[[=XML(add_personalization_url)]]";
   let load_users_url = "[[=XML(load_users_url)]]";
 
 </script>
