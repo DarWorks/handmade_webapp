@@ -385,4 +385,3 @@ def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
 
-removed merge conflicts
