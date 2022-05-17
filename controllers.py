@@ -34,6 +34,8 @@ from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
+from .models import get_user_FirstName
+from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
@@ -84,6 +86,8 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
+        isPersonalized = isPersonalized,
+        display =display
     )
 
 @action('about')
@@ -385,4 +389,3 @@ def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
 
-removed merge conflicts
