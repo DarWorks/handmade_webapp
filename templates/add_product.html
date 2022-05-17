@@ -92,7 +92,7 @@
   <!-- Image 1 -->
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Images</label>
+      <label class="label">Image 1</label>
     </div>
     <div class="field-body">
       <div class="field">
@@ -115,6 +115,12 @@
           <img v-if="product_image1" width="200" :src="product_image1" />
         </div>
 
+        <br>
+
+        <!-- <button v-if="product_image1 && !show_image1" @click="image_status('one')" class="button is-warning">
+          <i class="fa fa-plus fa-fw"></i> Add Another Image
+        </button> -->
+
       </div>
     </div>
   </div>
@@ -129,15 +135,16 @@
           <input type="submit" @click="add_product_info" value="Submit Here" class="button is-info">
         </div>
 
-        <div v-if="submitted">
-          <a class="button is-success" href="[[=URL('index')]]">
-            Return to Profile
-          </a>
-        </div>
-
       </div>
     </div>
   </div>
+
+  <div v-if="submitted">
+    <a class="button is-success" href="[[=URL('index')]]">
+      Return to Profile
+    </a>
+  </div>
+
 </div>
 
 </div>

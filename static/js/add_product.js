@@ -8,7 +8,13 @@ let init = (app) => {
         add_product_description: "",
         add_product_price: 0,
         product_image1: "",
+        product_image2: "",
+        product_image3: "",
+        product_image4: "",
         submitted: false,
+        show_image1: false,
+        show_image2: false,
+        show_image3: false,
     };
 
     app.enumerate = (a) => {
@@ -25,6 +31,9 @@ let init = (app) => {
                 product_description: app.vue.add_product_description,
                 product_price: app.vue.add_product_price,
                 product_image1: app.vue.product_image1,
+                product_image2: app.vue.product_image1,
+                product_image3: app.vue.product_image1,
+                product_image4: app.vue.product_image1,
             }).then(function (r) {
                 app.vue.submitted = true;
             });
@@ -36,15 +45,41 @@ let init = (app) => {
         if (file) {
             let reader = new FileReader();
             reader.addEventListener("load", function () {
-                app.vue.product_image1 = reader.result;
+                if (!app.vue.product_image1) {
+                    app.vue.product_image1 = reader.result;
+                }
+                if (!app.vue.product_image2) {
+                    app.vue.product_image2 = reader.result;
+                }
+                if (!app.vue.product_image3) {
+                    app.vue.product_image3 = reader.result;
+                }
+                if (!app.vue.product_image4) {
+                    app.vue.product_image4 = reader.result;
+                }
             });
             reader.readAsDataURL(file);
+
+            event = "";
+        }
+    };
+
+    app.image_status = function (new_status) {
+        if (new_status = "one") {
+            app.vue.show_image1 = true;
+        }
+        if (new_status = "two") {
+            app.vue.show_image2 = true;
+        }
+        if (new_status = "three") {
+            app.vue.show_image2 = true;
         }
     };
 
     app.methods = {
         add_product_info: app.add_product_info,
         upload_file: app.upload_file,
+        image_status: app.image_status,
     };
 
     app.vue = new Vue({

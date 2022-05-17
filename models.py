@@ -56,8 +56,7 @@ db.userProfile.id.readable = db.userProfile.id.writable = False
 db.define_table(
     'products',
     Field('name', requires = IS_NOT_EMPTY()),
-    # Removed for testing, uncomment when userprofile complete
-    # Field('seller', 'reference userProfile', requires = IS_NOT_EMPTY()),
+    Field('seller', 'reference userProfile', requires = IS_NOT_EMPTY()),
     Field('type'),
     Field('description', requires = IS_NOT_EMPTY()),
     Field('image1'),
