@@ -62,34 +62,34 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
-    # variables to track current user session for displaying the personalisation promt
 
-    #queriying all users to display  DB for debugging
+    # 1) queriying all users to display  DB for debugging
+    # 2) querying DB to see if a user with the currect email exists in the DB
     theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
 
-    #user session info variables used in index.html
+
+    # user session variables to be used in index.html
     customerID =0
-    isPersonalized =False
+    isPersonalized = False
     display = False
 
-    #querying DB to see if a user with the currect email exists in the DB
-    currentUser = db(
-        db.userProfile.user_email == get_user_email()
-    ).select().first()
-
-    #if not active session, display =false
+    # if no active user session set display = false
+    # active session, but no DB entry --> prompt customization
     if get_user_email() == None:
         print("not logged in ")
         display=False
-    else:  # active session, but no DB entry --> prompt customization
+    else:
         if currentUser == None:
             print("not in DB")
             isPersonalized = False
             display=True
             print(currentUser)
 
+
     # sending userSession data to conditionally render index.html
-    #note, can access as currentUsers['isPersonalized'] etc.
+    # note, can access as currentUsers['isPersonalized'] etc.
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -364,14 +364,14 @@ def search():
 #//////////////////////////////////////////////////////////
 
 
-@action('add_user_personalisation')
-@action.uses('personalisation.html', db, auth, url_signer)
+@action('add_user_personalization')
+@action.uses('personalization.html', db, auth, url_signer)
 def add_personalisation():
     email = get_user_email()
 
     return dict(
         #signed? URL for the callbacks
-        add_personalisation_url = URL('add_personalisation_info'),
+        add_personalisation_url = URL('add_personalization_info'),
         load_users_url = URL('load_users', signer=url_signer),
         email = email,
 
@@ -379,18 +379,17 @@ def add_personalisation():
 
 
 #todo: define add_personalisation_info function
-@action('add_personalisation_info', method=['POST'])
+@action('add_personalization_info', method=['POST'])
 @action.uses(db, auth )
 def add_personalisation_info():
 
-    #Current user session details to insert into DB
+    # Current user session details to insert into DB
     email = get_user_email()
     firstName = get_user_FirstName()
     lastName = get_user_LastName()
-    print(firstName)
 
 
-    #insertin into DB & storing id to be returned as dictionary
+    # inserting into DB & storing id to be returned as dictionary
     id = db.userProfile.insert(
         first_name= firstName,
         last_name= lastName,

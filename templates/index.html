@@ -11,6 +11,7 @@
   <div>
 
       <!--Conndtional alert rendering TODO: NEEDS TO BE FULL SCREEN + BLUR -->
+      <!--Personalization conditional prompt-->
     [[ personalized =isPersonalized]]
     <h3> need to be personalized? [[=personalized]] </h3>
     <h3> display? [[=display]] </h3>
@@ -21,7 +22,7 @@
             <div class="notification has-text-centered	is-danger">
                <h1 class="is-center"> Hey there! Handmade needs to know more about you.</h1>
                 <div>
-                    <a class="button is-success" href="[[=URL('add_user_personalisation')]]"> Personalize! </a>
+                    <a class="button is-success" href="[[=URL('add_user_personalization')]]"> Personalize! </a>
 
                 </div>
             </div>
@@ -31,7 +32,7 @@
 
     [[pass]]
 
-
+    <!--app body-->
 
       <section class="section has-background-warning">
         <div class="columns block is-mobile">
@@ -180,6 +181,7 @@
   </div>
 
     <div>
+        <!--DB contents-->
     <table class="table is-striped is-fullwidth">
         <tr>
             <th> id</th>

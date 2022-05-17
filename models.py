@@ -38,7 +38,6 @@ db.define_table(
     Field('preference1', 'text', default=""),
     Field('preference2', 'text', default=""),
     Field('preference3', 'text', default=""),
-    # Field('user_email', default=get_user_email),
 
 )
 # 1* unique=TRUE ensures the field entry is unique, but does not display an error prompt within implemented forms
