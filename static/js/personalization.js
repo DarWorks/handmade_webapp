@@ -31,9 +31,9 @@ let init = (app) => {
     };
 
 
-   app.add_personalisation = function() {
+   app.add_personalization = function() {
         //TODO: add row into userProfile DB with  user app.data collected w/vue form
-        axios.post(add_personalisation_url,
+        axios.post(add_personalization_url,
             {
                 user_first_name: app.vue.add_first_name,
                 user_last_name: app.vue.add_last_name,
@@ -58,7 +58,7 @@ let init = (app) => {
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit
-        add_personalisation: app.add_personalisation,
+        add_personalization: app.add_personalization,
     };
 
     // This creates the Vue instance.
