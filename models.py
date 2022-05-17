@@ -35,7 +35,6 @@ db.define_table(
     Field('preference1', 'text', default=""),
     Field('preference2', 'text', default=""),
     Field('preference3', 'text', default=""),
-
     Field('user_email', default=get_user_email),
     Field('username','text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
     Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
