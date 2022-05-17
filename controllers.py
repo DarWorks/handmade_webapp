@@ -35,6 +35,11 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 from .settings import APP_FOLDER, APP_NAME
+from .models import get_user_email
+from .models import get_user_FirstName
+from .models import get_user_LastName
+
+
 
 url_signer = URLSigner(session)
 
@@ -47,6 +52,7 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
+
 ###############################################################################
 
 
@@ -56,10 +62,52 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
+    # variables to track current user session for displaying the personalisation promt
+
+    #queriying all users to display  DB for debugging
+    theDB = db(db.userProfile).select().as_list()
+
+    #user session info variables used in index.html
+    customerID =0
+    isPersonalized =False
+    display = False
+
+    #querying DB to see if a user with the currect email exists in the DB
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()
+    ).select().first()
+
+    #if not active session, display =false
+    if get_user_email() == None:
+        print("not logged in ")
+        display=False
+    else:  # active session, but no DB entry --> prompt customization
+        if currentUser == None:
+            print("not in DB")
+            isPersonalized = False
+            display=True
+            print(currentUser)
+
+    # sending userSession data to conditionally render index.html
+    #note, can access as currentUsers['isPersonalized'] etc.
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
+        isPersonalized= isPersonalized,
+        customerID=customerID,
+        display=display,
+        theDB = theDB,
     )
+
+@action('about')
+@action.uses('about.html', db, auth, url_signer)
+def about():
+    return dict()
+
+@action('faq')
+@action.uses('faq.html', db, auth, url_signer)
+def faq():
+    return dict()
 
 #//////////////////////////////////////////////////////////
 # LOGIN/REGISTRATION
@@ -132,6 +180,9 @@ def profile(username=None):
     assert username is not None
     user = auth.get_user()
     # TODO: grab product data from DB using username
+
+
+
     # Then serialize the data in the format that is used in the html template like shown below
     # NOTE: we only need the first image for each product
     # ALSO ADD username field in auth
@@ -316,3 +367,59 @@ def search():
                 redirect_url=URL("product", seller.username, p.id)
             ))
     return dict(results=results)
+
+
+#//////////////////////////////////////////////////////////
+# PERSONALISATION PAGE
+#//////////////////////////////////////////////////////////
+
+
+@action('add_user_personalisation')
+@action.uses('personalisation.html', db, auth, url_signer)
+def add_personalisation():
+    email = get_user_email()
+
+    return dict(
+        #signed? URL for the callbacks
+        add_personalisation_url = URL('add_personalisation_info'),
+        load_users_url = URL('load_users', signer=url_signer),
+        email = email,
+
+    )
+
+
+#todo: define add_personalisation_info function
+@action('add_personalisation_info', method=['POST'])
+@action.uses(db, auth )
+def add_personalisation_info():
+
+    #Current user session details to insert into DB
+    email = get_user_email()
+    firstName = get_user_FirstName()
+    lastName = get_user_LastName()
+    print(firstName)
+
+
+    #insertin into DB & storing id to be returned as dictionary
+    id = db.userProfile.insert(
+        first_name= firstName,
+        last_name= lastName,
+        user_email= email,
+        username= request.json.get('user_userName'),
+        preference1= request.json.get('user_preference1'),
+        preference2= request.json.get('user_preference2'),
+        preference3= request.json.get('user_preference3'),
+        balance= 0.0,
+        isPersonlized= True,
+    )
+
+    return dict(id =id)
+
+
+# API function to retrieve users in DB =>debuggin purposes for now
+@action('load_users')
+@action.uses(url_signer.verify(), db)
+def load_users():
+    rows = db(db.userProfile).select().as_list()
+    return dict(rows=rows)
+
