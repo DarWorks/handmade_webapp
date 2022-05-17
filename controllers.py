@@ -34,8 +34,6 @@ from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
-from .models import get_user_FirstName
-from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
@@ -58,36 +56,9 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
-
-    # 1) queriying all users to display  DB for debugging
-    # 2) querying DB to see if a user with the currect email exists in the DB
-    theDB = db(db.userProfile).select().as_list()
-    currentUser = db(
-        db.userProfile.user_email == get_user_email()).select().first()
-
-
-    # user session variables to be used in index.html
-    customerID =0
-    isPersonalized = False
-    display = False
-
-    # if no active user session set display = false
-    # active session, but no DB entry --> prompt customization
-    if get_user_email() == None:
-        display=False
-    else:
-        if currentUser == None:
-            isPersonalized = False
-            display=True
-
-
-    # sending userSession data to conditionally render index.html
-    # note, can access as currentUsers['isPersonalized'] etc.
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
-        isPersonalized = isPersonalized,
-        display =display
     )
 
 @action('about')
@@ -99,6 +70,28 @@ def about():
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
     return dict()
+
+#//////////////////////////////////////////////////////////
+# LOGIN/REGISTRATION
+#//////////////////////////////////////////////////////////
+
+@action('loginH')
+@action.uses('loginH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving login")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
+
+@action('regisH')
+@action.uses('registrationH.html', url_signer,auth.user, db, session)
+def index():
+    print("serving registration")
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url = URL('my_callback', signer=url_signer),
+    )
 
 
 #//////////////////////////////////////////////////////////
@@ -333,59 +326,3 @@ def search():
                 redirect_url=URL("product", seller.username, p.id)
             ))
     return dict(results=results)
-
-
-#//////////////////////////////////////////////////////////
-# PERSONALIZATION PAGE
-#//////////////////////////////////////////////////////////
-
-
-@action('add_user_personalization')
-@action.uses('personalization.html', db, auth, url_signer)
-def add_personalization():
-    email = get_user_email()
-
-    return dict(
-        #signed? URL for the callbacks
-        add_personalization_url = URL('add_personalization_info'),
-        load_users_url = URL('load_users', signer=url_signer),
-        email = email,
-
-    )
-
-
-#todo: define add_personalisation_info function
-@action('add_personalization_info', method=['POST'])
-@action.uses(db, auth )
-def add_personalization_info():
-
-    # Current user session details to insert into DB
-    email = get_user_email()
-    firstName = get_user_FirstName()
-    lastName = get_user_LastName()
-
-
-    # inserting into DB & storing id to be returned as dictionary
-    id = db.userProfile.insert(
-        first_name= firstName,
-        last_name= lastName,
-        user_email= email,
-        username= request.json.get('user_userName'),
-        preference1= request.json.get('user_preference1'),
-        preference2= request.json.get('user_preference2'),
-        preference3= request.json.get('user_preference3'),
-        balance= 0.0,
-        isPersonlized= True,
-    )
-
-
-    return dict(id =id)
-
-
-# API function to retrieve users in DB =>debuggin purposes for now
-@action('load_users')
-@action.uses(url_signer.verify(), db)
-def load_users():
-    rows = db(db.userProfile).select().as_list()
-    return dict(rows=rows)
-
