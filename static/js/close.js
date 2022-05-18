@@ -7,7 +7,7 @@ let init = (closeapp) => {
 
     closeapp.close = function(x) {
         closeapp.vue.notifbutton = false;
-    };
+    }
 
     closeapp.methods = {
         close: closeapp.close,
