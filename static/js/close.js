@@ -2,19 +2,19 @@ let closeapp = {};
 
 let init = (closeapp) => {
     closeapp.data = {
-        notifbutton: true,
+        show: true,
     }
 
     closeapp.close = function(x) {
-        closeapp.vue.notifbutton = false;
-    }
+        closeapp.vue.show = false;
+    };
 
     closeapp.methods = {
         close: closeapp.close,
     }
 
     closeapp.vue = new Vue({
-        el: "#close-target",
+        el: "#vue-target",
         data: closeapp.data,
         methods: closeapp.methods
     });
@@ -24,6 +24,6 @@ let init = (closeapp) => {
     }
 
     closeapp.init();
-};
+}
 
 init(closeapp);
