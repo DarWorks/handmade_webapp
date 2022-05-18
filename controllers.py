@@ -58,6 +58,7 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
+
     # 1) queriying all users to display  DB for debugging
     # 2) querying DB to see if a user with the currect email exists in the DB
     theDB = db(db.userProfile).select().as_list()
