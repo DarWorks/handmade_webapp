@@ -1,12 +1,12 @@
 let closeapp = {};
 
-let init = (closeapp) => {
+let closeinit = (closeapp) => {
     closeapp.data = {
-        show: true,
+        notifshow: true,
     }
 
     closeapp.close = function(x) {
-        closeapp.vue.show = false;
+        closeapp.vue.notifshow = false;
     };
 
     closeapp.methods = {
@@ -14,7 +14,7 @@ let init = (closeapp) => {
     }
 
     closeapp.vue = new Vue({
-        el: "#vue-target",
+        el: "#close-target",
         data: closeapp.data,
         methods: closeapp.methods
     });
@@ -24,6 +24,6 @@ let init = (closeapp) => {
     }
 
     closeapp.init();
-}
+};
 
-init(closeapp);
+closeinit(closeapp);

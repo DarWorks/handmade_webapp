@@ -61,6 +61,6 @@ let init = (app) => {
     }
 
     app.init();
-}
+};
 
 init(app);
