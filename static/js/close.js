@@ -1,29 +1,29 @@
-let app = {};
+let closeapp = {};
 
-let init = (app) => {
-    app.data = {
+let init = (closeapp) => {
+    closeapp.data = {
         show: true,
     }
 
-    app.close = function(x) {
-        app.vue.show = false;
+    closeapp.close = function(x) {
+        closeapp.vue.show = false;
     };
 
-    app.methods = {
-        close: app.close,
+    closeapp.methods = {
+        close: closeapp.close,
     }
 
-    app.vue = new Vue({
+    closeapp.vue = new Vue({
         el: "#vue-target",
-        data: app.data,
-        methods: app.methods
+        data: closeapp.data,
+        methods: closeapp.methods
     });
 
-    app.init = () => {
+    closeapp.init = () => {
 
     }
 
-    app.init();
+    closeapp.init();
 }
 
-init(app);
+init(closeapp);
