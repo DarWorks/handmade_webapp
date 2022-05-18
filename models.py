@@ -26,6 +26,8 @@ def get_time():
     return datetime.datetime.utcnow()
 
 
+
+
 db.define_table(
     'userProfile',
     Field('first_name','text',default="", requires=IS_NOT_EMPTY()),
@@ -42,6 +44,13 @@ db.define_table(
 
 db.userProfile.username.requires= (IS_NOT_IN_DB(db, 'userProfile.username'))
 db.userProfile.id.readable = db.userProfile.id.writable = False
+
+
+### Define your table below
+#
+# db.define_table('thing', Field('name'))
+#
+## always commit your models to avoid problems later
 
 db.define_table(
     'products',

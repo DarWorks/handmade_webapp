@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 
+<style>
+  [notif]{
+    opacity: 0.8;
+  }
+  [notif]:hover {
+    opacity: 1;
+  }
+</style>
+
 <html lang="en">
   <head>
     <base href="[[=URL('static')]]/">
@@ -50,6 +59,13 @@
           </div>
         </div>
 
+        [[if not globals().get('user'):]]
+        <div class="notification has-background-warning" v-if="show" id="vue-target" notif>
+          <button class="delete" @click="close"></button>
+          Please Log In or Sign Up
+        </div>
+        [[pass]]
+
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable" id="vue-target-header">
             <div class="navbar-item">
@@ -77,8 +93,7 @@
 
                   </div>
                 </div>
-
-              [[else:]]
+            [[else:]]
             <div class="buttons">
               <a class="button is-primary" href="[[=URL('auth/register')]]">
                 Sign up
@@ -87,13 +102,6 @@
                 Log in
               </a>
               [[pass]]
-            [[if globals().get('user'):]]
-              [[ if globals().get('user').get('isPersonlized') == False:]]
-
-              [[pass]]
-
-              [[pass]]
-
             </div>
           </div>
         </div>
@@ -117,6 +125,7 @@
   <script src="js/axios.min.js"></script>
   <script src="js/vue.js"></script>
   <script src="js/utils.js"></script>
+  <script src="js/close.js"></script>
   <script src="js/header.js"></script>
   [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
 
