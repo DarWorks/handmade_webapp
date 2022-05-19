@@ -323,11 +323,10 @@ def get_reviews(product_id = None):
 def post_comment(product_id = None):
     assert product_id is not None
     text = request.json["comment"]
-    dbq = db(db.userProfile.id == auth.user.id).select()
-    userProfile = dbq.first()
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
     db.comments.insert(
         text=text,
-        user=auth.user.id,
+        user=userProfile.id,
         product=product_id,
     )
     return "ok"
@@ -337,11 +336,10 @@ def post_comment(product_id = None):
 def review_comment(product_id = None):
     assert product_id is not None
     text = request.json["review"]
-    dbq = db(db.userProfile.id == auth.user.id).select()
-    userProfile = dbq.first()
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
     db.reviews.insert(
         text=text,
-        user=auth.user.id,
+        user=userProfile.id,
         product=product_id,
     )
     return "ok"
