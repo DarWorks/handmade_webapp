@@ -100,29 +100,6 @@ def about():
 def faq():
     return dict()
 
-#//////////////////////////////////////////////////////////
-# LOGIN/REGISTRATION
-#//////////////////////////////////////////////////////////
-
-@action('loginH')
-@action.uses('loginH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving login")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
-@action('regisH')
-@action.uses('registrationH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving registration")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
-
 
 #//////////////////////////////////////////////////////////
 # SHOPING CART
