@@ -18,8 +18,9 @@ let init = (app) => {
         add_preference2:"",
         add_preference3:"",
         add_balance:"",
-        validUsername: false,
+        validUsername: true,
         submitted: false,
+
         rows: [],
     };
 
@@ -46,8 +47,11 @@ let init = (app) => {
             }).then(function (r) {
                 app.vue.submitted = true;
                 app.vue.user_userName = true;
+                app.vue.validUsername= false;
+
             }).catch(function(error){
                  app.vue.user_userName = false;
+                 app.vue.validUsername = false;
 
             });
 
