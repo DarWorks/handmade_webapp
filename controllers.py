@@ -171,16 +171,21 @@ def pay():
 def profile(username=None):
     assert username is not None
     user = auth.get_user()
-    # TODO: grab product data from DB using username
-    # Then serialize the data in the format that is used in the html template like shown below
-    # NOTE: we only need the first image for each product
-    # ALSO ADD username field in auth
+    userProfile = db(db.userProfile.username == username).select().first()
+    if userProfile is None:
+        return "404 profile not found"
+    isAccountOwner = False
+    # check if this person is the account owner to display currency
+    if user is not None:
+        u = db(db.userProfile.user_email == get_user_email()).select().first()
+        if u is not None and u.username == username:
+            isAccountOwner = True
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
-        isAccountOwner= (user is not None) and (user.get('username', '') == username),
+        isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
-            total_credits=112,
+            total_credits=userProfile.balance,
             profile_pic= "images/profile/image1.png"
         ),
         selling = (
@@ -189,16 +194,6 @@ def profile(username=None):
                 seller="SellerUsername",
                 image="images/product/image1.png"
             ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            )
         ),
         purchased = (
             dict(
@@ -206,11 +201,6 @@ def profile(username=None):
                 seller="SellerUsername",
                 image="images/product/image1.png"
             ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            )
         )
     )
 
