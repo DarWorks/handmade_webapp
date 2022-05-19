@@ -86,11 +86,10 @@
                   <a class="navbar-link is-primary">
                     [[=globals().get('user').get('email')]]
                   </a>
-                  <div class="navbar-dropdown">
+                  <div class="navbar-dropdown" id="profile-link-target">
                     <a class="navbar-item" href="[[=URL('auth/logout')]]">Logout</a>
-                    <a class="navbar-item" href="[[=URL('/profile')]]">Profile</a>
+                    <a v-if="username.length > 0" class="navbar-item" :href="profileURL">Profile</a>
                     <a class="navbar-item" href="[[=URL('auth/change_password')]]">Change Password</a></li>
-
                   </div>
                 </div>
             [[else:]]
@@ -125,8 +124,16 @@
   <script src="js/axios.min.js"></script>
   <script src="js/vue.js"></script>
   <script src="js/utils.js"></script>
-  <script src="js/close.js"></script>
   <script src="js/search.js"></script>
+
+  [[if globals().get('user'):]]
+    <script src="js/profilelink.js"></script>
+  [[pass]]
+
+  [[if not globals().get('user'):]]
+    <script src="js/close.js"></script>
+  [[pass]]
+
   [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
 
 </html>

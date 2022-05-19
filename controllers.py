@@ -351,7 +351,13 @@ def search():
             ))
     return dict(results=results)
 
-
+@action('username', method=['GET'])
+@action.uses(db, auth.user)
+def getUsername():
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
+    if userProfile is not None and userProfile.username is not None:
+        return dict(username=userProfile.username)
+    return dict(username="")
 
 #//////////////////////////////////////////////////////////
 # PERSONALIZATION PAGE
