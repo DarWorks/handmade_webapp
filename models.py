@@ -59,7 +59,7 @@ db.define_table(
     Field('sellerid', 'reference userProfile', requires = IS_NOT_EMPTY()),
     Field('type'),
     Field('description', requires = IS_NOT_EMPTY()),
-    Field('image1'),
+    Field('image1', requires=IS_NOT_EMPTY(), default=""),
     Field('image2'),
     Field('image3'),
     Field('image4'),
