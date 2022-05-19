@@ -254,7 +254,7 @@ def product(seller_name=None, product_id=None):
     prod = data.first()
     if prod is None:
         return "404 Not found"
-    data = db(db.userProfile.id == prod.seller).select()
+    data = db(db.userProfile.id == prod.sellerid).select()
     sellerProfile = data.first()
     if sellerProfile is None or sellerProfile.username != seller_name:
         return "404 Not found"
@@ -356,7 +356,7 @@ def search():
     results = []
     for p in prods:
         if q in p.name.lower():
-            seller = db(db.userProfile.id == p.seller).select().first()
+            seller = db(db.userProfile.id == p.sellerid).select().first()
             results.append(dict(
                 name=p.name,
                 redirect_url=URL("product", seller.username, p.id)
@@ -418,4 +418,3 @@ def add_personalization_info():
 def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
-
