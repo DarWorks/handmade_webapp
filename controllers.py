@@ -234,6 +234,11 @@ def product(seller_name=None, product_id=None):
         images.append(prod.image3)
     if prod.image4 is not None:
         images.append(prod.image4)
+    # check if user has username
+    hasUsername = False
+    if auth.get_user():
+        u = db(db.userProfile.user_email == get_user_email()).select().first()
+        hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
         get_comments_url = URL('comments', product_id),
@@ -241,6 +246,7 @@ def product(seller_name=None, product_id=None):
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
         isAuthenticated = "true" if auth.get_user() else "false",
+        hasUsername= "true" if hasUsername else "false",
         product = dict(
             name=prod.name,
             seller=sellerProfile.username,

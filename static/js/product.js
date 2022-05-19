@@ -25,12 +25,17 @@ let init = (app) => {
 
     app.can_comment = function () {
       if (!isAuthenticated) {
-        window.location.replace("/handmade_webapp/loginH");
-      }
+       window.location.replace("/handmade_webapp/auth/login");
+       return false;
+     } else if (!hasUsername) {
+       window.location.replace("/handmade_webapp/add_user_personalization");
+       return false;
+     }
+     return true;
     }
 
     app.add_comment = function () {
-      if (isAuthenticated) {
+      if (app.vue.can_comment()) {
         if (app.vue.new_comment.trim().length > 0) {
           let data = {"comment": app.vue.new_comment};
           axios.post(post_comment_url, data).then(function (response) {
@@ -40,19 +45,22 @@ let init = (app) => {
             })
           })
         }
-      } else {
-        window.location.replace("/handmade_webapp/loginH");
       }
     };
 
     app.can_review = function () {
       if (!isAuthenticated) {
-        window.location.replace("/handmade_webapp/loginH");
-      }
+       window.location.replace("/handmade_webapp/auth/login");
+       return false;
+     } else if (!hasUsername) {
+       window.location.replace("/handmade_webapp/add_user_personalization");
+       return false;
+     }
+     return true;
     }
 
     app.add_review = function () {
-      if (isAuthenticated) {
+      if (app.vue.can_review()) {
         if (app.vue.new_review.trim().length > 0) {
           let data = {"review": app.vue.new_review};
           axios.post(post_reviews_url, data).then(function (response) {
@@ -62,8 +70,6 @@ let init = (app) => {
             })
           })
         }
-      } else {
-        window.location.replace("/handmade_webapp/loginH");
       }
     };
 
