@@ -186,7 +186,7 @@ def profile(username=None):
 def add_product(username=None):
     assert username is not None
     return dict(
-        add_product_info_url = URL('add_product_info'),
+        add_product_info_url = URL('add_product_info', username),
         username=username,
     )
 
@@ -204,8 +204,7 @@ def add_product_info(username=None):
     image1=request.json.get('product_image1'),
     )
 
-    redirect(URL('profile', username))
-    return dict(id=id)
+    return dict(username=username)
 
 
 #//////////////////////////////////////////////////////////
