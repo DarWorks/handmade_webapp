@@ -191,17 +191,17 @@ def add_product(username=None):
     )
 
 @action('add_product_info/<username>', method=['POST'])
-@action.uses(db)
+@action.uses(db, auth.user)
 def add_product_info(username=None):
     assert username is not None
-
+    seller = db(db.userProfile.username == username).select().first()
     id = db.products.insert(
-    name=request.json.get('product_name'),
-    seller=username,
-    type=request.json.get('product_type'),
-    description=request.json.get('product_description'),
-    price=request.json.get('product_price'),
-    image1=request.json.get('product_image1'),
+        name=request.json.get('product_name'),
+        sellerid=seller.id,
+        type=request.json.get('product_type'),
+        description=request.json.get('product_description'),
+        price=request.json.get('product_price'),
+        image1=request.json.get('product_image1'),
     )
 
     return dict(username=username)
