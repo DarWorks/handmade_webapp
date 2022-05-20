@@ -47,10 +47,13 @@
           
           <br>
 
-          <center><a class="button is-danger" href="[[=URL('add_product')]]">
+          [[if isAccountOwner:]]
+          <center><a class="button is-danger" href="[[=URL('add_product', profile.get('username', ''))]]">
             <span class="icon"><i class="fa fa-plus"></i></span>
             <span>Add Product</span>
           </a></center>
+          [[pass]]
+
 
 
   </div>
