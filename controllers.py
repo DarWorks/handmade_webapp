@@ -34,6 +34,8 @@ from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
+from .models import get_user_FirstName
+from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
 
 url_signer = URLSigner(session)
@@ -56,10 +58,37 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
+    # 1) queriying all users to display  DB for debugging
+    # 2) querying DB to see if a user with the currect email exists in the DB
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+
+    # user session variables to be used in index.html
+    customerID = 0
+    isPersonalized = False
+    display = False
+
+    # if no active user session set display = false
+    # active session, but no DB entry --> prompt customization
+    if get_user_email() == None:
+        display = False
+    else:
+        if currentUser == None:
+            isPersonalized = False
+            display = True
+
+    # sending userSession data to conditionally render index.html
+    # note, can access as currentUsers['isPersonalized'] etc.
     return dict(
         # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
+        my_callback_url=URL('my_callback', signer=url_signer),
+        isPersonalized=isPersonalized,
+        customerID=customerID,
+        display=display,
+        theDB=theDB,
     )
+
 
 @action('about')
 @action.uses('about.html', db, auth, url_signer)
@@ -70,28 +99,6 @@ def about():
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
     return dict()
-
-#//////////////////////////////////////////////////////////
-# LOGIN/REGISTRATION
-#//////////////////////////////////////////////////////////
-
-@action('loginH')
-@action.uses('loginH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving login")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
-
-@action('regisH')
-@action.uses('registrationH.html', url_signer,auth.user, db, session)
-def index():
-    print("serving registration")
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
-    )
 
 
 #//////////////////////////////////////////////////////////
@@ -141,16 +148,21 @@ def pay():
 def profile(username=None):
     assert username is not None
     user = auth.get_user()
-    # TODO: grab product data from DB using username
-    # Then serialize the data in the format that is used in the html template like shown below
-    # NOTE: we only need the first image for each product
-    # ALSO ADD username field in auth
+    userProfile = db(db.userProfile.username == username).select().first()
+    if userProfile is None:
+        return "404 profile not found"
+    isAccountOwner = False
+    # check if this person is the account owner to display currency
+    if user is not None:
+        u = db(db.userProfile.user_email == get_user_email()).select().first()
+        if u is not None and u.username == username:
+            isAccountOwner = True
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
-        isAccountOwner= (user is not None) and (user.get('username', '') == username),
+        isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
-            total_credits=112,
+            total_credits=userProfile.balance,
             profile_pic= "images/profile/image1.png"
         ),
         selling = (
@@ -159,16 +171,6 @@ def profile(username=None):
                 seller="SellerUsername",
                 image="images/product/image1.png"
             ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            )
         ),
         purchased = (
             dict(
@@ -176,11 +178,6 @@ def profile(username=None):
                 seller="SellerUsername",
                 image="images/product/image1.png"
             ),
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            )
         )
     )
 
@@ -224,7 +221,7 @@ def product(seller_name=None, product_id=None):
     prod = data.first()
     if prod is None:
         return "404 Not found"
-    data = db(db.userProfile.id == prod.seller).select()
+    data = db(db.userProfile.id == prod.sellerid).select()
     sellerProfile = data.first()
     if sellerProfile is None or sellerProfile.username != seller_name:
         return "404 Not found"
@@ -237,6 +234,11 @@ def product(seller_name=None, product_id=None):
         images.append(prod.image3)
     if prod.image4 is not None:
         images.append(prod.image4)
+    # check if user has username
+    hasUsername = False
+    if auth.get_user():
+        u = db(db.userProfile.user_email == get_user_email()).select().first()
+        hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
         get_comments_url = URL('comments', product_id),
@@ -244,6 +246,7 @@ def product(seller_name=None, product_id=None):
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
         isAuthenticated = "true" if auth.get_user() else "false",
+        hasUsername= "true" if hasUsername else "false",
         product = dict(
             name=prod.name,
             seller=sellerProfile.username,
@@ -293,11 +296,10 @@ def get_reviews(product_id = None):
 def post_comment(product_id = None):
     assert product_id is not None
     text = request.json["comment"]
-    dbq = db(db.userProfile.id == auth.user.id).select()
-    userProfile = dbq.first()
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
     db.comments.insert(
         text=text,
-        user=auth.user.id,
+        user=userProfile.id,
         product=product_id,
     )
     return "ok"
@@ -307,11 +309,10 @@ def post_comment(product_id = None):
 def review_comment(product_id = None):
     assert product_id is not None
     text = request.json["review"]
-    dbq = db(db.userProfile.id == auth.user.id).select()
-    userProfile = dbq.first()
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
     db.reviews.insert(
         text=text,
-        user=auth.user.id,
+        user=userProfile.id,
         product=product_id,
     )
     return "ok"
@@ -326,9 +327,71 @@ def search():
     results = []
     for p in prods:
         if q in p.name.lower():
-            seller = db(db.userProfile.id == p.seller).select().first()
+            seller = db(db.userProfile.id == p.sellerid).select().first()
             results.append(dict(
                 name=p.name,
                 redirect_url=URL("product", seller.username, p.id)
             ))
     return dict(results=results)
+
+@action('username', method=['GET'])
+@action.uses(db, auth.user)
+def getUsername():
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
+    if userProfile is not None and userProfile.username is not None:
+        return dict(username=userProfile.username)
+    return dict(username="")
+
+#//////////////////////////////////////////////////////////
+# PERSONALIZATION PAGE
+#//////////////////////////////////////////////////////////
+
+
+@action('add_user_personalization')
+@action.uses('personalization.html', db, auth, url_signer)
+def add_personalization():
+    email = get_user_email()
+
+    return dict(
+        #signed? URL for the callbacks
+        add_personalization_url = URL('add_personalization_info'),
+        load_users_url = URL('load_users', signer=url_signer),
+        email = email,
+
+    )
+
+
+#todo: define add_personalisation_info function
+@action('add_personalization_info', method=['POST'])
+@action.uses(db, auth )
+def add_personalization_info():
+
+    # Current user session details to insert into DB
+    email = get_user_email()
+    firstName = get_user_FirstName()
+    lastName = get_user_LastName()
+
+
+    # inserting into DB & storing id to be returned as dictionary
+    id = db.userProfile.insert(
+        first_name= firstName,
+        last_name= lastName,
+        user_email= email,
+        username= request.json.get('user_userName'),
+        preference1= request.json.get('user_preference1'),
+        preference2= request.json.get('user_preference2'),
+        preference3= request.json.get('user_preference3'),
+        balance= 0.0,
+        isPersonlized= True,
+    )
+
+
+    return dict(id =id)
+
+
+# API function to retrieve users in DB =>debuggin purposes for now
+@action('load_users')
+@action.uses(url_signer.verify(), db)
+def load_users():
+    rows = db(db.userProfile).select().as_list()
+    return dict(rows=rows)

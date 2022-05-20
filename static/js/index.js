@@ -9,8 +9,11 @@ let init = (app) => {
 
     // This is the Vue data.
     app.data = {
+        hover: false,
         // Complete as you see fit.
     };
+
+
 
     app.enumerate = (a) => {
         // This adds an _idx field to each element of the array.
