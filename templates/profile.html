@@ -44,7 +44,7 @@
           [[if isAccountOwner:]]
           <center><h1 class="subsubsubtitle">Total Credits: [[=profile.get('total_credits', 0)]]</h1></center>
           [[pass]]
-          
+
           <br>
 
           [[if isAccountOwner:]]
@@ -68,7 +68,7 @@
           <div class="card-image">
             <!-- <figure class="image is-1by1"> -->
               <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
-                <img src="[[=URL('static', prod.get('image', ''))]]">
+                <img src="[[=prod.get('image', '')]]">
               </a>
             <!-- </figure> -->
           </div>

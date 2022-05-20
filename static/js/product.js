@@ -9,7 +9,8 @@ let init = (app) => {
 
     // This is the Vue data.
     app.data = {
-      productImage: initialProductImage,
+      productImages: images,
+      selectedImage: 1,
       comments: [],
       reviews: [],
       new_comment: "",

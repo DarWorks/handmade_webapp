@@ -157,28 +157,21 @@ def profile(username=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         if u is not None and u.username == username:
             isAccountOwner = True
+    selling = map(lambda x: dict(
+        id=x["id"],
+        seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
+        image=x["image1"]
+    ), db(db.products.sellerid == userProfile.id).select().as_list())
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
         isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
             total_credits=userProfile.balance,
-            profile_pic= "images/profile/image1.png"
+            profile_pic= "images/profile/default.jpg"
         ),
-        selling = (
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            ),
-        ),
-        purchased = (
-            dict(
-                id="123",
-                seller="SellerUsername",
-                image="images/product/image1.png"
-            ),
-        )
+        selling = selling,
+        purchased = []
     )
 
 @action('add_product/<username>')
@@ -226,13 +219,13 @@ def product(seller_name=None, product_id=None):
         return "404 Not found"
     images = []
     if prod.image1 is not None:
-        images.append(prod.image1)
+        images.append({"id":1, "src": prod.image1})
     if prod.image2 is not None:
-        images.append(prod.image2)
+        images.append({"id":2, "src":prod.image2})
     if prod.image3 is not None:
-        images.append(prod.image3)
+        images.append({"id":3, "src":prod.image3})
     if prod.image4 is not None:
-        images.append(prod.image4)
+        images.append({"id":4, "src":prod.image4})
     # check if user has username
     hasUsername = False
     if auth.get_user():
@@ -268,7 +261,7 @@ def get_comments(product_id = None):
         comments.append({
             'username': userProfile.username,
             'text': e.text,
-            'profile_pic': URL('static', 'images', 'profile', 'image1.png'),
+            'profile_pic': URL('static', 'images', 'profile', 'default.jpg'),
             'profile_link': URL('profile', userProfile.username),
         })
     return dict(comments=comments)
@@ -285,7 +278,7 @@ def get_reviews(product_id = None):
         reviews.append({
             'username': userProfile.username,
             'text': e.text,
-            'profile_pic': URL('static', 'images', 'profile', 'image1.png'),
+            'profile_pic': URL('static', 'images', 'profile', 'default.jpg'),
             'profile_link': URL('profile', userProfile.username),
         })
     return dict(reviews=reviews)
