@@ -48,6 +48,8 @@ let init = (app) => {
                 app.vue.submitted = true;
                 app.vue.user_userName = true;
                 app.vue.validUsername= false;
+                let x = document.referrer;
+                window.location.href = x;
 
             }).catch(function(error){
                  app.vue.user_userName = false;
