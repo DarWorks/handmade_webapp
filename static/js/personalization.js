@@ -7,6 +7,7 @@ let app = {};
 // creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
 
+
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
@@ -20,7 +21,6 @@ let init = (app) => {
         add_balance:"",
         validUsername: true,
         submitted: false,
-
         rows: [],
     };
 
