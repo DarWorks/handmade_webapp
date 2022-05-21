@@ -22,10 +22,15 @@ let init = (app) => {
         return a;
     };
 
+    app.setHover =  (hoverBool) => {
+        app.vue.hover = hoverBool;
+    };
+
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        setHover: app.setHover,
     };
 
     // This creates the Vue instance.
