@@ -56,9 +56,35 @@ def full_url(u):
 @action('index')
 @action.uses('index.html', db, auth, url_signer)
 def index():
+    # 1) queriying all users to display  DB for debugging
+    # 2) querying DB to see if a user with the currect email exists in the DB
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+
+    # user session variables to be used in index.html
+    customerID = 0
+    isPersonalized = False
+    display = False
+
+    # if no active user session set display = false
+    # active session, but no DB entry --> prompt customization
+    if get_user_email() == None:
+        display = False
+    else:
+        if currentUser == None:
+            isPersonalized = False
+            display = True
+
+    # sending userSession data to conditionally render index.html
+    # note, can access as currentUsers['isPersonalized'] etc.
     return dict(
         # COMPLETE: return here any signed URLs you need.
-        my_callback_url = URL('my_callback', signer=url_signer),
+        my_callback_url=URL('my_callback', signer=url_signer),
+        isPersonalized=isPersonalized,
+        customerID=customerID,
+        display=display,
+        theDB=theDB,
     )
 
 @action('about')
@@ -253,7 +279,11 @@ def product(username=None, product_id=None):
 def rating(username=None, product_id=None):
     assert product_id is not None
 
-    data = db(db.ratingvals.product_id == product_id & db.ratingvals.rater == username).select()
+    user = db(db.userProfile.username == username).select().first()
+
+    print(user)
+
+    data = db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).select()
 
     if (data == None):
         return dict(rating=0)
@@ -265,7 +295,11 @@ def rating(username=None, product_id=None):
 def set_rating(username=None, product_id=None):
     assert product_id is not None
 
-    data = db(db.ratingvals.product_id == product_id & db.ratingvals.rater == username).select()
+    user = db(db.userProfile.username == username).select()
+
+    assert user is not None
+
+    data = db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).select()
 
     if (data == None):
         db.ratingvals.insert(
