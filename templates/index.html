@@ -10,21 +10,12 @@
 }
 
 
-.NoOverlay {
-  position:absolute;
-  width: 50%;
-  height: 20%;
-  top: 10%;
-  z-index: 5;
-
-}
-
 .notification-corner{
     position: fixed;
 	right:-100;
 	bottom:0;
-	width:250px;
-	height:250px;
+	width:300px;
+	height:200px;
     background-color: rgb(1,89,138);
 	-webkit-box-shadow: 0 2px 15px 0 rgba(0,0,0,0.6);
 	box-shadow: 0 2px 15px 0 rgba(0,0,0,0.6);
@@ -34,7 +25,6 @@
 	padding: 0;
 	opacity: 0.6;
 
-
 }
 
 </style>
@@ -43,19 +33,17 @@
 
   <div>
 
-      <!--Conndtional alert rendering TODO: NEEDS TO BE FULL SCREEN + BLUR -->
-
     [[ personalized =isPersonalized]]
     [[ if personalized == True:]]
         <h1 >[[=personalized]]</h1>
      [[else: ]]
         [[if display == True: ]]
-            <div class=" onHover overlay"  >
-                    <div class=" box px-1 notification-corner  onHover " >
-                        <h1 class="py-3 title has-text-light has-text-centered "> Hey there!</h1>
-                        <h1 class=" px-3 has-text-white has-text-centered "> Handmade Crafts needs to know more about you.</h1>
-                        <div class=" py-3 has-text-centered ">
-                             <a class="button is-success is-medium" href="[[=URL('add_user_personalization')]]"> Personalize! </a>
+            <div>
+                    <div  @mouseover="setHover(true)" @mouseleave="setHover(false)" :class="{'onHover': hover}" class=" box px-1 notification-corner " >
+                        <h1 class="py-3 title has-text-light has-text-centered "> Hey there, [[=globals().get('user').get('first_name')]] !</h1>
+                        <h1 class=" title is-4 has-text-warning has-text-centered "> Let's get Personal.</h1>
+                        <div class="  has-text-centered ">
+                             <a class="button is-warning is-danger " href="[[=URL('add_user_personalization')]]"> Personalize! </a>
                         </div>
 
                     </div>
@@ -68,7 +56,6 @@
      [[pass]]
 
     [[pass]]
-
 
 
       <section class="section has-background-warning">
