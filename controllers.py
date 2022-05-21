@@ -209,18 +209,16 @@ def add_product_info():
 # PRODUCT PAGE
 #//////////////////////////////////////////////////////////
 
-@action('product/<seller_name>/<product_id:int>')
+@action('product/<username>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
-def product(seller_name=None, product_id=None):
+def product(username=None, product_id=None):
     assert product_id is not None
-    assert seller_name is not None
+    # assert seller_name is not None
     data = db(db.products.id == product_id).select()
     prod = data.first()
     if prod is None:
         return "404 Not found"
-    data = db(db.userProfile.id == prod.seller).select()
-    sellerProfile = data.first()
-    if sellerProfile is None or sellerProfile.username != seller_name:
+    if username is None:
         return "404 Not found"
     images = []
     if prod.image1 is not None:
@@ -233,6 +231,9 @@ def product(seller_name=None, product_id=None):
         images.append(prod.image4)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
+        my_rating_url = URL('rating', signer=url_signer),
+        set_rating_url = URL('set_rating', username, product_id, signer=url_signer),
+        get_rating_url = URL('get_rating', username, product_id, signer=url_signer),
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
@@ -240,13 +241,44 @@ def product(seller_name=None, product_id=None):
         isAuthenticated = "true" if auth.get_user() else "false",
         product = dict(
             name=prod.name,
-            seller=sellerProfile.username,
             description=prod.description,
             images=images,
             price=prod.price,
-            amount=prod.amount
+            amount=prod.amount,
         )
     )
+
+@action('get_rating/<username>/<product_id:int>')
+@action.uses(db)
+def rating(username=None, product_id=None):
+    assert product_id is not None
+
+    data = db(db.ratingvals.product_id == product_id & db.ratingvals.rater == username).select()
+
+    if (data == None):
+        return dict(rating=0)
+
+    return dict(rating=data.rating)
+
+@action('set_rating/<username>/<product_id:int>', method=['POST'])
+@action.uses(db)
+def set_rating(username=None, product_id=None):
+    assert product_id is not None
+
+    data = db(db.ratingvals.product_id == product_id & db.ratingvals.rater == username).select()
+
+    if (data == None):
+        db.ratingvals.insert(
+            rating=request.json.get('rating'),
+            rater=get_user_email(),
+            product_id=product_id,
+        )
+    else:
+        data.update(rating = request.json.get('rating'))
+        db(db.product.id == product_id).update(ratingtotal = ratingtotal + request.json.get('rating'), ratingnum = ratingnum + 1)
+
+    return dict()
+
 
 @action('comments/<product_id:int>', method=['GET'])
 @action.uses(db)

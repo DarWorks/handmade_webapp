@@ -65,7 +65,8 @@ db.define_table(
     Field('image3'),
     Field('image4'),
     Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0.5, 1e6)),
-    Field('rating', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
+    Field('ratingtotal', 'float'),
+    Field('ratingnum', 'integer'),
     Field('amount', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
 )
 
@@ -74,6 +75,13 @@ db.define_table(
     Field('user', 'reference userProfile', requires=IS_NOT_EMPTY()),
     Field('product', 'reference products', require=IS_NOT_EMPTY()),
     Field('text', requires=IS_NOT_EMPTY())
+)
+
+db.define_table(
+    'ratingvals',
+    Field('product_id', 'reference products'),
+    Field('rating', 'integer', default=0),
+    Field('rater', 'reference userProfile', requires=IS_NOT_EMPTY()),
 )
 
 db.define_table(

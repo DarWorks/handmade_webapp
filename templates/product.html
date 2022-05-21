@@ -44,6 +44,17 @@
 }
 </style>
 
+<div id="rating-target">
+  <span @mouseout="stars_out()">
+    <span @mouseover="stars_over(star_idx)"
+          @click="set_stars(star_idx)"
+          v-for="star_idx in [1, 2, 3, 4, 5]">
+      <i v-if="star_idx <= display" class="fa fa-star"></i>
+      <i v-if="star_idx > display" class="fa fa-star-o"></i>
+    </span>
+  </span>
+</div>
+
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
     <div class="column is-half">
@@ -60,7 +71,7 @@
             </div>
           </div>
           [[pass]]
-
+        
         </div>
         <div class="column is-three-quarters">
 
@@ -76,11 +87,11 @@
       </div>
   </div>
 
-  <div class="column is-half">
+  <!-- <div class="column is-half">
     <div><b>[[=product.get("name", "n/a")]] <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
     <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
     <div>[[=product.get("description", "")]]</div>
-  </div>
+  </div> -->
 </div>
 
 <section class="section margin-center-max-width-1000px">
@@ -173,7 +184,9 @@
 <!-- Loads the index-specific js for Vue -->
 <script type="text/javascript">
   let initialProductImage = "[[=URL('static', product.get('images',0)[0])]]"
-  let my_callback_url = "[[=XML(my_callback_url)]]";
+  let my_callback_url = "[[=XML(my_callback_url)]]"
+  let set_rating_url = "[[=XML(set_rating_url)]]"
+  let get_rating_url = "[[=XML(get_rating_url)]]"
   let get_comments_url = "[[=XML(get_comments_url)]]"
   let get_reviews_url = "[[=XML(get_reviews_url)]]"
   let post_comment_url = "[[=XML(post_comment_url)]]"
@@ -181,4 +194,5 @@
   let isAuthenticated = [[=isAuthenticated]]
 </script>
 <script src="js/product.js"></script>
+<script src="js/rating.js"></script>
 [[end]]
