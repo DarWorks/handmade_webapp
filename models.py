@@ -76,6 +76,13 @@ db.define_table(
 )
 
 db.define_table(
+    'ratingvals',
+    Field('product_id', 'reference products'),
+    Field('rating', 'integer', default=0),
+    Field('rater', 'reference userProfile', requires=IS_NOT_EMPTY()),
+)
+
+db.define_table(
     'reviews',
     Field('user', 'reference userProfile', requires=IS_NOT_EMPTY()),
     Field('product', 'reference products', require=IS_NOT_EMPTY()),
