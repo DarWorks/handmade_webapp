@@ -387,3 +387,12 @@ def add_personalization_info():
 def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
+
+
+#### PRODUCT CATEGORIES
+
+@action('displayProductCategory')
+@action.uses(db)
+def get_category1():
+    rows = db(db.products).select().as_list()
+    return dict(rows=rows)
