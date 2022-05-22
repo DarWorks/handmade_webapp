@@ -71,11 +71,9 @@
             </div>
             
               <span @mouseout="stars_out()">
-                <span @mouseover="stars_over(star_idx)"
-                      @click="set_stars(star_idx)"
-                      v-for="star_idx in [1, 2, 3, 4, 5]">
-                  <i v-if="star_idx <= 3" class="fa fa-star"></i>
-                  <i v-if="star_idx > 2" class="fa fa-star-o"></i>
+                <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
+                  <i v-if="star_idx <= display" class="fa fa-star"></i>
+                  <i v-if="star_idx > display" class="fa fa-star-o"></i>
                 </span>
               </span>
           </div>
