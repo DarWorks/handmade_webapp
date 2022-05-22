@@ -230,6 +230,7 @@ def product(username=None, product_id=None):
     hasUsername = False
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
+        ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -237,8 +238,8 @@ def product(username=None, product_id=None):
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
-        set_rating_url = URL('set_rating', username, product_id, signer=url_signer),
-        get_rating_url = URL('get_rating', username, product_id, signer=url_signer),
+        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer),
+        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
         product = dict(
@@ -274,13 +275,22 @@ def set_rating(username=None, product_id=None):
 
     if (data == None):
         db.ratingvals.insert(
-            rating=request.json.get('rating'),
-            rater=get_user_email(),
             product_id=product_id,
+            rating=request.json.get('rating'),
+            rater=user.id,
         )
+        database = db(db.products.id == product_id).select().first()
+        total = database.ratingtotal
+        num = database.ratingnum
+        print(total, num)
+        db(db.products.id == product_id).update(ratingtotal = total + request.json.get('rating'), ratingnum = num + 1)
+
     else:
-        data.update(rating = request.json.get('rating'))
-        db(db.product.id == product_id).update(ratingtotal = ratingtotal + request.json.get('rating'), ratingnum = ratingnum + 1)
+        storage = data.rating
+        db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).update(rating = request.json.get('rating'))
+        database = db(db.products.id == product_id).select().first()
+        total = database.ratingtotal
+        db(db.products.id == product_id).update(ratingtotal = total - storage + request.json.get('rating'))
 
     return dict()
 

@@ -65,6 +65,8 @@ db.define_table(
     Field('image4'),
     Field('price', 'float', requires = IS_FLOAT_IN_RANGE(0.5, 1e6)),
     Field('rating', 'float', requires = IS_FLOAT_IN_RANGE(0, 1e6)),
+    Field('ratingtotal', 'float', default=0),
+    Field('ratingnum', 'float', default=0),
     Field('amount', 'float', default=1, requires = IS_FLOAT_IN_RANGE(0, 1e6)),
 )
 

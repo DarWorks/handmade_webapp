@@ -44,6 +44,15 @@
 }
 </style>
 
+<div id="rating-target">
+  <span @mouseout="stars_out()">
+    <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
+      <i v-if="star_idx <= display" class="fa fa-star"></i>
+      <i v-if="star_idx > display" class="fa fa-star-o"></i>
+    </span>
+  </span>
+</div>
+
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
     <div class="column is-half">
@@ -61,7 +70,7 @@
 
         </div>
         <div class="column is-three-quarters">
-          <div id="rating-target">
+          <div>
             <div id="product_image" class="card">
               <div class="card-image">
                 <figure class="image is-1by1">
@@ -70,12 +79,7 @@
               </div>
             </div>
             
-              <span @mouseout="stars_out()">
-                <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
-                  <i v-if="star_idx <= display" class="fa fa-star"></i>
-                  <i v-if="star_idx > display" class="fa fa-star-o"></i>
-                </span>
-              </span>
+            
           </div>
         </div>
       </div>
