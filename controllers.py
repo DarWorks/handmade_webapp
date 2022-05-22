@@ -392,6 +392,8 @@ def load_users():
 
 # PRODUCT CATEGORIES-
 
+# TBD maybe: 'display_category/product_type'
+
 @action('display_category_1')
 @action.uses('display_category_1.html', db)
 def display_category_1():
