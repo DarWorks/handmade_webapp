@@ -390,7 +390,7 @@ def load_users():
     return dict(rows=rows)
 
 
-#### PRODUCT CATEGORIES
+# PRODUCT CATEGORIES-
 
 @action('display_category_1')
 @action.uses('display_category_1.html', db)
@@ -401,41 +401,37 @@ def display_category_1():
     return dict(rows=rows)
 
 
-@action('displayCategory2')
-@action.uses(db)
-def displayCategory2():
-    rows = db(db.products.type == "Clothing & Shoes").select()
-    print(len(rows))
+@action('display_category_2')
+@action.uses('display_category_2.html', db)
+def display_category_2():
+    rows = db(db.products.type == "Clothing & Shoes").select().as_list()
     return dict(rows=rows)
 
 
-@action('displayCategory3')
-@action.uses(db)
-def displayCategory3():
-    rows = db(db.products.type == "Home & Living").select()
-    print(len(rows))
+@action('display_category_3')
+@action.uses('display_category_3.html', db)
+def display_category_3():
+    rows = db(db.products.type == "Home & Living").select().as_list()
     return dict(rows=rows)
 
 
-@action('displayCategory4')
-@action.uses(db)
-def displayCategory4():
-    rows = db(db.products.type == "Toys & Entertainment").select()
-    print(len(rows))
+@action('display_category_4')
+@action.uses('display_category_4.html', db)
+def display_category_4():
+    rows = db(db.products.type == "Toys & Entertainment").select().as_list()
     return dict(rows=rows)
 
 
-@action('displayCategory5')
-@action.uses(db)
-def displayCategory5():
-    rows = db(db.products.type == "Art & Collectibles").select()
-    print(len(rows))
+@action('display_category_5')
+@action.uses('display_category_5.html', db)
+def display_category_5():
+    rows = db(db.products.type == "Art & Collectibles").select().as_list()
     return dict(rows=rows)
 
 
-@action('displayCategory6')
-@action.uses(db)
-def displayCategory6():
-    rows = db(db.products.type == "Others").select()
-    print(len(rows))
+@action('display_category_6')
+@action.uses('display_category_6.html', db)
+def display_category_6():
+    rows = db(db.products.type == "Other").select().as_list()
     return dict(rows=rows)
+
