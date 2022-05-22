@@ -95,6 +95,7 @@ def index():
 def about():
     return dict()
 
+
 @action('faq')
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
@@ -391,8 +392,50 @@ def load_users():
 
 #### PRODUCT CATEGORIES
 
-@action('displayProductCategory')
+@action('display_category_1')
+@action.uses('display_category_1.html', db)
+def display_category_1():
+    rows = db(db.products.type == "Jewelry & Accessories").select().as_list()
+    #x = rows[0]
+    #y = x['type']
+    return dict(rows=rows)
+
+
+@action('displayCategory2')
 @action.uses(db)
-def get_category1():
-    rows = db(db.products).select().as_list()
+def displayCategory2():
+    rows = db(db.products.type == "Clothing & Shoes").select()
+    print(len(rows))
+    return dict(rows=rows)
+
+
+@action('displayCategory3')
+@action.uses(db)
+def displayCategory3():
+    rows = db(db.products.type == "Home & Living").select()
+    print(len(rows))
+    return dict(rows=rows)
+
+
+@action('displayCategory4')
+@action.uses(db)
+def displayCategory4():
+    rows = db(db.products.type == "Toys & Entertainment").select()
+    print(len(rows))
+    return dict(rows=rows)
+
+
+@action('displayCategory5')
+@action.uses(db)
+def displayCategory5():
+    rows = db(db.products.type == "Art & Collectibles").select()
+    print(len(rows))
+    return dict(rows=rows)
+
+
+@action('displayCategory6')
+@action.uses(db)
+def displayCategory6():
+    rows = db(db.products.type == "Others").select()
+    print(len(rows))
     return dict(rows=rows)
