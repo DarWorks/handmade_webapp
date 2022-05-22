@@ -282,7 +282,6 @@ def set_rating(username=None, product_id=None):
         database = db(db.products.id == product_id).select().first()
         total = database.ratingtotal
         num = database.ratingnum
-        print(total, num)
         db(db.products.id == product_id).update(ratingtotal = total + request.json.get('rating'), ratingnum = num + 1)
 
     else:
