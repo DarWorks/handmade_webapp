@@ -1,0 +1,65 @@
+[[extend 'layout.html']]
+
+<style>
+[v-cloak] {
+     display: none;
+}
+
+.product-images-container {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 600px;
+
+}
+
+.product-image:not(:last-child){
+  padding-right: 8%;
+}
+
+.product-image img{
+  width: 400px;
+  height: 250px;
+}
+</style>
+
+<section class="section has-background-warning">
+<div class="section" id="vue-target" v-cloak>
+  <div>
+    <h1 class="title has-text-weight-bold has-text-success">Displaying results for the category: "[[=product_type]]"</h1>
+    <nav class="level is-mobile product-images-container">
+      [[for prod in rows:]]
+      <div class="level-item level-left product-image">
+        <div class="card">
+          <div class="card-image">
+               <div class ="card-image has centered px-6">
+                <img src="[[=prod['image1']]]" width="600" height="600">
+              </div>
+              <div class="card-content">
+                <p class= "title is-size-1 has-text-centered">[[=prod['name']]]</p>
+                <p class= "title is-size-4 has-text-centered">[[=prod['description']]]</p>
+                  <p class="mb-4"> </p>
+                  <p class= "title is-size-6 has-text-centered">Sold by: </p>
+                  <p class="mb-4"> </p>
+                  <p class= "title is-size-7 has-text-centered">Rating: [[=prod['rating']]]</p>
+                  <p class="mb-3"> </p>
+                <p class= "has-text-centered">$[[=prod['price']]]</p>
+              </div>
+              <footer class="card-footer">
+                <a href="#" class="card-footer-item">Buy Now</a>
+                <a href="#" class="card-footer-item">Add to Cart</a>
+              </footer>
+          </div>
+        </div>
+      </div>
+      [[pass]]
+    </nav>
+  </div>
+</div>
+</section>
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+</script>
+<script src="js/display_product_category.js"></script>
+[[end]]

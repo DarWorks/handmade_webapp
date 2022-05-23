@@ -250,6 +250,7 @@ def product(seller_name=None, product_id=None):
         )
     )
 
+
 @action('comments/<product_id:int>', method=['GET'])
 @action.uses(db)
 def get_comments(product_id = None):
@@ -390,50 +391,15 @@ def load_users():
     return dict(rows=rows)
 
 
-# PRODUCT CATEGORIES-
+# DISPLAYING PRODUCT CATEGORIES-
 
-# TBD maybe: 'display_category/product_type'
-
-@action('display_category_1')
-@action.uses('display_category_1.html', db)
-def display_category_1():
-    rows = db(db.products.type == "Jewelry & Accessories").select().as_list()
-    #x = rows[0]
-    #y = x['type']
-    return dict(rows=rows)
-
-
-@action('display_category_2')
-@action.uses('display_category_2.html', db)
-def display_category_2():
-    rows = db(db.products.type == "Clothing & Shoes").select().as_list()
-    return dict(rows=rows)
-
-
-@action('display_category_3')
-@action.uses('display_category_3.html', db)
-def display_category_3():
-    rows = db(db.products.type == "Home & Living").select().as_list()
-    return dict(rows=rows)
-
-
-@action('display_category_4')
-@action.uses('display_category_4.html', db)
-def display_category_4():
-    rows = db(db.products.type == "Toys & Entertainment").select().as_list()
-    return dict(rows=rows)
-
-
-@action('display_category_5')
-@action.uses('display_category_5.html', db)
-def display_category_5():
-    rows = db(db.products.type == "Art & Collectibles").select().as_list()
-    return dict(rows=rows)
-
-
-@action('display_category_6')
-@action.uses('display_category_6.html', db)
-def display_category_6():
-    rows = db(db.products.type == "Other").select().as_list()
-    return dict(rows=rows)
+@action('display_product_category/<product_type>')
+@action.uses('display_product_category.html', db)
+def test(product_type=None):
+    assert product_type is not None
+    rows = db(db.products.type == product_type).select().as_list()
+    # x = rows[0]
+    # y = x['type']
+    sellerInfoRows = db(db.products.sellerid == db.userProfile.id).select().as_list()
+    return dict(rows=rows, product_type=product_type, sellerInfoRows=sellerInfoRows)
 
