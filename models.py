@@ -42,7 +42,7 @@ db.define_table(
 
 )
 
-db.userProfile.username.requires= (IS_NOT_IN_DB(db, 'userProfile.username'))
+db.userProfile.username.requires = (IS_NOT_IN_DB(db, 'userProfile.username'))
 db.userProfile.id.readable = db.userProfile.id.writable = False
 
 

@@ -398,8 +398,27 @@ def load_users():
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
+
+
+    # with open('pleaselol.txt', 'w') as f:
+    #     for line in rows:
+    #         print(line, file=f)
+    #         f.write('\n')
+    # f.close()
+    # exit()
+
     # x = rows[0]
     # y = x['type']
-    sellerInfoRows = db(db.products.sellerid == db.userProfile.id).select().as_list()
-    return dict(rows=rows, product_type=product_type, sellerInfoRows=sellerInfoRows)
+
+    #rows = db(db.userProfile.id == db.products.sellerid).select()
+    # for i in sellerInfoRows0:
+    #     # print(i.userProfile)
+    #     # print(i.products.sellerid)
+    #     print(i.userProfile.username, i.userProfile.id, i.products.sellerid)
+    #rows = db((db.products.type == product_type) and (db.userProfile.id == db.products.sellerid)).select().as_list()
+
+
+    # [[ = sellerInfoRows['firstname']]]
+
+    return dict(rows=rows, product_type=product_type)
 

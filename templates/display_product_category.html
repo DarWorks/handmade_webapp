@@ -27,22 +27,22 @@
   <div>
     <h1 class="title has-text-weight-bold has-text-success">Displaying results for the category: "[[=product_type]]"</h1>
     <nav class="level is-mobile product-images-container">
-      [[for prod in rows:]]
+      [[for product in rows:]]
       <div class="level-item level-left product-image">
         <div class="card">
           <div class="card-image">
-               <div class ="card-image has centered px-6">
-                <img src="[[=prod['image1']]]" width="600" height="600">
+              <div class ="card-image has centered px-6">
+                <img src="[[=product['image1']]]" width="600" height="600">
               </div>
               <div class="card-content">
-                <p class= "title is-size-1 has-text-centered">[[=prod['name']]]</p>
-                <p class= "title is-size-4 has-text-centered">[[=prod['description']]]</p>
+                <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
+                <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
                   <p class="mb-4"> </p>
                   <p class= "title is-size-6 has-text-centered">Sold by: </p>
                   <p class="mb-4"> </p>
-                  <p class= "title is-size-7 has-text-centered">Rating: [[=prod['rating']]]</p>
+                  <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
                   <p class="mb-3"> </p>
-                <p class= "has-text-centered">$[[=prod['price']]]</p>
+                <p class= "has-text-centered">$[[=product['price']]]</p>
               </div>
               <footer class="card-footer">
                 <a href="#" class="card-footer-item">Buy Now</a>
