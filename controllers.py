@@ -95,6 +95,7 @@ def index():
 def about():
     return dict()
 
+
 @action('faq')
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
@@ -102,7 +103,7 @@ def faq():
 
 
 #//////////////////////////////////////////////////////////
-# SHOPING CART
+# SHOPPING CART
 #//////////////////////////////////////////////////////////
 
 @action('shopping_cart')
@@ -249,6 +250,7 @@ def product(seller_name=None, product_id=None):
         )
     )
 
+
 @action('comments/<product_id:int>', method=['GET'])
 @action.uses(db)
 def get_comments(product_id = None):
@@ -387,3 +389,37 @@ def add_personalization_info():
 def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
+
+
+# DISPLAYING PRODUCT CATEGORIES-
+
+@action('display_product_category/<product_type>')
+@action.uses('display_product_category.html', db)
+def test(product_type=None):
+    assert product_type is not None
+    rows = db(db.products.type == product_type).select().as_list()
+
+    # TODO: query seller information so that it can be displayed on the product cards
+    
+    # with open('pleaselol.txt', 'w') as f:
+    #     for line in rows:
+    #         print(line, file=f)
+    #         f.write('\n')
+    # f.close()
+    # exit()
+
+    # x = rows[0]
+    # y = x['type']
+
+    #rows = db(db.userProfile.id == db.products.sellerid).select()
+    # for i in sellerInfoRows0:
+    #     # print(i.userProfile)
+    #     # print(i.products.sellerid)
+    #     print(i.userProfile.username, i.userProfile.id, i.products.sellerid)
+    #rows = db((db.products.type == product_type) and (db.userProfile.id == db.products.sellerid)).select().as_list()
+
+
+    # [[ = sellerInfoRows['firstname']]]
+
+    return dict(rows=rows, product_type=product_type)
+
