@@ -59,21 +59,39 @@ def full_url(u):
 @action.uses('index.html', db, auth, url_signer)
 def index():
     # 1) queriying all users to display  DB for debugging
-    # 2) querying DB to see if a user with the currect email exists in the DB
+    # 2) querying DB to see if a user with the current email exists in the DB
     theDB = db(db.userProfile).select().as_list()
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
+
+    # Queries for displaying products-
+    # TODO: for this query later on display the most sold / search products (currently this is random)
+    trendingProducts = db(db.products).select(orderby='<random>').as_list()
+
+    # TODO: for this query later on display the most recently added prodcuts (currently this displays all products in reverse order )
+    newProducts = db(db.products).select(orderby=~db.products.id).as_list()
 
     # user session variables to be used in index.html
     customerID = 0
     isPersonalized = False
     display = False
+    firstProductRow = newProducts
+    firstRowText = "New Items-"
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
     if get_user_email() == None:
         display = False
     else:
+        if isPersonalized == True:
+             preferenceBasedProducts = db(db.products.type == currentUser.preference1 or
+                                     db.products.type == currentUser.preference2 or
+                                     db.products.type == currentUser.preference3).select().as_list()
+             print(preferenceBasedProducts)
+             print(currentUser)
+             firstProductRow = preferenceBasedProducts
+             firstRowText = "For You-"
+
         if currentUser == None:
             isPersonalized = False
             display = True
@@ -87,6 +105,9 @@ def index():
         customerID=customerID,
         display=display,
         theDB=theDB,
+        firstProductRow=firstProductRow,
+        trendingProducts=trendingProducts,
+        firstRowText=firstRowText
     )
 
 

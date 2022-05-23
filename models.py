@@ -30,12 +30,12 @@ def get_time():
 
 db.define_table(
     'userProfile',
-    Field('first_name','text',default="", requires=IS_NOT_EMPTY()),
-    Field('last_name','text',default="", requires=IS_NOT_EMPTY()),
+    Field('first_name', 'text', default="", requires=IS_NOT_EMPTY()),
+    Field('last_name', 'text', default="", requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email, requires=IS_NOT_EMPTY()),
-    Field('username','text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
-    Field('balance','float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
-    Field('isPersonlized','boolean', default=False),
+    Field('username', 'text', unique=True, requires=IS_NOT_EMPTY()),  # 1* Check comments below for details w.r to 'uniqie' attribute
+    Field('balance', 'float', default=0, requires=IS_FLOAT_IN_RANGE(0, 1e6)), # 2* Check below
+    Field('isPersonlized', 'boolean', default=False),
     Field('preference1', 'text', default=""),
     Field('preference2', 'text', default=""),
     Field('preference3', 'text', default=""),
