@@ -399,7 +399,8 @@ def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
 
-
+    # TODO: query seller information so that it can be displayed on the product cards
+    
     # with open('pleaselol.txt', 'w') as f:
     #     for line in rows:
     #         print(line, file=f)
