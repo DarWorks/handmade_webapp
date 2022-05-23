@@ -65,10 +65,12 @@ def index():
         db.userProfile.user_email == get_user_email()).select().first()
 
     # Queries for displaying products-
-    # TODO: for this query later on display the most sold / most searched products (currently this displays random products)
+    # TODO: for this query later on display the most sold / most searched products
+    #  (currently this displays random products)
     trendingProducts = db(db.products).select(orderby='<random>').as_list()
 
-    # TODO: for this query later on display the most recently added prodcuts (currently this displays all products in reverse order)
+    # TODO: for this query later on display the most recently added prodcuts
+    #  (currently this displays all products in reverse order with no limits)
     newProducts = db(db.products).select(orderby=~db.products.id).as_list()
 
     # user session variables to be used in index.html
@@ -88,15 +90,22 @@ def index():
             display = True
         else:
             # TODO: for this query display all products from the database which math the users preferences
-            # TODO: (currently its just matching the first preference of the user since for some reason "and" wasnt displaying the correct ones)
-            preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
-                                         (db.products.type == currentUser.preference2) and
-                                         (db.products.type == currentUser.preference3)).select().as_list()
-
-            firstProductRow = preferenceBasedProducts
+            #  (currently its just matching the first preference of the user since for
+            #  some reason "and" wasnt displaying the correct ones)
+            # preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
+            #                              (db.products.type == currentUser.preference2) and
+            #                              (db.products.type == currentUser.preference3)).select().as_list()
+            #
+            # firstProductRow = preferenceBasedProducts
             firstRowText = "For You-"
 
-            #l1 = db(db.products.type == currentUser.preference1).select().as_list()
+            # TODO: this works but this is inefficient and if there are two preferences
+            #  that are same then this displays products multiple times
+            l1 = db(db.products.type == currentUser.preference1).select().as_list()
+            l2 = db(db.products.type == currentUser.preference2).select().as_list()
+            l3 = db(db.products.type == currentUser.preference3).select().as_list()
+            l = l1 + l2 + l3
+            firstProductRow = l
 
 
     # sending userSession data to conditionally render index.html
