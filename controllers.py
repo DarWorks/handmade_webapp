@@ -67,10 +67,12 @@ def index():
     # Queries for displaying products-
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
+    #  Also need to display seller info here
     trendingProducts = db(db.products).select(orderby='<random>').as_list()
 
     # TODO: for this query later on display the most recently added prodcuts
     #  (currently this displays all products in reverse order with no limits)
+    #  Also need to display seller info here
     newProducts = db(db.products).select(orderby=~db.products.id).as_list()
 
     # user session variables to be used in index.html
@@ -431,9 +433,19 @@ def load_users():
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
-
     # TODO: query seller information so that it can be displayed on the product cards
-    
+
+    # xrows = db((db.products.type == product_type) and
+    #           (db.userProfile.id == db.products.sellerid)).select(db.userProfile.first_name,
+    #                                                               db.userProfile.last_name,
+    #                                                               db.userProfile.username,
+    #                                                               db.products.image,
+    #                                                               db.products.name,
+    #                                                               db.products.description,
+    #                                                               db.products.rating,
+    #                                                               db.products.price).as_list()
+    # print(xrows)
+    #
     # with open('pleaselol.txt', 'w') as f:
     #     for line in rows:
     #         print(line, file=f)
@@ -451,6 +463,19 @@ def test(product_type=None):
     #     print(i.userProfile.username, i.userProfile.id, i.products.sellerid)
     #rows = db((db.products.type == product_type) and (db.userProfile.id == db.products.sellerid)).select().as_list()
 
+    # temprows = db(db.userProfile.id == db.products.sellerid).select(db.userProfile.first_name, db.userProfile.last_name,
+    #                                                                 db.userProfile.username,
+    #                                                                 db.products.name, db.products.image1,
+    #                                                                 db.products.type, db.products.description,
+    #                                                                 db.products.rating, db.products.price).as_list()
+    #
+    # rows = {}
+    # x = 0
+    # for i in temprows:
+    #     if i['products']['type'] == product_type:
+    #         rows[x] = i
+    #         x += 1
+    # print(rows)
 
     # [[ = sellerInfoRows['firstname']]]
 
