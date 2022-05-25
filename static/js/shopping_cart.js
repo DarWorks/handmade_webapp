@@ -3,11 +3,37 @@ let app = {};
 let init = (app) => {
 
     app.data = {
-        fulfillment: {name: "Cool Guy", address: "Moon"},
+        cart: [],
+        cart_size: 0,
+        cart_total: 0,
+        checkout_state: 'checkout',
+        fulfillment: { name: "", address: "" },
     };
 
     app.stripe_session_id = null;
-    app.items = [];
+
+    app.store_cart = function () {
+        localStorage[app_name] = JSON.stringify({ cart: app.vue.cart });
+    };
+
+    app.read_cart = function () {
+
+        if (localStorage[app_name]) {
+            try {
+                app.vue.cart = JSON.parse(localStorage[app_name]).cart;
+
+            } catch (error) {
+                console.error(error);
+                app.vue.cart = [];
+            }
+        } else {
+            app.vue.cart = [];
+        }
+    };
+
+    app.checkout = function () {
+        app.vue.checkout_state = "pay";
+    };
 
     app.pay = function () {
         axios.post(pay_url).then(function (r) {
@@ -19,7 +45,7 @@ let init = (app) => {
                 }).then(function (result) {
                     Q.flash(result.error.message);
                 });
-            } 
+            }
         });
     };
 
@@ -27,7 +53,6 @@ let init = (app) => {
         pay: app.pay,
     };
 
-    // This creates the Vue instance.
     app.vue = new Vue({
         el: "#vue-target",
         data: app.data,
@@ -35,6 +60,7 @@ let init = (app) => {
     });
 
     app.init = () => {
+        app.read_cart();
     };
 
     app.init();

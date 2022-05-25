@@ -110,8 +110,18 @@ def faq():
 def shopping_cart():
     return dict(
         pay_url = URL('pay', signer=url_signer),
-        stripe_key = STRIPE_KEY_INFO['test_public_key']
+        stripe_key = STRIPE_KEY_INFO['test_public_key'],
+        app_name = APP_NAME,
+        get_product_url = URL('get_product')
     )
+
+@action('get_product')
+@action.uses(db, auth)
+def get_product():
+    id = request.params.get('id')
+
+    row = db(db.products.id == id).select().first()
+    return dict(row=row)
 
 @action('pay', method="POST")
 @action.uses(db, url_signer)
@@ -205,7 +215,7 @@ def add_product_info(username=None):
 #//////////////////////////////////////////////////////////
 
 @action('product/<seller_name>/<product_id:int>')
-@action.uses('product.html', auth, url_signer)
+@action.uses('product.html', db, auth, url_signer)
 def product(seller_name=None, product_id=None):
     assert product_id is not None
     assert seller_name is not None
@@ -231,8 +241,12 @@ def product(seller_name=None, product_id=None):
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+
     return dict(
-        my_callback_url = URL('my_callback', signer=url_signer),
+        app_name = APP_NAME,
+        get_product_url = URL('get_product'),
+        product_id=product_id,
+
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),

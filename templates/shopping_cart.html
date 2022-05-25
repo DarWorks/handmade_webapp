@@ -6,7 +6,81 @@
     }
 </style>
 
-<html>
+<div class="section" id="vue-target" v-cloak>
+
+    <h1 class="title">Shopping Cart</h1>
+
+    <!-- Cart content -->
+    <div v-if="cart.length === 0" class="container">
+        <p>Add something to your cart!</p>
+    </div>
+
+
+    <!-- Displays products -->
+    <div v-for="product in cart" class="box">
+        <div class="columns">
+
+            <div class="column is-one-quarter">
+                <div class="box">
+                    <img :src="product.image1" />
+                </div>
+            </div>
+
+            <div class="column is-three-quarters">
+                <div class="has-text-weight-bold is-size-3">{{product.name}}</div>
+                <div class="mt-2">
+                    <p>{{product.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="cart.length > 0" class="block">
+        Your total price: ${{cart_total}}
+    </div>
+
+    <div class="block">
+        <!-- checkout -->
+        <button v-if="cart_total > 0 && checkout_state === 'checkout'" class="button is-success" @click="checkout()">
+            <span>Checkout</span>
+        </button>
+
+        <!-- pay -->
+        <div v-if="cart_total > 0 && checkout_state === 'pay'">
+            <div class="subtitle">Shipping Information</div>
+            <div class="form">
+                <div class="field">
+                    <label class="label">Name:</label>
+                    <div class="control">
+                        <input type="text" v-model="fulfillment.name" class="input">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Address:</label>
+                    <div class="control">
+                        <input type="text" v-model="fulfillment.address" class="input">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-link" @click="pay()">
+                            <span class="icon is-small"><i class="fa fa-credit-card"></i></span>
+                            <span>Pay</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">You will be redirected to Stripe to complete your payment securely.</div>
+        </div>
+    </div>
+
+    <!-- End -->
+
+</div>
+
+
+
+<!-- <html>
   <body>
     <div class="section" id="vue-target" v-cloak>
         <h1 class="subtitle">Purchase a cool necklace!</h1>
@@ -19,14 +93,16 @@
     </div>
 
   </body>
-</html>
+</html> -->
 
 
 [[block page_scripts]]
 <script>
     let pay_url = "[[=XML(pay_url)]]";
     let stripe_key = "[[=XML(stripe_key)]]";
-</script>  
+    let app_name = "[[=XML(app_name)]]";
+    let get_product_url = "[[XML(get_product_url)]]"
+</script>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="js/shopping_cart.js"></script>
 [[end]]
