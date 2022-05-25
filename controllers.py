@@ -59,15 +59,28 @@ def full_url(u):
 @action.uses('index.html', db, auth, url_signer)
 def index():
     # 1) queriying all users to display  DB for debugging
-    # 2) querying DB to see if a user with the currect email exists in the DB
+    # 2) querying DB to see if a user with the current email exists in the DB
     theDB = db(db.userProfile).select().as_list()
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
+
+    # Queries for displaying products-
+    # TODO: for this query later on display the most sold / most searched products
+    #  (currently this displays random products)
+    #  Also need to display seller info here
+    trendingProducts = db(db.products).select(orderby='<random>').as_list()
+
+    # TODO: for this query later on display the most recently added prodcuts
+    #  (currently this displays all products in reverse order with no limits)
+    #  Also need to display seller info here
+    newProducts = db(db.products).select(orderby=~db.products.id).as_list()
 
     # user session variables to be used in index.html
     customerID = 0
     isPersonalized = False
     display = False
+    firstProductRow = newProducts
+    firstRowText = "New Items-"
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -77,6 +90,25 @@ def index():
         if currentUser == None:
             isPersonalized = False
             display = True
+        else:
+            # TODO: for this query display all products from the database which math the users preferences
+            #  (currently its just matching the first preference of the user since for
+            #  some reason "and" wasnt displaying the correct ones)
+            # preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
+            #                              (db.products.type == currentUser.preference2) and
+            #                              (db.products.type == currentUser.preference3)).select().as_list()
+            #
+            # firstProductRow = preferenceBasedProducts
+            firstRowText = "For You-"
+
+            # TODO: this works but this is inefficient and if there are two preferences
+            #  that are same then this displays products multiple times
+            l1 = db(db.products.type == currentUser.preference1).select().as_list()
+            l2 = db(db.products.type == currentUser.preference2).select().as_list()
+            l3 = db(db.products.type == currentUser.preference3).select().as_list()
+            l = l1 + l2 + l3
+            firstProductRow = l
+
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
@@ -87,6 +119,9 @@ def index():
         customerID=customerID,
         display=display,
         theDB=theDB,
+        firstProductRow=firstProductRow,
+        trendingProducts=trendingProducts,
+        firstRowText=firstRowText
     )
 
 
@@ -95,6 +130,7 @@ def index():
 def about():
     return dict()
 
+
 @action('faq')
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
@@ -102,7 +138,7 @@ def faq():
 
 
 #//////////////////////////////////////////////////////////
-# SHOPING CART
+# SHOPPING CART
 #//////////////////////////////////////////////////////////
 
 @action('shopping_cart')
@@ -431,3 +467,60 @@ def add_personalization_info():
 def load_users():
     rows = db(db.userProfile).select().as_list()
     return dict(rows=rows)
+
+
+# DISPLAYING PRODUCT CATEGORIES-
+
+@action('display_product_category/<product_type>')
+@action.uses('display_product_category.html', db)
+def test(product_type=None):
+    assert product_type is not None
+    rows = db(db.products.type == product_type).select().as_list()
+    # TODO: query seller information so that it can be displayed on the product cards
+
+    # xrows = db((db.products.type == product_type) and
+    #           (db.userProfile.id == db.products.sellerid)).select(db.userProfile.first_name,
+    #                                                               db.userProfile.last_name,
+    #                                                               db.userProfile.username,
+    #                                                               db.products.image,
+    #                                                               db.products.name,
+    #                                                               db.products.description,
+    #                                                               db.products.rating,
+    #                                                               db.products.price).as_list()
+    # print(xrows)
+    #
+    # with open('pleaselol.txt', 'w') as f:
+    #     for line in rows:
+    #         print(line, file=f)
+    #         f.write('\n')
+    # f.close()
+    # exit()
+
+    # x = rows[0]
+    # y = x['type']
+
+    #rows = db(db.userProfile.id == db.products.sellerid).select()
+    # for i in sellerInfoRows0:
+    #     # print(i.userProfile)
+    #     # print(i.products.sellerid)
+    #     print(i.userProfile.username, i.userProfile.id, i.products.sellerid)
+    #rows = db((db.products.type == product_type) and (db.userProfile.id == db.products.sellerid)).select().as_list()
+
+    # temprows = db(db.userProfile.id == db.products.sellerid).select(db.userProfile.first_name, db.userProfile.last_name,
+    #                                                                 db.userProfile.username,
+    #                                                                 db.products.name, db.products.image1,
+    #                                                                 db.products.type, db.products.description,
+    #                                                                 db.products.rating, db.products.price).as_list()
+    #
+    # rows = {}
+    # x = 0
+    # for i in temprows:
+    #     if i['products']['type'] == product_type:
+    #         rows[x] = i
+    #         x += 1
+    # print(rows)
+
+    # [[ = sellerInfoRows['firstname']]]
+
+    return dict(rows=rows, product_type=product_type)
+
