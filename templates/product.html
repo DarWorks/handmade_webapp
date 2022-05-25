@@ -44,6 +44,15 @@
 }
 </style>
 
+<div id="rating-target">
+  <span @mouseout="stars_out()">
+    <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
+      <i v-if="star_idx <= display" class="fa fa-star"></i>
+      <i v-if="star_idx > display" class="fa fa-star-o"></i>
+    </span>
+  </span>
+</div>
+
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
     <div class="column is-half">
@@ -61,15 +70,17 @@
 
         </div>
         <div class="column is-three-quarters">
-
-          <div id="product_image" class="card">
-            <div class="card-image">
-              <figure class="image is-1by1">
-                <img :src="productImages.find((x) => x.id == selectedImage)['src']">
-              </figure>
+          <div>
+            <div id="product_image" class="card">
+              <div class="card-image">
+                <figure class="image is-1by1">
+                  <img v-bind:src="productImages.find((x) => x.id == selectedImage)['src']">
+                </figure>
+              </div>
             </div>
+            
+            
           </div>
-
         </div>
       </div>
   </div>
@@ -170,11 +181,13 @@
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
 <script type="text/javascript">
-  let my_callback_url = "[[=XML(my_callback_url)]]";
+  let my_callback_url = "[[=XML(my_callback_url)]]"
   let get_comments_url = "[[=XML(get_comments_url)]]"
   let get_reviews_url = "[[=XML(get_reviews_url)]]"
   let post_comment_url = "[[=XML(post_comment_url)]]"
   let post_reviews_url = "[[=XML(post_reviews_url)]]"
+  let set_rating_url = "[[=XML(set_rating_url)]]"
+  let get_rating_url = "[[=XML(get_rating_url)]]"
   let isAuthenticated = [[=isAuthenticated]]
   let hasUsername = [[=hasUsername]]
   let images =[
@@ -184,4 +197,5 @@
   ]
 </script>
 <script src="js/product.js"></script>
+<script src="js/rating.js"></script>
 [[end]]

@@ -240,18 +240,18 @@ def add_product_info(username=None):
 # PRODUCT PAGE
 #//////////////////////////////////////////////////////////
 
-@action('product/<seller_name>/<product_id:int>')
+@action('product/<username>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
-def product(seller_name=None, product_id=None):
+def product(username=None, product_id=None):
     assert product_id is not None
-    assert seller_name is not None
+    assert username is not None
     data = db(db.products.id == product_id).select()
     prod = data.first()
     if prod is None:
         return "404 Not found"
     data = db(db.userProfile.id == prod.sellerid).select()
     sellerProfile = data.first()
-    if sellerProfile is None or sellerProfile.username != seller_name:
+    if sellerProfile is None or sellerProfile.username != username:
         return "404 Not found"
     images = []
     if prod.image1 is not None:
@@ -266,6 +266,7 @@ def product(seller_name=None, product_id=None):
     hasUsername = False
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
+        ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -273,6 +274,8 @@ def product(seller_name=None, product_id=None):
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
+        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer),
+        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
         product = dict(
@@ -285,6 +288,46 @@ def product(seller_name=None, product_id=None):
         )
     )
 
+@action('get_rating/<username>/<product_id:int>')
+@action.uses(db)
+def rating(username=None, product_id=None):
+    assert product_id is not None
+
+    user = db(db.userProfile.username == username).select().first()
+    data = db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).select().first()
+
+    if (data == None):
+        return dict(rating=0)
+
+    return dict(rating=data.rating)
+
+@action('set_rating/<username>/<product_id:int>', method=['POST'])
+@action.uses(db)
+def set_rating(username=None, product_id=None):
+    assert product_id is not None
+
+    user = db(db.userProfile.username == username).select().first()
+    data = db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).select().first()
+
+    if (data == None):
+        db.ratingvals.insert(
+            product_id=product_id,
+            rating=request.json.get('rating'),
+            rater=user.id,
+        )
+        database = db(db.products.id == product_id).select().first()
+        total = database.ratingtotal
+        num = database.ratingnum
+        db(db.products.id == product_id).update(ratingtotal = total + request.json.get('rating'), ratingnum = num + 1)
+
+    else:
+        storage = data.rating
+        db((db.ratingvals.product_id == product_id) & (db.ratingvals.rater == user.id)).update(rating = request.json.get('rating'))
+        database = db(db.products.id == product_id).select().first()
+        total = database.ratingtotal
+        db(db.products.id == product_id).update(ratingtotal = total - storage + request.json.get('rating'))
+
+    return dict()
 
 @action('comments/<product_id:int>', method=['GET'])
 @action.uses(db)
