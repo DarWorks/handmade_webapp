@@ -37,6 +37,8 @@ from .models import get_user_email
 from .models import get_user_FirstName
 from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
+from urllib.parse import urlsplit, urlunsplit
+
 
 url_signer = URLSigner(session)
 
@@ -64,6 +66,19 @@ def index():
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
 
+    isPersonalized = False
+
+
+    currentUserName=""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName= currentUser.username
+        isPersonalized= currentUser.isPersonlized
+    else:
+        currentUserName=None
+        isPersonalized = False
+
+
     # Queries for displaying products-
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
@@ -77,7 +92,6 @@ def index():
 
     # user session variables to be used in index.html
     customerID = 0
-    isPersonalized = False
     display = False
     firstProductRow = newProducts
     firstRowText = "New Items"
@@ -123,6 +137,7 @@ def index():
         trendingProducts=trendingProducts,
         firstRowText=firstRowText,
         url_signer = url_signer,
+        currentUserName =currentUserName,
 
     )
 
@@ -533,11 +548,39 @@ def test(product_type=None):
 #//////////////////////////////////////////////////////////
 # LAYOUT url signer
 #//////////////////////////////////////////////////////////
-# @action('layout')
+# @action('getUrls')
 # @action.uses('layout.html', db, auth, url_signer)
 # def layoutUrlSigner():
+#     homeUrl = URL('index')
+#     print(homeUrl)
+#     split_url = urlsplit(homeUrl)
+#     clean_path = "".join(split_url.path.rpartition("/")[:-1])
+#     print(clean_path)
+#     add_prod_path = clean_path + "add_product"
+#     add_prod_pathURL = URL(add_prod_path, signer=url_signer)
+#
 #     return dict(
-#         # COMPLETE: return here any signed URLs you need.
 #         url_signer=url_signer,
+#         clean_path = clean_path,
+#         add_prod_path = add_prod_path,
+#         add_prod_pathURL=add_prod_pathURL,
 #
 #     )
+
+#
+# @action('get_urls')
+# @action.uses(db)
+# def getUrls():
+#     homeUrl = URL('index')
+#     print(homeUrl)
+#     split_url = urlsplit(homeUrl)
+#     clean_path = "".join(split_url.path.rpartition("/")[:-1])
+#     print(clean_path)
+#     add_prod_path = clean_path + "add_product"
+#     add_prod_pathURL = URL(add_prod_path, signer=url_signer)
+#
+#
+#     return dict(url_signer=url_signer,
+#         clean_path = clean_path,
+#         add_prod_path = add_prod_path,
+#         add_prod_pathURL=add_prod_pathURL,)

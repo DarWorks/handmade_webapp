@@ -50,6 +50,8 @@ let addProdLinkInit = (addProdLink) => {
 
     // And this addProdLinkInitializes it.
     addProdLink.addProdLinkInit = () => {
+
+
       axios.get("/handB/username").then((res) => {
         addProdLink.vue.username = res.data.username
         addProdLink.vue.addProdLink = `/handB/add_product/${res.data.username}`

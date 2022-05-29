@@ -43,6 +43,11 @@
   height: 250px;
 }
 
+.listTopics{
+
+    background-color= #F9A276;
+
+}
 
 </style>
 
@@ -52,7 +57,7 @@
 
     [[ personalized =isPersonalized]]
     [[ if personalized == True:]]
-        <h1 >[[=personalized]]</h1>
+        <!--<h1 >[[=personalized]]</h1>-->
      [[else: ]]
         [[if display == True: ]]
             <div>
@@ -61,7 +66,7 @@
                            <h1 class=" title is-5 has-text-light has-text-centered "> Hey there, [[=globals().get('user').get('first_name')]] !</h1>
                            <h1 class=" title is-6 has-text-warning has-text-centered "> Let's get Personal.</h1>
                            <div class="  has-text-centered ">
-                                <a class="button " href="[[=URL('add_user_personalization', signer=url_signer)]] " style="background-color:#F9A276;"> Personalize! </a>
+                                <a class="button " href="[[=URL('add_user_personalization', signer=url_signer)]] " style="background-color:#F9A276"> Personalize! </a>
                             </div>
                        </div>
 
@@ -98,9 +103,27 @@
                   <!-- List of Topics bar-->
 
                 <div  class="notification has-text-white " style="background-color: #F9A276; ">
-                  <p class="is-size-2">List of Topics-</p>
-                  <div class="content is-medium">
+                  <div class="content is-medium ">
+                      <h1 class="title">Store Navigation</h1>
+                      [[if globals().get('user'):]]
+                      <div class="column is-vcentered">
+                                [[if personalized == True:]]
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_product', currentUserName)]]"> Sell </a>
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('profile', currentUserName)]]"> My Profile </a>
+                                [[else:]]
+                                    [[if display == True:]]
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] "> Sell </a>
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] "> Profile</a>
+                                [[pass]]
+                            [[pass]]
+                      </div>
+                      <h1 class="title">Shop Categories</h1>
+
+                      [[pass]]
+
+
                     <ul>
+
                       <a href="[[=URL('display_product_category/Jewelry & Accessories')]]"><li>Jewelry & Accessories</li></a>
                       <a href="[[=URL('display_product_category/Clothing & Shoes')]]"><li>Clothing & Shoes</li></a>
                       <a href="[[=URL('display_product_category/Home & Living')]]"><li>Home & Living</li></a>
@@ -110,6 +133,7 @@
                     </ul>
                     </div>
                 </div>
+
             </div>
             <!-- Second Half of page -->
             <div class="column is-two-thirds">
@@ -186,7 +210,30 @@
 </section>
 </div>
 
-
+<div> 
+    <table class="table is-striped is-fullwidth"> 
+        <tr> 
+            <th> id</th> 
+            <th> email</th> 
+            <th> username</th> 
+            <th> personalized</th> 
+            <th> pref1</th> 
+            <th> pref2</th> 
+            <th> pref3</th> 
+        </tr> 
+        [[ for r in theDB:]]  
+        <tr>  
+            <td> [[=r['id']]] </td> 
+            <td> [[=r['user_email']]] </td> 
+            <td> [[=r['username']]] </td> 
+            <td> [[=r['isPersonlized']]]</td> 
+            <td> [[=r['preference1']]]</td> 
+            <td> [[=r['preference2']]]</td> 
+            <td> [[=r['preference3']]]</td>   
+        </tr> 
+        [[pass]]  
+    </table>      
+</div> 
 
 
 [[block page_scripts]]

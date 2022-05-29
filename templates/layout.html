@@ -13,14 +13,18 @@
        background-color: #f1641e;
        color: black;
 
+
    }
 
   .nav{
    background-color: #F9A276;
+
   }
 
+  body{
+    color: white;
 
-
+  }
 
 </style>
 
@@ -81,24 +85,17 @@
               </a>
             </div>
           </div>
+
            [[if globals().get('user'):]]
-                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink"> Sell</a>
+                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink" >Sell</a>
+
            [[pass]]
 
 
 
 
 
-
-          <!--[[ if globals().get('user'): ]]-->
-              <!--<a  class="navbar-item"  id="profile-link-target" v-if="username.length > 0" :href="profileAddProd">-->
-                  <!--Sell-->
-              <!--</a>-->
-          <!--[[pass]]-->
-
-
         </div>
-
 
 
         [[if not globals().get('user'):]]
@@ -172,12 +169,17 @@
   [[if globals().get('user'):]]
     <script src="js/profilelink.js"></script>
     <script src="js/addProdLink.js"></script>
+
   [[pass]]
 
   [[if not globals().get('user'):]]
     <script src="js/close.js"></script>
   [[pass]]
 
-  [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+
+  [[block page_scripts]]<!-- individual pages can add scripts here -->
+
+
+  [[end]]
 
 </html>
