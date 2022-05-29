@@ -7,6 +7,25 @@
   [notif]:hover {
     opacity: 1;
   }
+
+  [navHover]:hover{
+
+       background-color: #f1641e;
+       color: black;
+
+
+   }
+
+  .nav{
+   background-color: #F9A276;
+
+  }
+
+  body{
+    color: white;
+
+  }
+
 </style>
 
 <html lang="en">
@@ -21,10 +40,10 @@
   </head>
   <body>
     <!-- Navigation bar -->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="[[=URL('index')]]">
-          Handmade Crafts
+    <nav class="navbar nav has-text-white" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand nav">
+        <a class=" has-text-white navbar-item" href="[[=URL('index')]]">
+          Handmade
           <!-- <img class="logo" width="150" src="images/site_icon.png"> -->
         </a>
 
@@ -37,27 +56,47 @@
         </a>
       </div>
 
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item">
-            Home
-          </a>
+      <div class="navbar-menu nav ">
+        <div class="navbar-start ">
 
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              Buy/Sell
+          <div class=" has-text-white navbar-item has-dropdown is-hoverable " >
+            <a  class="navbar-link has-text-white navHover">
+              Buy
             </a>
 
             <div class="navbar-dropdown">
-              <a class="navbar-item">
-                Buy
+              <a class="navbar-item" href="[[=URL('display_product_category/Jewelry & Accessories')]]">
+                Jewelry & Accessories
               </a>
-              <a class="navbar-item">
-                Sell
+              <a class="navbar-item" href="[[=URL('display_product_category/Clothing & Shoes')]]">
+                Clothing & Shoes
+              </a>
+              <a class="navbar-item" href="[[=URL('display_product_category/Home & Living')]]">
+                Home & Living
+              </a>
+              <a class="navbar-item" href="[[=URL('display_product_category/Toys & Entertainment')]]">
+                Toys & Entertainment
+              </a>
+              <a class="navbar-item" href="[[=URL('display_product_category/Art & Collectibles')]]">
+                Art & Collectibles
+              </a>
+              <a class="navbar-item" href="[[=URL('display_product_category/Other')]]">
+                Other
               </a>
             </div>
           </div>
+
+           [[if globals().get('user'):]]
+                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink" >Sell</a>
+
+           [[pass]]
+
+
+
+
+
         </div>
+
 
         [[if not globals().get('user'):]]
         <div class="notification has-background-warning" v-if="notifshow" id="close-target" notif>
@@ -69,7 +108,7 @@
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable" id="search-target">
             <div class="navbar-item">
-              <input class="input is-small" v-model="query" @keyup="search" type="text" placeholder="Search">
+              <input class="input" v-model="query" @keyup="search" type="text" placeholder="Search">
             </div>
 
             <div v-if="results.length > 0" class="navbar-dropdown">
@@ -83,7 +122,7 @@
 
             [[if globals().get('user'):]]
                <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link is-primary">
+                  <a class="navbar-link is-primary has-text-white">
                     [[=globals().get('user').get('email')]]
                   </a>
                   <div class="navbar-dropdown" id="profile-link-target">
@@ -126,14 +165,21 @@
   <script src="js/utils.js"></script>
   <script src="js/search.js"></script>
 
+
   [[if globals().get('user'):]]
     <script src="js/profilelink.js"></script>
+    <script src="js/addProdLink.js"></script>
+
   [[pass]]
 
   [[if not globals().get('user'):]]
     <script src="js/close.js"></script>
   [[pass]]
 
-  [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+
+  [[block page_scripts]]<!-- individual pages can add scripts here -->
+
+
+  [[end]]
 
 </html>
