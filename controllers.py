@@ -64,6 +64,19 @@ def index():
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
 
+    isPersonalized = False
+
+
+    currentUserName=""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName= currentUser.username
+        isPersonalized= currentUser.isPersonlized
+    else:
+        currentUserName=None
+        isPersonalized = False
+
+
     # Queries for displaying products-
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
@@ -77,10 +90,9 @@ def index():
 
     # user session variables to be used in index.html
     customerID = 0
-    isPersonalized = False
     display = False
     firstProductRow = newProducts
-    firstRowText = "New Items-"
+    firstRowText = "New Items"
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -99,7 +111,7 @@ def index():
             #                              (db.products.type == currentUser.preference3)).select().as_list()
             #
             # firstProductRow = preferenceBasedProducts
-            firstRowText = "For You-"
+            firstRowText = "For You"
 
             # TODO: this works but this is inefficient and if there are two preferences
             #  that are same then this displays products multiple times
@@ -121,7 +133,10 @@ def index():
         theDB=theDB,
         firstProductRow=firstProductRow,
         trendingProducts=trendingProducts,
-        firstRowText=firstRowText
+        firstRowText=firstRowText,
+        url_signer = url_signer,
+        currentUserName =currentUserName,
+
     )
 
 
