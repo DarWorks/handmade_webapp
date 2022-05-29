@@ -64,8 +64,6 @@ def index():
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
 
-
-
     # Queries for displaying products-
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
@@ -82,7 +80,7 @@ def index():
     isPersonalized = False
     display = False
     firstProductRow = newProducts
-    firstRowText = "New Items-"
+    firstRowText = "New Items"
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -101,7 +99,7 @@ def index():
             #                              (db.products.type == currentUser.preference3)).select().as_list()
             #
             # firstProductRow = preferenceBasedProducts
-            firstRowText = "For You-"
+            firstRowText = "For You"
 
             # TODO: this works but this is inefficient and if there are two preferences
             #  that are same then this displays products multiple times
@@ -216,7 +214,7 @@ def profile(username=None):
     )
 
 @action('add_product/<username>')
-@action.uses('add_product.html', db, auth, url_signer.verify())
+@action.uses('add_product.html', db, auth, url_signer)
 def add_product(username=None):
     assert username is not None
     return dict(
@@ -480,6 +478,7 @@ def load_users():
 @action.uses('display_product_category.html', db , auth, auth.user, url_signer)
 def test(product_type=None):
     assert product_type is not None
+    print(product_type)
     rows = db(db.products.type == product_type).select().as_list()
     # TODO: query seller information so that it can be displayed on the product cards
 
@@ -529,3 +528,16 @@ def test(product_type=None):
 
     return dict(rows=rows, product_type=product_type)
 
+
+
+#//////////////////////////////////////////////////////////
+# LAYOUT url signer
+#//////////////////////////////////////////////////////////
+# @action('layout')
+# @action.uses('layout.html', db, auth, url_signer)
+# def layoutUrlSigner():
+#     return dict(
+#         # COMPLETE: return here any signed URLs you need.
+#         url_signer=url_signer,
+#
+#     )

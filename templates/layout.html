@@ -13,18 +13,14 @@
        background-color: #f1641e;
        color: black;
 
-
    }
 
   .nav{
    background-color: #F9A276;
-
   }
 
-  body{
-    color: white;
 
-  }
+
 
 </style>
 
@@ -56,7 +52,7 @@
         </a>
       </div>
 
-      <div class="navbar-menu nav   ">
+      <div class="navbar-menu nav ">
         <div class="navbar-start ">
 
           <div class=" has-text-white navbar-item has-dropdown is-hoverable " >
@@ -65,19 +61,19 @@
             </a>
 
             <div class="navbar-dropdown">
-              <a class="navbar-item" href="[[=URL('display_product_category/Jewelry&Accessories')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Jewelry & Accessories')]]">
                 Jewelry & Accessories
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Clothing&Shoes')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Clothing & Shoes')]]">
                 Clothing & Shoes
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Home&Living')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Home & Living')]]">
                 Home & Living
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Toys&Entertainment')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Toys & Entertainment')]]">
                 Toys & Entertainment
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Art&Collectibles')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Art & Collectibles')]]">
                 Art & Collectibles
               </a>
               <a class="navbar-item" href="[[=URL('display_product_category/Other')]]">
@@ -85,12 +81,13 @@
               </a>
             </div>
           </div>
-
-
            [[if globals().get('user'):]]
-                  <a class="navbar-item is-primary has-text-white" href="[[=URL('display_product_category/Other')]]" >Sell</a>
-            [[pass]]
-          [[pass]]
+                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink"> Sell</a>
+           [[pass]]
+
+
+
+
 
 
           <!--[[ if globals().get('user'): ]]-->
@@ -101,8 +98,6 @@
 
 
         </div>
-
-
 
 
 
@@ -173,8 +168,10 @@
   <script src="js/utils.js"></script>
   <script src="js/search.js"></script>
 
+
   [[if globals().get('user'):]]
     <script src="js/profilelink.js"></script>
+    <script src="js/addProdLink.js"></script>
   [[pass]]
 
   [[if not globals().get('user'):]]
