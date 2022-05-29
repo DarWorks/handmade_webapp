@@ -35,9 +35,9 @@ let profilelinkinit = (profilelinkapp) => {
 
     // And this profilelinkinitializes it.
     profilelinkapp.profilelinkinit = () => {
-      axios.get("/handQ/username").then((res) => {
+      axios.get("/handB/username").then((res) => {
         profilelinkapp.vue.username = res.data.username
-        profilelinkapp.vue.profileURL = `/handQ/profile/${res.data.username}`
+        profilelinkapp.vue.profileURL = `/handB/profile/${res.data.username}`
       })
     };
 

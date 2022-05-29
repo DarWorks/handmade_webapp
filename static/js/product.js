@@ -26,10 +26,10 @@ let init = (app) => {
 
     app.can_comment = function () {
       if (!isAuthenticated) {
-       window.location.replace("/handmade_webapp/auth/login");
+       window.location.replace("/handB/auth/login");
        return false;
      } else if (!hasUsername) {
-       window.location.replace("/handmade_webapp/add_user_personalization");
+       window.location.replace("/handB/add_user_personalization");
        return false;
      }
      return true;
@@ -51,10 +51,10 @@ let init = (app) => {
 
     app.can_review = function () {
       if (!isAuthenticated) {
-       window.location.replace("/handmade_webapp/auth/login");
+       window.location.replace("/handB/auth/login");
        return false;
      } else if (!hasUsername) {
-       window.location.replace("/handmade_webapp/add_user_personalization");
+       window.location.replace("/handB/add_user_personalization");
        return false;
      }
      return true;

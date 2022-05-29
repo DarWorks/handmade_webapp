@@ -64,6 +64,8 @@ def index():
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
 
+
+
     # Queries for displaying products-
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
@@ -121,7 +123,9 @@ def index():
         theDB=theDB,
         firstProductRow=firstProductRow,
         trendingProducts=trendingProducts,
-        firstRowText=firstRowText
+        firstRowText=firstRowText,
+        url_signer = url_signer,
+
     )
 
 
@@ -200,6 +204,7 @@ def profile(username=None):
     ), db(db.products.sellerid == userProfile.id).select().as_list())
     return dict(
         my_callback_url = URL('my_callback', signer=url_signer),
+        url_signer = url_signer,
         isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
@@ -211,7 +216,7 @@ def profile(username=None):
     )
 
 @action('add_product/<username>')
-@action.uses('add_product.html', db, auth, url_signer)
+@action.uses('add_product.html', db, auth, url_signer.verify())
 def add_product(username=None):
     assert username is not None
     return dict(
@@ -420,7 +425,7 @@ def getUsername():
 
 
 @action('add_user_personalization')
-@action.uses('personalization.html', db, auth, url_signer)
+@action.uses('personalization.html', db, auth, url_signer.verify(), auth.user)
 def add_personalization():
     email = get_user_email()
 
@@ -472,7 +477,7 @@ def load_users():
 # DISPLAYING PRODUCT CATEGORIES-
 
 @action('display_product_category/<product_type>')
-@action.uses('display_product_category.html', db)
+@action.uses('display_product_category.html', db , auth, auth.user, url_signer)
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
