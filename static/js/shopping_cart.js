@@ -31,12 +31,23 @@ let init = (app) => {
         }
     };
 
+    app.delete_item = function (product) {
+        let i = app.vue.cart.indexOf(product);
+        if (i > -1) {
+            app.vue.cart.splice(i, 1);
+        }
+        app.store_cart();
+    };
+
     app.checkout = function () {
         app.vue.checkout_state = "pay";
     };
 
     app.pay = function () {
-        axios.post(pay_url).then(function (r) {
+        axios.post(pay_url, {
+            cart: app.vue.cart,
+            fulfillment: app.vue.fulfillment
+        }).then(function (r) {
             if (r.data.ok) {
                 let stripe_session_id = r.data.session_id;
                 stripe = Stripe(stripe_key);
@@ -51,6 +62,7 @@ let init = (app) => {
 
     app.methods = {
         pay: app.pay,
+        delete_item: app.delete_item,
     };
 
     app.vue = new Vue({

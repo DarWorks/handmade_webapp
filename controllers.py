@@ -126,18 +126,30 @@ def get_product():
 @action('pay', method="POST")
 @action.uses(db, url_signer)
 def pay():
+    items = request.json.get('cart')
+    fulfillment = request.json.get('fulfillment')
+
     line_items = []
-    line_item = {
-            'quantity': 1,
-            'price_data': {
-                'currency': 'usd',
-                'unit_amount': 1599,
-                'product_data': {
-                    'name': "Super Cool Necklace",
+    for it in items:
+        p = db.products(it['id'])
+
+        line_item = {
+                'quantity': 1,
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': int(p.price * 100),
+                    'product_data': {
+                        'name': p.name,
+                    }
                 }
-            }
-    }
-    line_items.append(line_item)
+        }
+
+        line_items.append(line_item)
+
+    order_id = db.customer_order.insert(
+        ordered_items=json.dumps(items),
+        fulfillment=json.dumps(fulfillment),
+    )
 
     stripe_session = stripe.checkout.Session.create(
         payment_method_types=['card'],

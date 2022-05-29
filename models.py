@@ -68,6 +68,15 @@ db.define_table(
     Field('amount', 'float', default=1, requires = IS_FLOAT_IN_RANGE(0, 1e6)),
 )
 
+db.define_table('customer_order',
+    Field('order_date', default=get_time),
+    Field('ordered_items', 'text'),
+    Field('fulfillment', 'text'),
+    Field('paid', 'boolean', default=False),
+    Field('created_on', 'datetime', default=get_time),
+    Field('paid_on', 'datetime'),
+)
+
 db.define_table(
     'comments',
     Field('user', 'reference userProfile', requires=IS_NOT_EMPTY()),
