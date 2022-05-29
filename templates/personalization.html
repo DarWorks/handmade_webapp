@@ -6,9 +6,9 @@
   }
 </style>
 
-<div class="section " id="vue-target">
+<div class="section" id="vue-target">
 
-    <div class="column is-half is-offset-one-quarter is-vcentered ">
+    <div class="column is-half is-offset-one-quarter">
 
         <div v-if="!submitted" class="container block">
             <div class="title">Let's Personalize, [[=globals().get('user').get('first_name')]]! </div>
@@ -16,8 +16,21 @@
 
               <!-- This looks like a form, but is not.  We just need the inputs. -->
 
+
               <div class="field">
-                <label class="label">Choose a Username:</label>
+                <label class="label">First Name:</label>
+                <div class="control">
+                  <input readonly type="text" v-model="add_first_name" class="input" placeholder="[[=globals().get('user').get('first_name')]]">
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Last Name:</label>
+                <div class="control">
+                  <input readonly type="text" v-model="add_last_name" class="input" placeholder="[[=globals().get('user').get('last_name')]]">
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Username:</label>
                 <div class="control">
                   <input type="text" v-model="add_user_userName" class="input">
                 </div>
@@ -65,7 +78,7 @@
 
               <div class="field">
                 <div class="control">
-                  <input type="submit" @click="add_personalization" value=" Submit! " class="button is-success">
+                  <input type="submit" @click="add_personalization" value=" Submit! " class="button is-primary">
                   <!--<input type="submit" @click="set_add_status(false)" value="Cancel" class="button is-warning">-->
                 </div>
               </div>
