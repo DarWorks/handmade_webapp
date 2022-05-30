@@ -91,7 +91,7 @@ def index():
     display = False
     firstProductRow = newProducts
     firstRowText = "New Items"
-    
+
 
 
     # if no active user session set display = false
@@ -547,11 +547,11 @@ def test(product_type=None):
 # Layout PAGE
 #//////////////////////////////////////////////////////////
 
-@action('layoutUrls')
-@action.uses('layout.html', db, auth, url_signer)
-def layoutUrlSigner():
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        url_signer=url_signer,
-
-    )
+# @action('layoutUrls')
+# @action.uses('layout.html', db, auth, url_signer)
+# def layoutUrlSigner():
+#     return dict(
+#         # COMPLETE: return here any signed URLs you need.
+#         url_signer=url_signer,
+#
+#     )
