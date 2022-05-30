@@ -65,8 +65,6 @@ def index():
         db.userProfile.user_email == get_user_email()).select().first()
 
     isPersonalized = False
-
-
     currentUserName=""
 
     if currentUser is not None and currentUser.username is not None:
@@ -93,6 +91,8 @@ def index():
     display = False
     firstProductRow = newProducts
     firstRowText = "New Items"
+    
+
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -120,6 +120,9 @@ def index():
             l3 = db(db.products.type == currentUser.preference3).select().as_list()
             l = l1 + l2 + l3
             firstProductRow = l
+
+
+
 
 
     # sending userSession data to conditionally render index.html
