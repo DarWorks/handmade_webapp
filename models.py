@@ -13,18 +13,12 @@ from pydal.validators import *
 
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
-
 def get_user_FirstName():
     return auth.current_user.get('first_name') if auth.current_user else None
 def get_user_LastName():
     return auth.current_user.get('last_name') if auth.current_user else None
-
-
-
-
 def get_time():
     return datetime.datetime.utcnow()
-
 
 
 
@@ -44,13 +38,6 @@ db.define_table(
 
 db.userProfile.username.requires= (IS_NOT_IN_DB(db, 'userProfile.username'))
 db.userProfile.id.readable = db.userProfile.id.writable = False
-
-
-### Define your table below
-#
-# db.define_table('thing', Field('name'))
-#
-## always commit your models to avoid problems later
 
 db.define_table(
     'products',
