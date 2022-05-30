@@ -12,39 +12,82 @@
 
 .notification-corner{
     position: fixed;
-	right:-100;
+	right:0;
 	bottom:0;
 	width:300px;
-	height:200px;
-    background-color: rgb(1,89,138);
+	height:170px;
+    background-color: #f1641e;
 	-webkit-box-shadow: 0 2px 15px 0 rgba(0,0,0,0.6);
 	box-shadow: 0 2px 15px 0 rgba(0,0,0,0.6);
 	-moz-box-shadow: 0 2px 15px 0 rgba(0,0,0,0.6);
 	z-index: 9999;
-	margin: 0;
-	padding: 0;
+	margin: 10;
+	padding: 10;
 	opacity: 0.6;
+}
+
+.product-images-container {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 600px;
 
 }
 
+
+.product-image:not(:last-child){
+  padding-right: 8%;
+}
+
+.product-image img{
+  width: 400px;
+  height: 250px;
+}
+
+.listTopics{
+
+    background-color= #F9A276;
+
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1641e;
+  border-radius: 10px;
+}
+
+
 </style>
 
-<div  id="vue-target" v-cloak>
+<div id="vue-target" v-cloak>
 
   <div>
 
     [[ personalized =isPersonalized]]
     [[ if personalized == True:]]
-        <h1 >[[=personalized]]</h1>
+
      [[else: ]]
         [[if display == True: ]]
             <div>
                     <div  @mouseover="setHover(true)" @mouseleave="setHover(false)" :class="{'onHover': hover}" class=" box px-1 notification-corner " >
-                        <h1 class="py-3 title has-text-light has-text-centered "> Hey there, [[=globals().get('user').get('first_name')]] !</h1>
-                        <h1 class=" title is-4 has-text-warning has-text-centered "> Let's get Personal.</h1>
-                        <div class="  has-text-centered ">
-                             <a class="button is-warning is-danger " href="[[=URL('add_user_personalization')]]"> Personalize! </a>
-                        </div>
+                       <div >
+                           <h1 class=" title is-5 has-text-light has-text-centered "> Hey there, [[=globals().get('user').get('first_name')]] !</h1>
+                           <h1 class=" title is-6 has-text-warning has-text-centered "> Let's get Personal.</h1>
+                           <div class="  has-text-centered ">
+                                <a class="button " href="[[=URL('add_user_personalization', signer=url_signer)]] " style="background-color:#F9A276"> Personalize! </a>
+                            </div>
+                       </div>
+
 
                     </div>
 
@@ -58,154 +101,115 @@
     [[pass]]
 
 
-      <section class="section has-background-warning">
-        <div class="columns block is-mobile">
-            <div class="column is-two-thirds">
-                <div class="columns block is-mobile">
-                    <div class="column is-half">
-                      <!-- Search Bar -->
-                      <div class="field is-grouped">
-                        <p class="control is-expanded">
-                          <input class="input" type="text" placeholder="Search for crafts">
-                        </p>
-                        <p class="control">
-                          <a class="button is-info">
-                            Search
-                          </a>
-                        </p>
+      <section class="section">
+         <div class="columns block is-mobile is-variable is-8">
+              <!-- First Half of page -->
+             <div class="column is-one-third">
+
+
+                <div  class="notification has-text-white " style="background-color: #F9A276; ">
+                  <div class="content is-medium ">
+                      <h1 class="title">Store Navigation</h1>
+                      [[if globals().get('user'):]]
+                      <div class="column is-vcentered">
+                                [[if personalized == True:]]
+                                   <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]"> My Profile </a>
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_product', currentUserName, signer=url_signer)]]"> Sell an Item </a>
+                                [[else:]]
+                                    [[if display == True:]]
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] "> Profile</a>
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] "> Sell an Item </a>
+
+                                [[pass]]
+                            [[pass]]
                       </div>
+                      <h1 class="title">Shop Categories</h1>
+
+                      [[pass]]
 
 
-                  <!-- List of Topics bar-->
-                  <div class="notification is-link has-background-info mt-6">
-                  <p class="is-size-2">List of Topics-</p>
-                  <div class="content is-medium">
-                  <ul>
-                  <a href="#"><li>Animal Crafts</li></a>
-                  <a href="#"><li>Jewellery</li></a>
-                  <a href="#"><li>Paper Crafts</li></a>
-                  <a href="#"><li>Pottery</li></a>
-                  <a href="#"><li>Wood Crafts</li></a>
-                </ul>
-                </div>
-                </div>
+                    <ul>
 
-                    </div>
-                    <!-- Product Cards-->
-                    <div class="column is-half">
-                    <!-- Product Card 1-->
-                        <div class="card">
-                          <div class ="card-image has centered px-6">
-                            <img src="images\pic1.jpg">
-                          </div>
-                          <div class="card-content">
-                            <p class= "title is-size-1 has-text-centered">Fish Toys</p>
-                            <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                            <p class= "has-text-centered">$69.00</p>
-                          </div>
-                          <footer class="card-footer">
-                            <a href="#" class="card-footer-item">Buy Now</a>
-                            <a href="#" class="card-footer-item">Add to Cart</a>
-                          </footer>
-                        </div>
-                  <!-- Product Card 2-->
-                        <div class="mt-6">
-                          <div class="card">
-                            <div class ="card-image has centered px-6">
-                              <img src="images\pic2.jpg">
-                            </div>
-                            <div class="card-content">
-                              <p class= "title is-size-1 has-text-centered">Wooden Crafts</p>
-                              <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                              <p class= "has-text-centered">$12.00</p>
-                            </div>
-                            <footer class="card-footer">
-                              <a href="#" class="card-footer-item">Buy Now</a>
-                              <a href="#" class="card-footer-item">Add to Cart</a>
-                            </footer>
-                          </div>
-                      </div>
-                      <!-- Product Card 3-->
-                            <div class="mt-6">
-                              <div class="card">
-                                <div class ="card-image has centered px-6">
-                                  <img src="images\pic3.jpg">
-                                </div>
-                                <div class="card-content">
-                                  <p class= "title is-size-1 has-text-centered">Peacock Feathers</p>
-                                  <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                                  <p class= "has-text-centered">$21.00</p>
-                                </div>
-                                <footer class="card-footer">
-                                  <a href="#" class="card-footer-item">Buy Now</a>
-                                  <a href="#" class="card-footer-item">Add to Cart</a>
-                                </footer>
-                              </div>
-                          </div>
+                      <a href="[[=URL('display_product_category/Jewelry & Accessories')]]"><li>Jewelry & Accessories</li></a>
+                      <a href="[[=URL('display_product_category/Clothing & Shoes')]]"><li>Clothing & Shoes</li></a>
+                      <a href="[[=URL('display_product_category/Home & Living')]]"><li>Home & Living</li></a>
+                      <a href="[[=URL('display_product_category/Toys & Entertainment')]]"><li>Toys & Entertainment</li></a>
+                      <a href="[[=URL('display_product_category/Art & Collectibles')]]"><li>Art & Collectibles</li></a>
+                      <a href="[[=URL('display_product_category/Other')]]"><li>Other</li></a>
+                    </ul>
                     </div>
                 </div>
+
             </div>
+            <!-- Second Half of page -->
+            <div class="column is-two-thirds">
+            <!-- First Scroller -->
+            <h1 class="title has-text-weight-bold " style="color: #f1641e">[[=firstRowText]]</h1>
+             <nav class="level is-mobile product-images-container" >
 
-            <div class="column is-one-third">
-              <!-- Product Card 4-->
-                <div class="card">
-                  <div class ="card-image has centered px-6">
-                    <img src="images\pic4.jpg">
+      [[for product in firstProductRow:]]
+
+        <div class="level-item level-left product-image">
+            <div class="card "  style=" border-style: solid; border-color: #f1641e;">
+              <div class="card-image pt-6">
+               <div class ="card-image has centered px-6">
+                    <img src="[[=product['image1']]]" width="600" height="600">
                   </div>
                   <div class="card-content">
-                    <p class= "title is-size-1 has-text-centered">Wooden Hats</p>
-                    <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                    <p class= "has-text-centered">$7.00</p>
+                    <p class= "title is-4 has-text-centered">[[=product['name']]]</p>
+                      <p class="mb-4"> </p>
+                      <p class= "title is-5 has-text-centered">Rating: [[=product['rating']]]</p>
+                      <p class="mb-3"> </p>
+                    <p class= " title is-4  has-text-centered">$[[=product['price']]]</p>
+                  </div>
+                  <footer class="card-footer">
+                      <!--view now will send user to product page, must receiv & set in controller-->
+                     <!--<a href="[[=URL('product',  )]] "> View Now </a>-->
+                    <a href="#" class="card-footer-item">Buy Now</a>
+                    <a href="#" class="card-footer-item">Add to Cart</a>
+                  </footer>
+              </div>
+            </div>
+      </div>
+
+
+      [[pass]]
+    </nav>
+
+      <!-- Second Scroller -->
+    <p class="mt-6"></p>
+    <h1 class="title has-text-weight-bold" style="color: #f1641e">Trending Items</h1>
+    <nav class="level is-mobile product-images-container" >
+
+      [[for product in trendingProducts:]]
+          <div class="level-item level-left product-image ">
+            <div class="card  ">
+              <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
+               <div class ="card-image has centered px-6">
+                    <img src="[[=product['image1']]]" width="600" height="600">
+                  </div>
+                  <div class="card-content ">
+                    <p class= "title is-4 has-text-centered">[[=product['name']]]</p>
+                      <p class="mb-4"> </p>
+                      <p class= "title is-5 has-text-centered">Rating: [[=product['rating']]]</p>
+                      <p class="mb-3"> </p>
+                    <p class= "title is-4 has-text-centered">$[[=product['price']]]</p>
                   </div>
                   <footer class="card-footer">
                     <a href="#" class="card-footer-item">Buy Now</a>
                     <a href="#" class="card-footer-item">Add to Cart</a>
                   </footer>
-                </div>
-                <!-- Product Card 5-->
-                      <div class="mt-6">
-                        <div class="card">
-                          <div class ="card-image has centered px-6">
-                            <img src="images\pic5.jpg">
-                          </div>
-                          <div class="card-content">
-                            <p class= "title is-size-1 has-text-centered">Sewed Craft</p>
-                            <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                            <p class= "has-text-centered">$10.00</p>
-                          </div>
-                          <footer class="card-footer">
-                            <a href="#" class="card-footer-item">Buy Now</a>
-                            <a href="#" class="card-footer-item">Add to Cart</a>
-                          </footer>
-                        </div>
-                    </div>
-                    <!-- Product Card 6-->
-                          <div class="mt-6">
-                            <div class="card">
-                              <div class ="card-image has centered px-6">
-                                <img src="images\pic6.jpg">
-                              </div>
-                              <div class="card-content">
-                                <p class= "title is-size-1 has-text-centered">Colored Cards</p>
-                                <p class= "title is-size-7 has-text-centered">Some nice product description about describing the product</p>
-                                <p class= "has-text-centered">$3.00</p>
-                              </div>
-                              <footer class="card-footer">
-                                <a href="#" class="card-footer-item">Buy Now</a>
-                                <a href="#" class="card-footer-item">Add to Cart</a>
-                              </footer>
-                            </div>
-                        </div>
+              </div>
             </div>
-
-        </div>
-      </section>
+         </div>
 
 
+
+      [[pass]]
+    </nav>
   </div>
-
-
-  <!-- Put here your Vue.js template -->
+ </div>
+</section>
 </div>
 
 
@@ -216,5 +220,3 @@
 </script>
 <script src="js/index.js"></script>
 [[end]]
-
-
