@@ -539,3 +539,16 @@ def test(product_type=None):
 
     return dict(rows=rows, product_type=product_type)
 
+
+#//////////////////////////////////////////////////////////
+# Layout PAGE
+#//////////////////////////////////////////////////////////
+
+@action('layoutUrls')
+@action.uses('layout.html', db, auth, url_signer)
+def layoutUrlSigner():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        url_signer=url_signer,
+
+    )

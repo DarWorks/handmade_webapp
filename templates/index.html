@@ -49,6 +49,24 @@
 
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1641e;
+  border-radius: 10px;
+}
+
+
 </style>
 
 <div id="vue-target" v-cloak>
@@ -57,7 +75,7 @@
 
     [[ personalized =isPersonalized]]
     [[ if personalized == True:]]
-        <!--<h1 >[[=personalized]]</h1>-->
+
      [[else: ]]
         [[if display == True: ]]
             <div>
@@ -88,19 +106,6 @@
               <!-- First Half of page -->
              <div class="column is-one-third">
 
-              <!-- Search Bar -->
-                <!--<div class="field is-grouped">-->
-                    <!--&lt;!&ndash;<p class="control is-expanded">&ndash;&gt;-->
-                      <!--&lt;!&ndash;<input class="input" type="text" placeholder="Search for crafts">&ndash;&gt;-->
-                    <!--&lt;!&ndash;</p>&ndash;&gt;-->
-                    <!--<p class="control">-->
-                      <!--<a class="button is-info">-->
-                        <!--Search-->
-                      <!--</a>-->
-                    <!--</p>-->
-                <!--</div>-->
-
-                  <!-- List of Topics bar-->
 
                 <div  class="notification has-text-white " style="background-color: #F9A276; ">
                   <div class="content is-medium ">
@@ -178,7 +183,7 @@
 
       [[for product in trendingProducts:]]
           <div class="level-item level-left product-image ">
-            <div class="card pt-6 ">
+            <div class="card  ">
               <div class="card-image"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">
                     <img src="[[=product['image1']]]" width="600" height="600">
