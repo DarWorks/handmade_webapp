@@ -95,7 +95,7 @@
   <!-- Images -->
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Images (Choose up to 4)</label>
+      <label class="label">Images (Select up to 4)</label>
     </div>
     <div class="field-body">
       <div class="field">
@@ -118,6 +118,24 @@
 
         <div v-if="product_image1">
           <img v-if="product_image1" width="200" :src="product_image1" />
+        </div>
+
+        <br>
+
+        <div v-if="product_image2">
+          <img v-if="product_image2" width="200" :src="product_image2" />
+        </div>
+
+        <br>
+
+        <div v-if="product_image3">
+          <img v-if="product_image3" width="200" :src="product_image3" />
+        </div>
+
+        <br>
+
+        <div v-if="product_image4">
+          <img v-if="product_image4" width="200" :src="product_image4" />
         </div>
 
       </div>

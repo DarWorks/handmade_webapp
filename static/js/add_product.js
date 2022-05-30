@@ -8,6 +8,10 @@ let init = (app) => {
         add_product_description: "",
         add_product_price: 0,
         product_image1: "",
+        product_image2: "",
+        product_image3: "",
+        product_image4: "",
+
         submitted: false,
 
         name_flag: false,
@@ -73,12 +77,37 @@ let init = (app) => {
     app.upload_file = function (event) {
         let input = event.target;
         let file = input.files[0];
+        let file2 = input.files[1];
+        let file3 = input.files[2];
+        let file4 = input.files[3];
+
         if (file) {
             let reader = new FileReader();
             reader.addEventListener("load", function () {
                 app.vue.product_image1 = reader.result;
             });
             reader.readAsDataURL(file);
+        }
+        if (file2) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image2 = reader.result;
+            });
+            reader.readAsDataURL(file2);
+        }
+        if (file3) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image3 = reader.result;
+            });
+            reader.readAsDataURL(file3);
+        }
+        if (file4) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image4 = reader.result;
+            });
+            reader.readAsDataURL(file4);
         }
     };
 
