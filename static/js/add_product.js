@@ -68,6 +68,9 @@ let init = (app) => {
                     product_description: app.vue.add_product_description,
                     product_price: app.vue.add_product_price,
                     product_image1: app.vue.product_image1,
+                    product_image2: app.vue.product_image2,
+                    product_image3: app.vue.product_image3,
+                    product_image4: app.vue.product_image4,
                 }).then(function (r) {
                     app.vue.submitted = true;
                 });
