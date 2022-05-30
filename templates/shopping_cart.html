@@ -6,27 +6,93 @@
     }
 </style>
 
-<html>
-  <body>
-    <div class="section" id="vue-target" v-cloak>
-        <h1 class="subtitle">Purchase a cool necklace!</h1>
+<div class="section" id="vue-target" v-cloak>
 
-        <button class="button is-link" @click="pay()">
-            <span>Buy </span>
-            <span class="icon is-small"><i class="fa fa-credit-card"></i></span>
-        </button>
+    <h1 class="title pl-5">My Cart</h1>
+
+    <div class="columns">
+
+        <!-- Displays products -->
+        <div class="column is-two-thirds">
+
+            <!-- Case: No products in cart -->
+            <div v-if="cart.length === 0" class="container">
+                <p class="pl-5">Add something to your cart!</p>
+            </div>
+
+            <div v-for="product in cart" class="box">
+
+                <div class="columns">
+                    <div class="column is-one-quarter">
+                        <div class="box">
+                            <img :src="product.image1" />
+                        </div>
+                    </div>
+
+                    <div class="column is-half">
+                        <div class="has-text-weight-bold is-size-4">{{product.name}}</div>
+                        <div class="mt-2">
+                            <p>${{product.price}}</p>
+                        </div>
+
+                        <div class="buttons has-addons mt-3">
+                            <button class="button is-small"><i class="fa fa-minus"></i></button>
+                            <button class="button is-small is-static">2</button>
+                            <button class="button is-small"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="column has-text-right">
+                        <span @click="delete_item(product)" class="has-text-danger">
+                            <i class="fa fa-times-circle fa-2x"></i>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="box">
+                <div v-if="cart.length > 0" class="pb-3">
+                    <b>Subtotal: ${{cart_total}}</b>
+                </div>
+
+                <u>Shipping Information:</u>
+
+                <p class="pt-2 pb-3">Name:</p>
+                <div class="control">
+                    <input class="input" type="text" v-model="fulfillment.name"
+                        placeholder="Packages will be shipped under this name">
+                </div>
+
+                <p class="py-3">Shipping Information:</p>
+                <div class="control">
+                    <input class="input" type="text" v-model="fulfillment.address"
+                        placeholder="Items will be shipped to this adress!">
+                </div>
+
+                <button class="mt-4 button is-medium is-fullwidth has-text-white" @click="pay()"
+                    style="background-color: #f1641e">
+                    <span>Checkout </span>
+                    <span class="icon is-small"><i class="fa fa-credit-card"></i></span>
+                </button>
+
+                <p class="is-size-7 has-text-grey pt-1">Payments are handled securely by Stripe</p>
+            </div>
+        </div>
 
     </div>
 
-  </body>
-</html>
-
+</div>
 
 [[block page_scripts]]
 <script>
     let pay_url = "[[=XML(pay_url)]]";
     let stripe_key = "[[=XML(stripe_key)]]";
-</script>  
+    let app_name = "[[=XML(app_name)]]";
+    let get_product_url = "[[XML(get_product_url)]]"
+</script>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="js/shopping_cart.js"></script>
 [[end]]

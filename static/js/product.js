@@ -1,14 +1,12 @@
-// This will be the object that will contain the Vue attributes
-// and be used to initialize it.
 let app = {};
 
-
-// Given an empty app object, initializes it filling its attributes,
-// creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
 
-    // This is the Vue data.
     app.data = {
+      cart: [],
+      product_id: 0,
+      product_added: false,
+
       productImages: images,
       selectedImage: 1,
       comments: [],
@@ -18,7 +16,6 @@ let init = (app) => {
     };
 
     app.enumerate = (a) => {
-        // This adds an _idx field to each element of the array.
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
@@ -74,23 +71,51 @@ let init = (app) => {
       }
     };
 
-    // This contains all the methods.
+
+    // Reads initial contents of shopping cart
+    app.read_cart = function () {
+
+      if (localStorage[app_name]) {
+          try {
+              app.vue.cart = JSON.parse(localStorage[app_name]).cart;
+          } catch (error) {
+              console.error(error);
+              app.vue.cart = [];
+          }
+      } else {
+          app.vue.cart = [];
+      }
+  };
+
+
+    // Puts item into shopping cart
+    app.add_to_cart = function () {
+      axios.get(get_product_url, { params: { id: product_id } }).then(function (response) {
+          app.vue.cart.push(response.data.row);
+          localStorage[app_name] = JSON.stringify({ cart: app.vue.cart });
+
+          app.vue.product_added = true;
+      });
+  };
+
+
     app.methods = {
         add_comment: app.add_comment,
         can_comment: app.can_comment,
         add_review: app.add_review,
         can_review: app.can_review,
+        add_to_cart: app.add_to_cart,
     };
 
-    // This creates the Vue instance.
     app.vue = new Vue({
         el: "#vue-target",
         data: app.data,
         methods: app.methods
     });
 
-    // And this initializes it.
     app.init = () => {
+      app.read_cart();
+
       axios.get(get_comments_url).then(function (response) {
           app.vue.comments = response.data.comments
       })
@@ -99,10 +124,7 @@ let init = (app) => {
       })
     };
 
-    // Call to the initializer.
     app.init();
 };
 
-// This takes the (empty) app object, and initializes it,
-// putting all the code i
 init(app);

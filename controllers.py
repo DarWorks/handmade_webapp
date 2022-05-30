@@ -25,9 +25,11 @@ session, db, T, auth, and tempates are examples of Fixtures.
 Warning: Fixtures MUST be declared with @action.uses({fixtures}) else your app will result in undefined behavior
 """
 
+import datetime
 import json
 import os
 import stripe
+from functools import reduce
 
 from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
@@ -37,6 +39,10 @@ from .models import get_user_email
 from .models import get_user_FirstName
 from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
+
+
+from py4web.utils.form import Form, FormStyleBulma
+from py4web.utils.grid import Grid, GridClassStyleBulma
 
 url_signer = URLSigner(session)
 
@@ -164,34 +170,91 @@ def faq():
 def shopping_cart():
     return dict(
         pay_url = URL('pay', signer=url_signer),
-        stripe_key = STRIPE_KEY_INFO['test_public_key']
+        stripe_key = STRIPE_KEY_INFO['test_public_key'],
+        app_name = APP_NAME,
+        get_product_url = URL('get_product')
     )
+
+@action('get_product')
+@action.uses(db, auth)
+def get_product():
+    id = request.params.get('id')
+
+    row = db(db.products.id == id).select().first()
+    return dict(row=row)
 
 @action('pay', method="POST")
 @action.uses(db, url_signer)
 def pay():
+    items = request.json.get('cart')
+    fulfillment = request.json.get('fulfillment')
+
     line_items = []
-    line_item = {
-            'quantity': 1,
-            'price_data': {
-                'currency': 'usd',
-                'unit_amount': 1599,
-                'product_data': {
-                    'name': "Super Cool Necklace",
+    item_names = []
+    for it in items:
+        p = db.products(it['id'])
+
+        line_item = {
+                'quantity': 1,
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': int(p.price * 100),
+                    'product_data': {
+                        'name': p.name,
+                    }
                 }
-            }
-    }
-    line_items.append(line_item)
+        }
+
+        line_items.append(line_item)
+        item_names.append(p.name)
+
+    order_id = db.customer_order.insert(
+        ordered_items= item_names,
+        fulfillment=json.dumps(fulfillment),
+    )
 
     stripe_session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=line_items,
         mode='payment',
-        success_url=full_url(URL('index')),
-        cancel_url=full_url(URL('index')),
+        success_url=full_url(URL('successful_payment', order_id)),
+        cancel_url=full_url(URL('cancelled_payment', order_id)),
     )
     return dict(ok=True, session_id=stripe_session.id)
 
+@action('successful_payment/<order_id:int>')
+@action.uses('successful_payment.html', db, auth, url_signer)
+def successful_payment(order_id=None):
+    order = db(db.customer_order.id == int(order_id)).select().first()
+    if order is None:
+        redirect(URL('index'))
+    order.paid = True
+    order.paid_on = datetime.datetime.utcnow()
+    order.update_record()
+
+    fulfillment = json.loads(order.fulfillment)
+    return dict(name=fulfillment["name"], address=fulfillment["address"], app_name = APP_NAME,)
+
+@action('cancelled_payment/<order_id:int>')
+@action.uses(db, auth)
+def cancelled_payment(order_id=None):
+    try:
+        db(db.customer_order.id == int(order_id)).delete()
+    except:
+        pass
+    redirect(URL('index'))
+
+@action('view_orders')
+@action('view_orders/<path:path>', method=['POST', 'GET'])
+@action.uses('view_order.html', db, auth, session)
+def view_orders(path=None):
+    grid = Grid(path,
+                query= db.customer_order.id > 0,
+                editable=False, deletable=False, details=False, create=False,
+                grid_class_style=GridClassStyleBulma,
+                formstyle=FormStyleBulma,
+                )
+    return dict(grid=grid)
 
 #//////////////////////////////////////////////////////////
 # PROFILE PAGE
@@ -288,8 +351,12 @@ def product(username=None, product_id=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+
     return dict(
-        my_callback_url = URL('my_callback', signer=url_signer),
+        app_name = APP_NAME,
+        get_product_url = URL('get_product'),
+        product_id=product_id,
+
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
