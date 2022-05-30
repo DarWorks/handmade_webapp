@@ -48,7 +48,7 @@
           <br>
 
           [[if isAccountOwner:]]
-          <center><a class="button is-danger" href="[[=URL('add_product', profile.get('username', ''))]]">
+          <center><a class="button is-danger" href="[[=URL('add_product', profile.get('username', ''), signer=url_signer)]]">
             <span class="icon"><i class="fa fa-plus"></i></span>
             <span>Add Product</span>
           </a></center>

@@ -198,7 +198,7 @@ def pay():
 #//////////////////////////////////////////////////////////
 
 @action('profile/<username>')
-@action.uses('profile.html', auth, url_signer)
+@action.uses('profile.html', auth, url_signer.verify())
 def profile(username=None):
     assert username is not None
     user = auth.get_user()
@@ -217,6 +217,7 @@ def profile(username=None):
         image=x["image1"]
     ), db(db.products.sellerid == userProfile.id).select().as_list())
     return dict(
+        url_signer=url_signer,
         my_callback_url = URL('my_callback', signer=url_signer),
         isAccountOwner = isAccountOwner,
         profile = dict(
@@ -229,12 +230,13 @@ def profile(username=None):
     )
 
 @action('add_product/<username>')
-@action.uses('add_product.html', db, auth, url_signer)
+@action.uses('add_product.html', db, auth, url_signer.verify())
 def add_product(username=None):
     assert username is not None
     return dict(
         add_product_info_url = URL('add_product_info', username),
         username=username,
+        url_signer=url_signer,
     )
 
 @action('add_product_info/<username>', method=['POST'])
@@ -251,7 +253,7 @@ def add_product_info(username=None):
         image1=request.json.get('product_image1'),
     )
 
-    return dict(username=username)
+    return dict(username=username, url_signer=url_signer,)
 
 
 #//////////////////////////////////////////////////////////
@@ -547,11 +549,11 @@ def test(product_type=None):
 # Layout PAGE
 #//////////////////////////////////////////////////////////
 
-# @action('layoutUrls')
-# @action.uses('layout.html', db, auth, url_signer)
-# def layoutUrlSigner():
-#     return dict(
-#         # COMPLETE: return here any signed URLs you need.
-#         url_signer=url_signer,
-#
-#     )
+@action('layoutUrls')
+@action.uses('layout.html', db, auth, url_signer)
+def layoutUrlSigner():
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        url_signer=url_signer,
+
+    )
