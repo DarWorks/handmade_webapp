@@ -1,6 +1,8 @@
-# Vue Start
+# Handmade
 
-This app is the starting point for all of our 
-Vue applications.  To write a new Vue app 
-in py4web, clone this application in your apps 
-folder, and work on it. 
+Welcome to Handmade!
+
+An e-commerce with a user-friendly interface
+ready for all user purchases and sellings.
+
+Project for CSE183 Web Apps
