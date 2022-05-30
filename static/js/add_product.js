@@ -9,6 +9,12 @@ let init = (app) => {
         add_product_price: 0,
         product_image1: "",
         submitted: false,
+
+        name_flag: false,
+        type_flag: false,
+        desc_flag: false,
+        price_flag: false,
+        img_flag: false,
     };
 
     app.enumerate = (a) => {
@@ -17,17 +23,51 @@ let init = (app) => {
         return a;
     };
 
-    app.add_product_info = function() {
-        axios.post(add_product_info_url,
-            {
-                product_name: app.vue.add_product_name,
-                product_type: app.vue.add_product_type,
-                product_description: app.vue.add_product_description,
-                product_price: app.vue.add_product_price,
-                product_image1: app.vue.product_image1,
-            }).then(function (r) {
-                app.vue.submitted = true;
-            });
+    app.check_values = function () {
+        let checker = false;
+
+        console.log(app.vue.product_name)
+
+        if (app.vue.add_product_name === "") {
+            app.vue.name_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.add_product_type === "") {
+            app.vue.type_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.add_product_description === "") {
+            app.vue.desc_flag = true;
+            checker = true;
+        }
+
+        if (app.vue. add_product_price < 1) {
+            app.vue.price_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.product_image1 === "") {
+            app.vue.img_flag = true;
+            checker = true;
+        }
+        return checker;
+    }
+
+    app.add_product_info = function () {
+        if (!app.check_values()) {
+            axios.post(add_product_info_url,
+                {
+                    product_name: app.vue.add_product_name,
+                    product_type: app.vue.add_product_type,
+                    product_description: app.vue.add_product_description,
+                    product_price: app.vue.add_product_price,
+                    product_image1: app.vue.product_image1,
+                }).then(function (r) {
+                    app.vue.submitted = true;
+                });
+        }
     }
 
     app.upload_file = function (event) {

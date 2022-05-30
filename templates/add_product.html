@@ -23,6 +23,7 @@
       <div class="field">
         <div class="control">
           <input class="input" type="text" v-model="add_product_name" placeholder="Insert a name for the product">
+          <p v-if="name_flag" class="has-text-danger">Cannot be blank!</p>
         </div>
       </div>
     </div>
@@ -47,6 +48,7 @@
               <option>Other</option>
             </select>
           </div>
+          <p v-if="type_flag" class="has-text-danger">Please choose an option!</p>
         </div>
       </div>
     </div>
@@ -62,6 +64,7 @@
         <div class="control">
           <textarea class="textarea" v-model="add_product_description"
             placeholder="Provide a descirption of the product"></textarea>
+          <p v-if="desc_flag" class="has-text-danger">Please provide a description!</p>
         </div>
       </div>
     </div>
@@ -82,17 +85,17 @@
         </p>
         <p class="control">
           <input class="input" type="number" v-model="add_product_price" placeholder="Provide a price">
+          <p v-if="price_flag" class="has-text-danger ml-2">Invalid Value!</p>
         </p>
       </div>
-
-
     </div>
   </div>
 
-  <!-- Image 1 -->
+
+  <!-- Images -->
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Images</label>
+      <label class="label">Images (Choose up to 4)</label>
     </div>
     <div class="field-body">
       <div class="field">
@@ -101,7 +104,7 @@
           <div class="file is-info">
             <label class="file-label">
               <input class="file-input" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
-                @change="upload_file($event)">
+                @change="upload_file($event)" multiple>
               <span class="file-cta">
                 <span class="file-label">
                   Choose a file...
@@ -109,8 +112,10 @@
               </span>
             </label>
           </div>
+          <p v-if="img_flag" class="has-text-danger">Requires at least one image</p>
+
         </div>
-        
+
         <div v-if="product_image1">
           <img v-if="product_image1" width="200" :src="product_image1" />
         </div>
