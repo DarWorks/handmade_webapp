@@ -40,7 +40,6 @@ from .models import get_user_FirstName
 from .models import get_user_LastName
 from .settings import APP_FOLDER, APP_NAME
 
-
 from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.grid import Grid, GridClassStyleBulma
 

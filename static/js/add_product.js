@@ -8,7 +8,17 @@ let init = (app) => {
         add_product_description: "",
         add_product_price: 0,
         product_image1: "",
+        product_image2: "",
+        product_image3: "",
+        product_image4: "",
+
         submitted: false,
+
+        name_flag: false,
+        type_flag: false,
+        desc_flag: false,
+        price_flag: false,
+        img_flag: false,
     };
 
     app.enumerate = (a) => {
@@ -17,28 +27,87 @@ let init = (app) => {
         return a;
     };
 
-    app.add_product_info = function() {
-        axios.post(add_product_info_url,
-            {
-                product_name: app.vue.add_product_name,
-                product_type: app.vue.add_product_type,
-                product_description: app.vue.add_product_description,
-                product_price: app.vue.add_product_price,
-                product_image1: app.vue.product_image1,
-            }).then(function (r) {
-                app.vue.submitted = true;
-            });
+    app.check_values = function () {
+        let checker = false;
+
+        console.log(app.vue.product_name)
+
+        if (app.vue.add_product_name === "") {
+            app.vue.name_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.add_product_type === "") {
+            app.vue.type_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.add_product_description === "") {
+            app.vue.desc_flag = true;
+            checker = true;
+        }
+
+        if (app.vue. add_product_price < 1) {
+            app.vue.price_flag = true;
+            checker = true;
+        }
+
+        if (app.vue.product_image1 === "") {
+            app.vue.img_flag = true;
+            checker = true;
+        }
+        return checker;
+    }
+
+    app.add_product_info = function () {
+        if (!app.check_values()) {
+            axios.post(add_product_info_url,
+                {
+                    product_name: app.vue.add_product_name,
+                    product_type: app.vue.add_product_type,
+                    product_description: app.vue.add_product_description,
+                    product_price: app.vue.add_product_price,
+                    product_image1: app.vue.product_image1,
+                }).then(function (r) {
+                    app.vue.submitted = true;
+                });
+        }
     }
 
     app.upload_file = function (event) {
         let input = event.target;
         let file = input.files[0];
+        let file2 = input.files[1];
+        let file3 = input.files[2];
+        let file4 = input.files[3];
+
         if (file) {
             let reader = new FileReader();
             reader.addEventListener("load", function () {
                 app.vue.product_image1 = reader.result;
             });
             reader.readAsDataURL(file);
+        }
+        if (file2) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image2 = reader.result;
+            });
+            reader.readAsDataURL(file2);
+        }
+        if (file3) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image3 = reader.result;
+            });
+            reader.readAsDataURL(file3);
+        }
+        if (file4) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.product_image4 = reader.result;
+            });
+            reader.readAsDataURL(file4);
         }
     };
 
