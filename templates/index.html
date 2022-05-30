@@ -113,8 +113,8 @@
                       [[if globals().get('user'):]]
                       <div class="column is-vcentered">
                                 [[if personalized == True:]]
-                                   <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('profile', currentUserName)]]"> My Profile </a>
-                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_product', currentUserName)]]"> Sell an Item </a>
+                                   <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]"> My Profile </a>
+                                    <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_product', currentUserName, signer=url_signer)]]"> Sell an Item </a>
                                 [[else:]]
                                     [[if display == True:]]
                                     <a style="color:#f1641e;" class="button is-medium  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] "> Profile</a>

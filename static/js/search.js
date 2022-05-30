@@ -15,7 +15,7 @@ let searchinit = (searchapp) => {
           "q": searchapp.vue.query
         }
       }
-      axios.get("/handmade_webapp/search", data).then((res) => {
+      axios.get("/handmadeX/search", data).then((res) => {
         searchapp.vue.results = res.data.results
       })
     };

@@ -1,62 +1,69 @@
 [[extend 'layout.html']]
 
 
-<div class="block m-3">
-    <div class="title">
-        Frequently Asked Questions
-    </div>
-</div>
+
+<div class="section">
 
 
-<div class="box has-background-success" id="vue-target">
-    <div class="box">
-        <div class="box">
-            This is a sample question.
-        </div>
-        <button class="button has-background-white" v-if="a1" @click="show(1)">
-            <i class="fa fa-sort-desc"></i>
-        </button>
-        <div class="block" v-else>
-            <div class="block ml-6 mr-6">
-                This is a sample answer
-            </div>
-            <button class="button has-background-white" @click="hide(1)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
+    <div class="block m-3">
+        <div class="title">
+            Frequently Asked Questions
         </div>
     </div>
-    <div class="box">
+
+
+    <div class="box "  id="vue-target" style="background-color: #F9A276;">
         <div class="box">
-            This is a sample question.
-        </div>
-        <button class="button has-background-white" v-if="a2" @click="show(2)">
-            <i class="fa fa-sort-desc"></i>
-        </button>
-        <div class="block" v-else>
-            <div class="block ml-6 mr-6">
-                This is a sample answer
+            <div class="box">
+                This is a sample question.
             </div>
-            <button class="button has-background-white" @click="hide(2)">
-                <i class="fa fa-sort-asc"></i>
+            <button class="button has-background-white" v-if="a1" @click="show(1)">
+                <i class="fa fa-sort-desc"></i>
             </button>
+            <div class="block" v-else>
+                <div class="block ml-6 mr-6">
+                    This is a sample answer
+                </div>
+                <button class="button has-background-white" @click="hide(1)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box">
+                This is a sample question.
+            </div>
+            <button class="button has-background-white" v-if="a2" @click="show(2)">
+                <i class="fa fa-sort-desc"></i>
+            </button>
+            <div class="block" v-else>
+                <div class="block ml-6 mr-6">
+                    This is a sample answer
+                </div>
+                <button class="button has-background-white" @click="hide(2)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box">
+                This is a sample question.
+            </div>
+            <button class="button has-background-white" v-if="a3" @click="show(3)">
+                <i class="fa fa-sort-desc"></i>
+            </button>
+            <div class="block" v-else>
+                <div class="block ml-6 mr-6">
+                    This is a sample answer
+                </div>
+                <button class="button has-background-white" @click="hide(3)">
+                    <i class="fa fa-sort-asc"></i>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="box">
-        <div class="box">
-            This is a sample question.
-        </div>
-        <button class="button has-background-white" v-if="a3" @click="show(3)">
-            <i class="fa fa-sort-desc"></i>
-        </button>
-        <div class="block" v-else>
-            <div class="block ml-6 mr-6">
-                This is a sample answer
-            </div>
-            <button class="button has-background-white" @click="hide(3)">
-                <i class="fa fa-sort-asc"></i>
-            </button>
-        </div>
-    </div>
+
+
 </div>
 
 [[block page_scripts]]
