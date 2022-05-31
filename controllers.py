@@ -85,6 +85,9 @@ def index():
     #  (currently this displays random products)
     #  Also need to display seller info here
     trendingProducts = db(db.products).select(orderby='<random>').as_list()
+    for prod in trendingProducts:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
 
     # TODO: for this query later on display the most recently added prodcuts
     #  (currently this displays all products in reverse order with no limits)
@@ -95,6 +98,9 @@ def index():
     customerID = 0
     display = False
     firstProductRow = newProducts
+    for prod in firstProductRow:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
     firstRowText = "New Items"
 
 
@@ -621,6 +627,9 @@ def load_users():
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
+    for prod in rows:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
     # TODO: query seller information so that it can be displayed on the product cards
 
     # xrows = db((db.products.type == product_type) and
