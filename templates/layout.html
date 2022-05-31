@@ -87,10 +87,10 @@
             </div>
           </div>
 
-           [[if globals().get('user'):]]
-                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink" >Sell</a>
+<!--           [[if globals().get('user'):]] -->
+<!--                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink" >Sell</a>-->
 
-           [[pass]]
+<!--           [[pass]]-->
 
 
 
@@ -127,9 +127,14 @@
                   <a class="navbar-link is-primary has-text-white">
                     [[=globals().get('user').get('email')]]
                   </a>
-                  <div class="navbar-dropdown" id="profile-link-target">
+<!--                  <div class="navbar-dropdown" id="profile-link-target">-->
+<!--                    <a class="navbar-item" href="[[=URL('auth/logout')]]">Logout</a>-->
+<!--                    <a v-if="username.length > 0" class="navbar-item" :href="profileURL">Profile</a>-->
+<!--                    <a class="navbar-item" href="[[=URL('auth/change_password')]]">Change Password</a></li>-->
+<!--                  </div>-->
+                                   <div class="navbar-dropdown">
                     <a class="navbar-item" href="[[=URL('auth/logout')]]">Logout</a>
-                    <a v-if="username.length > 0" class="navbar-item" :href="profileURL">Profile</a>
+<!--                    <a v-if="username.length > 0" class="navbar-item" :href="profileURL">Profile</a>-->
                     <a class="navbar-item" href="[[=URL('auth/change_password')]]">Change Password</a></li>
                   </div>
                 </div>
@@ -173,22 +178,22 @@
   <script src="js/search.js"></script>
 
 
-  [[if globals().get('user'):]]
-    <script src="js/profilelink.js"></script>
-    <script src="js/addProdLink.js"></script>
+<!--&lt;!&ndash;  [[if globals().get('user'):]]&ndash;&gt;-->
+<!--&lt;!&ndash;    <script src="js/profilelink.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;    <script src="js/addProdLink.js"></script>&ndash;&gt;-->
 
-  [[pass]]
+<!--&lt;!&ndash;  [[pass]]&ndash;&gt;-->
 
-  [[if not globals().get('user'):]]
-    <script src="js/close.js"></script>
-  [[pass]]
-  <script>
-    let url = window.location.href;
+<!--&lt;!&ndash;  [[if not globals().get('user'):]]&ndash;&gt;-->
+<!--&lt;!&ndash;    <script src="js/close.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;  [[pass]]&ndash;&gt;-->
+<!--&lt;!&ndash;  <script>&ndash;&gt;-->
+<!--&lt;!&ndash;    let url = window.location.href;&ndash;&gt;-->
 
-    console.log(url);
+<!--&lt;!&ndash;    console.log(url);&ndash;&gt;-->
 
 
-</script>
+<!--</script>-->
 
 
   [[block page_scripts]]<!-- individual pages can add scripts here -->

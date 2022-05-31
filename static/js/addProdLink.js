@@ -20,27 +20,6 @@ let addProdLinkInit = (addProdLink) => {
         return a;
     };
 
-
-      // This contains all the methods.
-    addProdLink.methods = {
-        // Complete as you see fit.
-//        getPage: addProdLink. getPage,
-    };
-//
-//    addProdLink.getPage = function(){
-//
-//        axios.get("/handB/username").then((res) => {
-//        addProdLink.vue.username = res.data.username
-//        addProdLink.vue.addProdLink = `/handB/add_product/${res.data.username}`
-//       }).catch((e) => {
-//            console.log(e)
-//
-//       });
-//
-//
-//    }
-//
-
     // This creates the Vue instance.
     addProdLink.vue = new Vue({
         el: "#addProd-link-target",
@@ -67,3 +46,4 @@ let addProdLinkInit = (addProdLink) => {
 // This takes the (empty) addProdLink object, and addProdLinkInitializes it,
 // putting all the code i
 addProdLinkInit(addProdLink);
+
