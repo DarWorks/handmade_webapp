@@ -26,6 +26,34 @@
 
   }
 
+
+
+.scroller {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-color: #f1641e #F9A276;
+  scrollbar-width: wide;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1641e;
+  border-radius: 10px;
+}
+
+
 </style>
 
 <html lang="en">
@@ -66,19 +94,19 @@
             </a>
 
             <div class="navbar-dropdown">
-              <a class="navbar-item" href="[[=URL('display_product_category/Jewelry & Accessories')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Jewelry and Accessories')]]">
                 Jewelry & Accessories
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Clothing & Shoes')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Clothing and Shoes')]]">
                 Clothing & Shoes
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Home & Living')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Home and Living')]]">
                 Home & Living
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Toys & Entertainment')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Toys and Entertainment')]]">
                 Toys & Entertainment
               </a>
-              <a class="navbar-item" href="[[=URL('display_product_category/Art & Collectibles')]]">
+              <a class="navbar-item" href="[[=URL('display_product_category/Art and Collectibles')]]">
                 Art & Collectibles
               </a>
               <a class="navbar-item" href="[[=URL('display_product_category/Other')]]">
@@ -86,11 +114,6 @@
               </a>
             </div>
           </div>
-
-           [[if globals().get('user'):]]
-                <a  id="addProd-link-target" v-if="username.length >0" class="navbar-item has-text-white" :href="addProdLink" >Sell</a>
-
-           [[pass]]
 
 
 
@@ -100,7 +123,7 @@
 
 
         <!--[[if not globals().get('user'):]]-->
-        <!--<div style="length:5px;"  class=" has-background-warning" v-if="notifshow" id="close-target" notif>-->
+        <!--<div   class=" has-background-warning" v-if="notifshow" id="close-target" notif>-->
           <!--<button class="delete" @click="close"></button>-->
           <!--Please Log In or Sign Up-->
         <!--</div>-->
@@ -127,9 +150,8 @@
                   <a class="navbar-link is-primary has-text-white">
                     [[=globals().get('user').get('email')]]
                   </a>
-                  <div class="navbar-dropdown" id="profile-link-target">
+                  <div class="navbar-dropdown" >
                     <a class="navbar-item" href="[[=URL('auth/logout')]]">Logout</a>
-                    <a v-if="username.length > 0" class="navbar-item" :href="profileURL">Profile</a>
                     <a class="navbar-item" href="[[=URL('auth/change_password')]]">Change Password</a></li>
                   </div>
                 </div>
@@ -166,6 +188,10 @@
 
     </footer>
   </body>
+
+  <script type="text/javascript">
+    let searchRoute = "[[=URL('search')]]"; // this would be something like "/handmade_webapp/search/"
+  </script>
   <script src="js/sugar.min.js"></script>
   <script src="js/axios.min.js"></script>
   <script src="js/vue.js"></script>
@@ -183,9 +209,7 @@
     <script src="js/close.js"></script>
   [[pass]]
   <script>
-    let url = window.location.href;
 
-    console.log(url);
 
 
 </script>

@@ -3,10 +3,10 @@ let app = {};
 let init = (app) => {
 
     app.data = {
-        add_product_name: "",
-        add_product_type: "",
-        add_product_description: "",
-        add_product_price: 0,
+        add_product_name: add_product_name,
+        add_product_type: add_product_type,
+        add_product_description: add_product_description,
+        add_product_price: add_product_price,
         product_image1: "",
         product_image2: "",
         product_image3: "",
@@ -51,11 +51,6 @@ let init = (app) => {
             app.vue.price_flag = true;
             checker = true;
         }
-
-        if (app.vue.product_image1 === "") {
-            app.vue.img_flag = true;
-            checker = true;
-        }
         return checker;
     }
 
@@ -71,8 +66,9 @@ let init = (app) => {
                     product_image2: app.vue.product_image2,
                     product_image3: app.vue.product_image3,
                     product_image4: app.vue.product_image4,
+
                 }).then(function (r) {
-                    app.vue.submitted = true;
+                  window.location.replace(on_edit_url);
                 });
         }
     }
@@ -114,9 +110,17 @@ let init = (app) => {
         }
     };
 
+    app.delete = () => {
+      axios.post(delete_prod_url).then(res => {
+        console.log(on_delete_url);
+        window.location.replace(on_delete_url);
+      });
+    };
+
     app.methods = {
         add_product_info: app.add_product_info,
         upload_file: app.upload_file,
+        delete_prod: app.delete,
     };
 
     app.vue = new Vue({

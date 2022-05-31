@@ -88,17 +88,38 @@
                             </div>
                        </div>
 
-
                     </div>
-
                 </div>
 
-            </div>
-      [[pass]]
+             [[pass]]
+         [[pass]]
+  </div>
 
-     [[pass]]
 
-    [[pass]]
+    <div>
+
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    [[if personalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if display == True:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+
+     </div>
+
+
+
 
 
       <section class="section">
@@ -127,14 +148,13 @@
 
                       [[pass]]
 
-
                     <ul>
 
-                      <a href="[[=URL('display_product_category/Jewelry & Accessories')]]"><li>Jewelry & Accessories</li></a>
-                      <a href="[[=URL('display_product_category/Clothing & Shoes')]]"><li>Clothing & Shoes</li></a>
-                      <a href="[[=URL('display_product_category/Home & Living')]]"><li>Home & Living</li></a>
-                      <a href="[[=URL('display_product_category/Toys & Entertainment')]]"><li>Toys & Entertainment</li></a>
-                      <a href="[[=URL('display_product_category/Art & Collectibles')]]"><li>Art & Collectibles</li></a>
+                      <a href="[[=URL('display_product_category/Jewelry and Accessories')]]"><li>Jewelry & Accessories</li></a>
+                      <a href="[[=URL('display_product_category/Clothing and Shoes')]]"><li>Clothing & Shoes</li></a>
+                      <a href="[[=URL('display_product_category/Home and Living')]]"><li>Home & Living</li></a>
+                      <a href="[[=URL('display_product_category/Toys and Entertainment')]]"><li>Toys & Entertainment</li></a>
+                      <a href="[[=URL('display_product_category/Art and Collectibles')]]"><li>Art & Collectibles</li></a>
                       <a href="[[=URL('display_product_category/Other')]]"><li>Other</li></a>
                     </ul>
                     </div>
@@ -145,7 +165,7 @@
             <div class="column is-two-thirds">
             <!-- First Scroller -->
             <h1 class="title has-text-weight-bold " style="color: #f1641e">[[=firstRowText]]</h1>
-             <nav class="level is-mobile product-images-container" >
+             <nav class="level is-mobile product-images-container scroller" >
 
       [[for product in firstProductRow:]]
 
@@ -153,19 +173,25 @@
             <div class="card "  style=" border-style: solid; border-color: #f1641e;">
               <div class="card-image pt-6">
                <div class ="card-image has centered px-6">
-                    <img src="[[=product['image1']]]" width="600" height="600">
+                   <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
+                         <img src="[[=product['image1']]]" width="600" height="600">
+                     </a>
                   </div>
                   <div class="card-content">
-                    <p class= "title is-4 has-text-centered">[[=product['name']]]</p>
-                      <p class="mb-4"> </p>
-                      <p class= "title is-5 has-text-centered">Rating: [[=product['rating']]]</p>
-                      <p class="mb-3"> </p>
-                    <p class= " title is-4  has-text-centered">$[[=product['price']]]</p>
+                       <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
+                       <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
+                       <p class="mb-4"> </p>
+                       <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                           [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
+                       <p class="mb-4"> </p>
+                       <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
+                       <p class="mb-3"> </p>
+                       <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
                   <footer class="card-footer">
                       <!--view now will send user to product page, must receiv & set in controller-->
                      <!--<a href="[[=URL('product',  )]] "> View Now </a>-->
-                    <a href="#" class="card-footer-item">Buy Now</a>
+                    <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
                     <a href="#" class="card-footer-item">Add to Cart</a>
                   </footer>
               </div>
@@ -179,32 +205,35 @@
       <!-- Second Scroller -->
     <p class="mt-6"></p>
     <h1 class="title has-text-weight-bold" style="color: #f1641e">Trending Items</h1>
-    <nav class="level is-mobile product-images-container" >
+    <nav class="level is-mobile product-images-container scroller" >
 
       [[for product in trendingProducts:]]
           <div class="level-item level-left product-image ">
             <div class="card  ">
               <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">
+                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
                     <img src="[[=product['image1']]]" width="600" height="600">
+                  </a>
                   </div>
                   <div class="card-content ">
-                    <p class= "title is-4 has-text-centered">[[=product['name']]]</p>
+                      <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
+                      <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
                       <p class="mb-4"> </p>
-                      <p class= "title is-5 has-text-centered">Rating: [[=product['rating']]]</p>
+                         <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                           [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
+                      <p class="mb-4"> </p>
+                      <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
                       <p class="mb-3"> </p>
-                    <p class= "title is-4 has-text-centered">$[[=product['price']]]</p>
+                      <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
                   <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Buy Now</a>
+                    <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
                     <a href="#" class="card-footer-item">Add to Cart</a>
                   </footer>
               </div>
             </div>
          </div>
-
-
-
       [[pass]]
     </nav>
   </div>
