@@ -104,7 +104,6 @@ def index():
     firstRowText = "New Items"
 
 
-
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
     if get_user_email() == None:
@@ -129,12 +128,40 @@ def index():
             l1 = db(db.products.type == currentUser.preference1).select().as_list()
             l2 = db(db.products.type == currentUser.preference2).select().as_list()
             l3 = db(db.products.type == currentUser.preference3).select().as_list()
-            l = l1 + l2 + l3
+
+
+            if (l1 == l2 == l3):
+                l = l1
+            elif l1 == l3:
+                l = l1 + l2
+            elif l1 == l2:
+                l = l1 + l3
+            elif l2 == l3:
+                l = l1
+            else:
+                l = l1 + l2 + l3
+
             firstProductRow = l
+
 
     for prod in firstProductRow:
         u = db(db.userProfile.id == prod["sellerid"]).select().first()
         prod["prodURL"] = URL("product", u["username"], prod["id"])
+
+    for row in firstProductRow:
+        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
+        for seller in sellerQuery:
+            row["first_name"] = seller["first_name"]
+            row["last_name"] = seller["last_name"]
+            row["username"] = seller["username"]
+
+    for row in trendingProducts:
+        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
+        for seller in sellerQuery:
+            row["first_name"] = seller["first_name"]
+            row["last_name"] = seller["last_name"]
+            row["username"] = seller["username"]
+
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.

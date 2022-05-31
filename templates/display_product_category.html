@@ -46,14 +46,14 @@
                     <img src="[[=product['image1']]]" width="600" height="600">
               </div>
               <div class="card-content">
-                <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
-                <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
+                  <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
+                  <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
                   <p class="mb-4"> </p>
-                  <p class= "title is-size-6 has-text-centered">Sold by: </p>
+                  <p class= "title is-size-6 has-text-centered">Sold by: [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</p>
                   <p class="mb-4"> </p>
                   <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
                   <p class="mb-3"> </p>
-                <p class= "has-text-centered">$[[=product['price']]]</p>
+                  <p class= "has-text-centered">$[[=product['price']]]</p>
               </div>
               <footer class="card-footer">
                 <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
