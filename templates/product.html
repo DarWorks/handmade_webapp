@@ -90,8 +90,8 @@
     </div>
 
     <div class="column is-half">
-      <div><b>[[=product.get("name", "n/a")]] <a
-            href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
+      <div><b>[[=product.get("name", "n/a")]]
+        <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
       <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
       <div>[[=product.get("description", "")]]</div>
     </div>
