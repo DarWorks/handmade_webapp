@@ -89,7 +89,7 @@ def index():
         u = db(db.userProfile.id == prod["sellerid"]).select().first()
         prod["prodURL"] = URL("product", u["username"], prod["id"]);
 
-    # TODO: for this query later on display the most recently added products
+    # TODO: for this query later on display the most recently added prodcuts
     #  (currently this displays all products in reverse order with no limits)
     #  Also need to display seller info here
     newProducts = db(db.products).select(orderby=~db.products.id).as_list()
@@ -116,7 +116,7 @@ def index():
         else:
             # TODO: for this query display all products from the database which math the users preferences
             #  (currently its just matching the first preference of the user since for
-            #  some reason "and" wasn't displaying the correct ones)
+            #  some reason "and" wasnt displaying the correct ones)
             # preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
             #                              (db.products.type == currentUser.preference2) and
             #                              (db.products.type == currentUser.preference3)).select().as_list()
@@ -129,33 +129,12 @@ def index():
             l1 = db(db.products.type == currentUser.preference1).select().as_list()
             l2 = db(db.products.type == currentUser.preference2).select().as_list()
             l3 = db(db.products.type == currentUser.preference3).select().as_list()
-
-            if (l1 == l2 == l3):
-                l = l1
-            elif l1 == l3:
-                l = l1 + l2
-            elif l1 == l2:
-                l = l1 + l3
-            elif l2 == l3:
-                l = l1
-            else:
-                l = l1 + l2 + l3
-
+            l = l1 + l2 + l3
             firstProductRow = l
 
-    for row in firstProductRow:
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
 
-    for row in trendingProducts:
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
+
+
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
@@ -645,22 +624,59 @@ def load_users():
 # DISPLAYING PRODUCT CATEGORIES-
 
 @action('display_product_category/<product_type>')
-@action.uses('display_product_category.html', db, auth, url_signer)
+@action.uses('display_product_category.html', db)
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
-
-
-    for row in rows:
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
-            
     for prod in rows:
         u = db(db.userProfile.id == prod["sellerid"]).select().first()
         prod["prodURL"] = URL("product", u["username"], prod["id"]);
+    # TODO: query seller information so that it can be displayed on the product cards
+
+    # xrows = db((db.products.type == product_type) and
+    #           (db.userProfile.id == db.products.sellerid)).select(db.userProfile.first_name,
+    #                                                               db.userProfile.last_name,
+    #                                                               db.userProfile.username,
+    #                                                               db.products.image,
+    #                                                               db.products.name,
+    #                                                               db.products.description,
+    #                                                               db.products.rating,
+    #                                                               db.products.price).as_list()
+    # print(xrows)
+    #
+    # with open('pleaselol.txt', 'w') as f:
+    #     for line in rows:
+    #         print(line, file=f)
+    #         f.write('\n')
+    # f.close()
+    # exit()
+
+    # x = rows[0]
+    # y = x['type']
+
+    #rows = db(db.userProfile.id == db.products.sellerid).select()
+    # for i in sellerInfoRows0:
+    #     # print(i.userProfile)
+    #     # print(i.products.sellerid)
+    #     print(i.userProfile.username, i.userProfile.id, i.products.sellerid)
+    #rows = db((db.products.type == product_type) and (db.userProfile.id == db.products.sellerid)).select().as_list()
+
+    # temprows = db(db.userProfile.id == db.products.sellerid).select(db.userProfile.first_name, db.userProfile.last_name,
+    #                                                                 db.userProfile.username,
+    #                                                                 db.products.name, db.products.image1,
+    #                                                                 db.products.type, db.products.description,
+    #                                                                 db.products.rating, db.products.price).as_list()
+    #
+    # rows = {}
+    # x = 0
+    # for i in temprows:
+    #     if i['products']['type'] == product_type:
+    #         rows[x] = i
+    #         x += 1
+    # print(rows)
+
+    # [[ = sellerInfoRows['firstname']]]
+
     return dict(rows=rows, product_type=product_type)
 
 
