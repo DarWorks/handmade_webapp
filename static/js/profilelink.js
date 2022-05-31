@@ -28,17 +28,17 @@ let profilelinkinit = (profilelinkapp) => {
 
     // This creates the Vue instance.
     profilelinkapp.vue = new Vue({
-        el: "#profile-link-target",
+//        el: "#profile-link-target",
         data: profilelinkapp.data,
         methods: profilelinkapp.methods
     });
 
     // And this profilelinkinitializes it.
     profilelinkapp.profilelinkinit = () => {
-      axios.get("/handx/username").then((res) => {
-        profilelinkapp.vue.username = res.data.username
-        profilelinkapp.vue.profileURL = `/handx/profile/${res.data.username}`
-      })
+//      axios.get("/handx/username").then((res) => {
+//        profilelinkapp.vue.username = res.data.username
+//        profilelinkapp.vue.profileURL = `/handx/profile/${res.data.username}`
+//      })
     };
 
     // Call to the profilelinkinitializer.
