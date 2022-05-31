@@ -44,6 +44,7 @@
   }
 </style>
 
+[[if isAuthenticated == "true":]]
 <div id="rating-target">
   <span @mouseout="stars_out()">
     <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
@@ -52,6 +53,7 @@
     </span>
   </span>
 </div>
+[[pass]]
 
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
@@ -80,8 +82,8 @@
                 </figure>
               </div>
             </div>
-            
-            
+
+
           </div>
         </div>
       </div>
@@ -100,37 +102,40 @@
       <div class="column is-half">
         <center>
 
-          <button class="button rate-button">Rate</button>
+          <button @click="rateButtonClicked = !rateButtonClicked" class="button rate-button">Rate</button>
+
           <br />
-          <h1 class="subtitle subtitle-margin">Comments</h1>
+          <div v-if="rateButtonClicked">
+            <h1 class="subtitle subtitle-margin">Comments</h1>
 
-          <div class="field">
-            <div class="control is-small">
-              <div class="columns block is-mobile">
-                <div class="column is-two-thirds">
-                  <input class="input is-small" v-model="new_comment" @click="can_comment" type="text"
-                    placeholder="Add a comment">
-                </div>
-                <div class="column is-one-third">
-                  <button class="button is-primary" @click="add_comment">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-for="comment in comments" class="block">
-            <div class="columns block is-mobile">
-              <div class="column is-one-quarter">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-1by1">
-                      <img :src="comment.profile_pic">
-                    </figure>
+            <div class="field">
+              <div class="control is-small">
+                <div class="columns block is-mobile">
+                  <div class="column is-two-thirds">
+                    <input class="input is-small" v-model="new_comment" @click="can_comment" type="text"
+                      placeholder="Add a comment">
+                  </div>
+                  <div class="column is-one-third">
+                    <button class="button is-primary" @click="add_comment">Add</button>
                   </div>
                 </div>
               </div>
-              <div class="column is-two-quarters comment-text">
-                <a :href="comment.profile_link">@{{comment.username}}</a> {{comment.text}}
+            </div>
+
+            <div v-for="comment in comments" class="block">
+              <div class="columns block is-mobile">
+                <div class="column is-one-quarter">
+                  <div class="card">
+                    <div class="card-image">
+                      <figure class="image is-1by1">
+                        <img :src="comment.profile_pic">
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-two-quarters comment-text">
+                  <a :href="comment.profile_link">@{{comment.username}}</a> {{comment.text}}
+                </div>
               </div>
             </div>
           </div>
@@ -146,37 +151,44 @@
           <button v-if="product_added" class="button is-static buy-button">
             <span class="icon"><i class="fa fa-check"></i></span> <span>Added</span>
           </button>
-          
+
           <br />
-          <h1 class="subtitle subtitle-margin">Reviews</h1>
+          <div v-if="rateButtonClicked">
+            <h1 class="subtitle subtitle-margin">Reviews</h1>
 
-          <div class="field">
-            <div class="control is-small">
-              <div class="columns block is-mobile">
-                <div class="column is-two-thirds">
-                  <input class="input is-small" v-model="new_review" @click="can_review" type="text"
-                    placeholder="Add a review">
-                </div>
-                <div class="column is-one-third">
-                  <button class="button is-primary" @click="add_review">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-for="review in reviews" class="block">
-            <div class="columns block is-mobile">
-              <div class="column is-one-quarter">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-1by1">
-                      <img :src="review.profile_pic">
-                    </figure>
+            <div class="field">
+              <div class="control is-small">
+                <div class="columns block is-mobile">
+                  <div class="column is-two-thirds">
+                    <input class="input is-small" v-model="new_review" @click="can_review" type="text"
+                      placeholder="Add a review">
+                  </div>
+                  <div class="column is-one-third">
+                    <button class="button is-primary" @click="add_review">Add</button>
                   </div>
                 </div>
               </div>
-              <div class="column is-two-quarters comment-text">
-                <a :href="review.profile_link">@{{review.username}}</a> {{review.text}}
+            </div>
+
+            <div v-if="showReviewWarning" class="notification is-warning">
+              <button @click="showReviewWarning=false" class="delete"></button>
+              You can't leave a review before purchasing this product
+            </div>
+
+            <div v-for="review in reviews" class="block">
+              <div class="columns block is-mobile">
+                <div class="column is-one-quarter">
+                  <div class="card">
+                    <div class="card-image">
+                      <figure class="image is-1by1">
+                        <img :src="review.profile_pic">
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-two-quarters comment-text">
+                  <a :href="review.profile_link">@{{review.username}}</a> {{review.text}}
+                </div>
               </div>
             </div>
           </div>
@@ -184,6 +196,7 @@
         </center>
       </div>
     </div>
+
   </section>
 </div>
 <!-- body END -->
@@ -200,8 +213,11 @@
   let post_reviews_url = "[[=XML(post_reviews_url)]]"
   let set_rating_url = "[[=XML(set_rating_url)]]"
   let get_rating_url = "[[=XML(get_rating_url)]]"
+  let login_url = "[[=login_url]]"
+  let personalization_url = "[[=personalization_url]]"
   let isAuthenticated = [[=isAuthenticated]]
   let hasUsername = [[=hasUsername]]
+  let hasPurchasedBefore = [[=hasPurchasedBefore]]
   let images = [
     [[for img in product.get('images'):]]
   { id: "[[=img.get('id')]]", src: "[[=img.get('src')]]" },
@@ -209,5 +225,7 @@
   ]
 </script>
 <script src="js/product.js"></script>
+[[if isAuthenticated == "true":]]
 <script src="js/rating.js"></script>
+[[pass]]
 [[end]]

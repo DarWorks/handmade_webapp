@@ -9,7 +9,7 @@
 
 <div class="section" id="vue-target" v-cloak>
   <h1 class="title">
-    Insert Product Details
+    Edit Product Details
   </h1>
 
   <br>
@@ -22,7 +22,7 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <input class="input" type="text" v-model="add_product_name" placeholder="Insert a name for the product">
+          <input class="input" value="[[=product_name]]" type="text" v-model="add_product_name" placeholder="Insert a name for the product">
           <p v-if="name_flag" class="has-text-danger">Cannot be blank!</p>
         </div>
       </div>
@@ -39,13 +39,13 @@
         <div class="control">
           <div class="select is-fullwidth">
             <select v-model="add_product_type">
-              <option value="" disabled selected>Select an option</option>
-              <option>Jewelry and Accessories</option>
-              <option>Clothing and Shoes</option>
-              <option>Home and Living</option>
-              <option>Toys and Entertainment</option>
-              <option>Art and Collectibles</option>
-              <option>Other</option>
+                <option value="" disabled >Select an option</option>
+                <option >Jewelry and Accessories</option>
+                <option >Clothing and Shoes</option>
+                <option >Home and Living</option>
+                <option >Toys and Entertainment</option>
+                <option >Art and Collectibles</option>
+                <option >Other</option>
             </select>
           </div>
           <p v-if="type_flag" class="has-text-danger">Please choose an option!</p>
@@ -63,7 +63,9 @@
       <div class="field">
         <div class="control">
           <textarea class="textarea" v-model="add_product_description"
-            placeholder="Provide a descirption of the product"></textarea>
+            placeholder="Provide a descirption of the product">
+            [[=description]]
+          </textarea>
           <p v-if="desc_flag" class="has-text-danger">Please provide a description!</p>
         </div>
       </div>
@@ -84,7 +86,7 @@
           </a>
         </p>
         <p class="control">
-          <input class="input" type="number" v-model="add_product_price" placeholder="Provide a price">
+          <input class="input" value="[[=price]]" type="number" v-model="add_product_price" placeholder="Provide a price" />
           <p v-if="price_flag" class="has-text-danger ml-2">Invalid Value!</p>
         </p>
       </div>
@@ -95,7 +97,7 @@
   <!-- Images -->
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Images (Select up to 4)</label>
+      <label class="label">Replace Images (Select up to 4)</label>
     </div>
     <div class="field-body">
       <div class="field">
@@ -149,7 +151,11 @@
       <div class="field has-addons has-addons-right">
 
         <div class="control" v-if="!submitted">
-          <input type="submit" @click="add_product_info" value="Submit Here" class="button is-info">
+          <input type="submit" @click="add_product_info" value="Save Changes" class="button is-info">
+        </div>
+
+        <div class="control">
+          <input type="submit" @click="delete_prod" value="Delete Product" class="button is-danger" style="margin-left: 10px">
         </div>
 
         <div v-if="submitted">
@@ -168,6 +174,13 @@
 [[block page_scripts]]
 <script>
   let add_product_info_url = "[[=XML(add_product_info_url)]]";
+  let add_product_name = "[[=product_name]]";
+  let add_product_type = "[[=type]]";
+  let add_product_description = "[[=description]]";
+  let add_product_price = [[=price]];
+  let delete_prod_url = "[[=XML(delete_prod_url)]]";
+  let on_delete_url = "[[=on_delete_url]]";
+  let on_edit_url = "[[=on_edit_url]]";
 </script>
-<script src="js/add_product.js"></script>
+<script src="js/edit_product.js"></script>
 [[end]]

@@ -85,6 +85,9 @@ def index():
     #  (currently this displays random products)
     #  Also need to display seller info here
     trendingProducts = db(db.products).select(orderby='<random>').as_list()
+    for prod in trendingProducts:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
 
     # TODO: for this query later on display the most recently added products
     #  (currently this displays all products in reverse order with no limits)
@@ -95,6 +98,9 @@ def index():
     customerID = 0
     display = False
     firstProductRow = newProducts
+    for prod in firstProductRow:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
     firstRowText = "New Items"
 
 
@@ -276,12 +282,67 @@ def view_orders(path=None):
                 )
     return dict(grid=grid)
 
+@action('edit_product/<product_id:int>', method=['GET'])
+@action.uses('edit_product.html', db, auth.user, session, url_signer)
+def edit_product_page(product_id=None):
+    assert product_id is not None
+    data = db(db.products.id == product_id).select().first()
+    user = db(db.userProfile.user_email == get_user_email()).select().first()
+    if (data is None):
+        return "not found"
+    if (user is None) or (data.sellerid != user.id):
+        return "unauthorized"
+    return dict(
+        product_id=data.id,
+        product_name=data.name,
+        type=data.type if data.type is not None else "",
+        description=data.description,
+        price=data.price,
+        add_product_info_url = URL('edit_product_info', user.username, data.id, signer=url_signer),
+        username=user.username,
+        url_signer=url_signer,
+        delete_prod_url=URL('delete_product', data.id, signer=url_signer),
+        on_delete_url = URL('profile', user.username),
+        on_edit_url = URL('product', user.username, data.id),
+    )
+
+@action('edit_product_info/<username>/<product_id:int>', method=['POST'])
+@action.uses(db, auth.user, url_signer.verify())
+def add_product_info(product_id=None, username=None):
+    db(db.products.id == product_id).update(
+        name=request.json.get('product_name'),
+        type=request.json.get('product_type'),
+        description=request.json.get('product_description'),
+        price=request.json.get('product_price'),
+    )
+    image1=request.json.get('product_image1')
+    image2=request.json.get('product_image2')
+    image3=request.json.get('product_image3')
+    image4=request.json.get('product_image4')
+    if len(image1) > 0:
+        db(db.products.id == product_id).update(
+            image1=image1,
+            image2=image2,
+            image3=image3,
+            image4=image4,
+        )
+    return "ok"
+
+@action('delete_product/<product_id:int>', method=['POST'])
+@action.uses(db, auth.user, session, url_signer.verify())
+def delete_product(product_id=None):
+    try:
+        db(db.products.id == product_id).delete()
+    except:
+        pass
+    return "ok"
+
 #//////////////////////////////////////////////////////////
 # PROFILE PAGE
 #//////////////////////////////////////////////////////////
 
 @action('profile/<username>')
-@action.uses('profile.html', auth, url_signer.verify())
+@action.uses('profile.html', auth)
 def profile(username=None):
     assert username is not None
     user = auth.get_user()
@@ -297,7 +358,8 @@ def profile(username=None):
     selling = map(lambda x: dict(
         id=x["id"],
         seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
-        image=x["image1"]
+        image=x["image1"],
+        editURL=URL('edit_product', x["id"]),
     ), db(db.products.sellerid == userProfile.id).select().as_list())
     return dict(
         url_signer=url_signer,
@@ -305,7 +367,6 @@ def profile(username=None):
         isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
-            total_credits=userProfile.balance,
             profile_pic= "images/profile/default.jpg"
         ),
         selling = selling,
@@ -334,9 +395,6 @@ def add_product_info(username=None):
         description=request.json.get('product_description'),
         price=request.json.get('product_price'),
         image1=request.json.get('product_image1'),
-        image2=request.json.get('product_image2'),
-        image3=request.json.get('product_image3'),
-        image4=request.json.get('product_image4'),
     )
 
     return dict(username=username, url_signer=url_signer,)
@@ -362,24 +420,28 @@ def product(username=None, product_id=None):
     images = []
     if prod.image1 is not None:
         images.append({"id":1, "src": prod.image1})
-    if prod.image2 is not None:
+    if prod.image2 is not None and len(prod.image2) > 0:
         images.append({"id":2, "src":prod.image2})
-    if prod.image3 is not None:
+    if prod.image3 is not None and len(prod.image3) > 0:
         images.append({"id":3, "src":prod.image3})
-    if prod.image4 is not None:
+    if prod.image4 is not None and len(prod.image4) > 0:
         images.append({"id":4, "src":prod.image4})
     # check if user has username
     hasUsername = False
+    ausername = ""
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+    # check if user has purchased this before to allow them to review the item
+    hasPurchasedBefore = False
 
     return dict(
         app_name = APP_NAME,
         get_product_url = URL('get_product'),
         product_id=product_id,
-
+        login_url= URL("auth", "login"),
+        personalization_url=URL("add_user_personalization"),
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
@@ -388,6 +450,7 @@ def product(username=None, product_id=None):
         get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
+        hasPurchasedBefore="true" if hasPurchasedBefore else "false",
         product = dict(
             name=prod.name,
             seller=sellerProfile.username,
@@ -587,13 +650,17 @@ def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
 
+
     for row in rows:
         sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
         for seller in sellerQuery:
             row["first_name"] = seller["first_name"]
             row["last_name"] = seller["last_name"]
             row["username"] = seller["username"]
-
+            
+    for prod in rows:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"]);
     return dict(rows=rows, product_type=product_type)
 
 
