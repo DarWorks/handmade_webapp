@@ -23,6 +23,11 @@
 .product-image img{
   height: 210px;
 }
+
+.in-image-btn {
+  position: absolute;
+  right: 0;
+}
 </style>
 
 <!-- Body -->
@@ -39,19 +44,27 @@
           </div>
           <br/>
 
-          <center><h1 class="subtitle">[[=profile.get('username', '')]]</h1></center>
-
-          [[if isAccountOwner:]]
-          <center><h1 class="subsubsubtitle">Total Credits: [[=profile.get('total_credits', 0)]]</h1></center>
-          [[pass]]
+          <center>
+            <h1 class="subtitle">[[=profile.get('username', '')]]</h1>
+          </center>
 
           <br>
 
           [[if isAccountOwner:]]
-          <center><a class="button is-danger" href="[[=URL('add_product', profile.get('username', ''), signer=url_signer)]]">
-            <span class="icon"><i class="fa fa-plus"></i></span>
-            <span>Add Product</span>
-          </a></center>
+          <center>
+            <a class="button is-danger" href="[[=URL('add_product', profile.get('username', ''), signer=url_signer)]]">
+              <span class="icon">
+                <i class="fa fa-plus"></i>
+              </span>
+              <span>Add Product</span>
+            </a>
+          </center>
+          <br/>
+          <center>
+            <a class="button is-info" href="[[=URL('view_orders')]]">
+              <span>View Orders</span>
+            </a>
+          </center>
           [[pass]]
 
 
@@ -66,28 +79,12 @@
       <div class="level-item level-left product-image">
         <div class="card">
           <div class="card-image">
+            [[if isAccountOwner:]]
+              <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
+            [[pass]]
             <!-- <figure class="image is-1by1"> -->
               <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
-                <img src="[[=prod.get('image', '')]]">
-              </a>
-            <!-- </figure> -->
-          </div>
-        </div>
-      </div>
-      [[pass]]
-
-    </nav>
-
-    <h1 class="title">Purchased</h1>
-    <nav class="level is-mobile has-text-white product-images-container" >
-
-      [[for prod in purchased:]]
-      <div class="level-item level-left product-image">
-        <div class="card">
-          <div class="card-image">
-            <!-- <figure class="image is-1by1"> -->
-              <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
-                <img src="[[=URL('static', prod.get('image', ''))]]">
+                <img src="[[=prod.get('image', '')]]" />
               </a>
             <!-- </figure> -->
           </div>

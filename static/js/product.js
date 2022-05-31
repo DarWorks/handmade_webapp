@@ -6,7 +6,8 @@ let init = (app) => {
       cart: [],
       product_id: 0,
       product_added: false,
-
+      rateButtonClicked: false,
+      showReviewWarning: false,
       productImages: images,
       selectedImage: 1,
       comments: [],
@@ -23,10 +24,10 @@ let init = (app) => {
 
     app.can_comment = function () {
       if (!isAuthenticated) {
-       window.location.replace("/handmade_webapp/auth/login");
+       window.location.replace(login_url);
        return false;
      } else if (!hasUsername) {
-       window.location.replace("/handmade_webapp/add_user_personalization");
+       window.location.replace(personalization_url);
        return false;
      }
      return true;
@@ -48,10 +49,13 @@ let init = (app) => {
 
     app.can_review = function () {
       if (!isAuthenticated) {
-       window.location.replace("/handmade_webapp/auth/login");
+       window.location.replace(login_url);
+       return false;
+     } else if (!hasPurchasedBefore) {
+       app.vue.showReviewWarning = true;
        return false;
      } else if (!hasUsername) {
-       window.location.replace("/handmade_webapp/add_user_personalization");
+       window.location.replace(personalization_url);
        return false;
      }
      return true;
