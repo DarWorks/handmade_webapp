@@ -14,7 +14,7 @@ let closeinit = (closeapp) => {
     }
 
     closeapp.vue = new Vue({
-        el: "#close-target",
+       // el: "#close-target",
         data: closeapp.data,
         methods: closeapp.methods
     });

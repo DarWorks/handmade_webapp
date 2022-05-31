@@ -651,7 +651,7 @@ def load_users():
 # DISPLAYING PRODUCT CATEGORIES-
 
 @action('display_product_category/<product_type>')
-@action.uses('display_product_category.html', db)
+@action.uses('display_product_category.html', db, auth, url_signer)
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
