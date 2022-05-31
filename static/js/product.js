@@ -1,18 +1,37 @@
 let app = {};
 
 let init = (app) => {
-
     app.data = {
       cart: [],
       product_id: 0,
       product_added: false,
-
       productImages: images,
       selectedImage: 1,
       comments: [],
       reviews: [],
       new_comment: "",
       new_review: "",
+      defaultstars: 0,
+      display: 0,
+    };
+
+    app.set_stars = function(num_stars) {
+      app.vue.defaultstars = num_stars;
+      axios.post(set_rating_url, {rating: num_stars});
+    };
+
+    app.stars_out = function() {
+      app.vue.display = app.vue.defaultstars;
+    };
+
+    app.stars_over = function(num_stars) {
+      app.vue.display = num_stars;
+    };
+
+    app.methods = {
+        set_stars: app.set_stars,
+        stars_out: app.stars_out,
+        stars_over: app.stars_over,
     };
 
     app.enumerate = (a) => {
@@ -105,6 +124,9 @@ let init = (app) => {
         add_review: app.add_review,
         can_review: app.can_review,
         add_to_cart: app.add_to_cart,
+        set_stars: app.set_stars,
+        stars_out: app.stars_out,
+        stars_over: app.stars_over,
     };
 
     app.vue = new Vue({
@@ -122,6 +144,11 @@ let init = (app) => {
       axios.get(get_reviews_url).then(function (response) {
           app.vue.reviews = response.data.reviews
       })
+      axios.get(get_rating_url)
+            .then((result) => {
+              app.vue.defaultstars = result.data.rating; 
+              app.vue.display = result.data.rating; 
+            });
     };
 
     app.init();

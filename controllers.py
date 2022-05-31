@@ -346,16 +346,17 @@ def product(username=None, product_id=None):
         images.append({"id":4, "src":prod.image4})
     # check if user has username
     hasUsername = False
+    ausername = None
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
-        ausername = u.username
+        if u is not None:
+            ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
 
     return dict(
         app_name = APP_NAME,
         get_product_url = URL('get_product'),
         product_id=product_id,
-
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
