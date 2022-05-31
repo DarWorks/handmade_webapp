@@ -26,24 +26,11 @@ let addProdLinkInit = (addProdLink) => {
         // Complete as you see fit.
 //        getPage: addProdLink. getPage,
     };
-//
-//    addProdLink.getPage = function(){
-//
-//        axios.get("/handB/username").then((res) => {
-//        addProdLink.vue.username = res.data.username
-//        addProdLink.vue.addProdLink = /handB/add_product/${res.data.username}
-//       }).catch((e) => {
-//            console.log(e)
-//
-//       });
-//
-//
-//    }
-//
+
 
     // This creates the Vue instance.
     addProdLink.vue = new Vue({
-        el: "#addProd-link-target",
+//        el: "#addProd-link-target",
         data: addProdLink.data,
         methods: addProdLink.methods
     });
@@ -52,10 +39,10 @@ let addProdLinkInit = (addProdLink) => {
     addProdLink.addProdLinkInit = () => {
 
 
-      axios.get("/handx/username").then((res) => {
-        addProdLink.vue.username = res.data.username
-        addProdLink.vue.addProdLink = /handx/add_product/${res.data.username}
-      })
+//      axios.get("/handx/username").then((res) => {
+//        addProdLink.vue.username = res.data.username
+//        addProdLink.vue.addProdLink = /handx/add_product/${res.data.username}
+//      })
 
     };
 
