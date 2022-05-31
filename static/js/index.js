@@ -9,7 +9,7 @@ let init = (app) => {
 
     // This is the Vue data.
     app.data = {
-        hover: false,
+//        hover: false,
         // Complete as you see fit.
     };
 
@@ -22,15 +22,15 @@ let init = (app) => {
         return a;
     };
 
-    app.setHover =  (hoverBool) => {
-        app.vue.hover = hoverBool;
-    };
+//    app.setHover =  (hoverBool) => {
+//        app.vue.hover = hoverBool;
+//    };
 
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
-        setHover: app.setHover,
+//        setHover: app.setHover,
     };
 
     // This creates the Vue instance.
