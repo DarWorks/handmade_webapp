@@ -74,6 +74,13 @@ db.define_table(
 )
 
 db.define_table(
+    'order_history',
+    Field('sellerid', 'integer', requires=IS_NOT_EMPTY()),
+    Field('buyerid', 'integer', requires=IS_NOT_EMPTY()),
+    Field('productid', 'integer', requires=IS_NOT_EMPTY()),
+)
+
+db.define_table(
     'ratingvals',
     Field('product_id', 'reference products'),
     Field('rating', 'integer', default=0),

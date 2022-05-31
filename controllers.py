@@ -274,7 +274,7 @@ def edit_product_page(product_id=None):
         add_product_info_url = URL('edit_product_info', user.username, data.id, signer=url_signer),
         username=user.username,
         url_signer=url_signer,
-        delete_prod_url=URL('delete_product', user.username, data.id, signer=url_signer),
+        delete_prod_url=URL('delete_product', data.id, signer=url_signer),
         on_delete_url = URL('profile', user.username),
         on_edit_url = URL('product', user.username, data.id),
     )
@@ -405,12 +405,15 @@ def product(username=None, product_id=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+    # check if user has purchased this before to allow them to review the item
+    hasPurchasedBefore = False
 
     return dict(
         app_name = APP_NAME,
         get_product_url = URL('get_product'),
         product_id=product_id,
-
+        login_url= URL("auth", "login"),
+        personalization_url=URL("add_user_personalization"),
         get_comments_url = URL('comments', product_id),
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
@@ -419,6 +422,7 @@ def product(username=None, product_id=None):
         get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
+        hasPurchasedBefore="true" if hasPurchasedBefore else "false",
         product = dict(
             name=prod.name,
             seller=sellerProfile.username,
