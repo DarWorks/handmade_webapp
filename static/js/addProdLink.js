@@ -31,7 +31,7 @@ let addProdLinkInit = (addProdLink) => {
 //
 //        axios.get("/handB/username").then((res) => {
 //        addProdLink.vue.username = res.data.username
-//        addProdLink.vue.addProdLink = /handB/add_product/${res.data.username}
+//        addProdLink.vue.addProdLink = `/handB/add_product/${res.data.username}`
 //       }).catch((e) => {
 //            console.log(e)
 //
@@ -54,7 +54,7 @@ let addProdLinkInit = (addProdLink) => {
 
       axios.get("/handx/username").then((res) => {
         addProdLink.vue.username = res.data.username
-        addProdLink.vue.addProdLink = /handx/add_product/${res.data.username}
+        addProdLink.vue.addProdLink = `/handx/add_product/${res.data.username}`
       })
 
     };
