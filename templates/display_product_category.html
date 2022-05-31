@@ -43,7 +43,9 @@
         <div class="card " style=" border-style: solid; border-color: #f1641e;">
           <div class="card-image">
               <div class ="card-image has centered px-6">
-                    <img src="[[=product['image1']]]" width="600" height="600">
+              <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
+                  <img src="[[=product['image1']]]" width="600" height="600">
+              </a>
               </div>
               <div class="card-content">
                   <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
