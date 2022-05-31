@@ -22,6 +22,7 @@
                   <input type="text" v-model="add_user_userName" class="input">
                 </div>
                   <h2 class="has-text-danger" v-if="!validUsername">Choose a unique username!</h2>
+                  <h2 class="has-text-danger" v-if="error_flag">Choose a username!</h2>
 
 
               </div>
