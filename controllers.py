@@ -565,19 +565,44 @@ def load_users():
 def test(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
+
+    for row in rows:
+        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
+        for seller in sellerQuery:
+            row["first_name"] = seller["first_name"]
+            row["last_name"] = seller["last_name"]
+            row["username"] = seller["username"]
     # TODO: query seller information so that it can be displayed on the product cards
+
+    # brows=[]
+    # products = db(db.products.type == product_type).select().as_list()
+    # for product in products:
+    #     #product["username"] = ""
+    #     #print(i["sellerid"])
+    #     #rows.add()
+    #     brows = db(db.userProfile.id == product["sellerid"]).select()
+    #     for b in brows:
+    #         product["username"] = b["username"]
+    #
+    # print(brows)
+    # print(products)
+    # for product in products:
+    #     print(product["username"])
+
 
     # xrows = db((db.products.type == product_type) and
     #           (db.userProfile.id == db.products.sellerid)).select(db.userProfile.first_name,
     #                                                               db.userProfile.last_name,
     #                                                               db.userProfile.username,
-    #                                                               db.products.image,
+    #                                                               #db.products.image,
     #                                                               db.products.name,
+    #                                                               db.products.type,
     #                                                               db.products.description,
     #                                                               db.products.rating,
     #                                                               db.products.price).as_list()
     # print(xrows)
-    #
+    # for x in xrows:
+    #     print(x)
     # with open('pleaselol.txt', 'w') as f:
     #     for line in rows:
     #         print(line, file=f)
@@ -610,6 +635,11 @@ def test(product_type=None):
     # print(rows)
 
     # [[ = sellerInfoRows['firstname']]]
+
+    #
+    # for i in zip(rows, brows):
+    #     print(i[1])
+    #
 
     return dict(rows=rows, product_type=product_type)
 
