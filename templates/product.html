@@ -44,6 +44,7 @@
   }
 </style>
 
+[[if isAuthenticated == "true":]]
 <div id="rating-target">
   <span @mouseout="stars_out()">
     <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
@@ -52,6 +53,7 @@
     </span>
   </span>
 </div>
+[[pass]]
 
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
@@ -223,5 +225,7 @@
   ]
 </script>
 <script src="js/product.js"></script>
+[[if isAuthenticated == "true":]]
 <script src="js/rating.js"></script>
+[[pass]]
 [[end]]
