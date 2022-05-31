@@ -18,8 +18,14 @@ let init = (app) => {
     };
 
     app.set_stars = function(num_stars) {
-      app.vue.defaultstars = num_stars;
-      axios.post(set_rating_url, {rating: num_stars});
+      if (hasUsername) { // equivalent to isPersonalized
+        app.vue.defaultstars = num_stars;
+        axios.post(set_rating_url, {rating: num_stars});
+      } else if (isAuthenticated) { // redirect to personalization page if not personalized
+        window.location.href = personalization_url + "?reason=You+need+a+username+before+you+can+rate+a+product";
+      } else { // redirect to login if not logged in
+        window.location.href = login_url;
+      }
     };
 
     app.stars_out = function() {
@@ -44,10 +50,10 @@ let init = (app) => {
 
     app.can_comment = function () {
       if (!isAuthenticated) {
-       window.location.replace(login_url);
+       window.location.href = login_url;
        return false;
      } else if (!hasUsername) {
-       window.location.replace(personalization_url);
+       window.location.href = personalization_url + "?reason=You+need+a+username+before+you+can+comment";
        return false;
      }
      return true;
@@ -71,11 +77,11 @@ let init = (app) => {
       if (!isAuthenticated) {
        window.location.replace(login_url);
        return false;
+     } else if (!hasUsername) {
+       window.location.href = personalization_url+"?reason=You+need+a+username+before+you+can+leave+a+review";
+       return false;
      } else if (!hasPurchasedBefore) {
        app.vue.showReviewWarning = true;
-       return false;
-     } else if (!hasUsername) {
-       window.location.replace(personalization_url);
        return false;
      }
      return true;
@@ -149,11 +155,13 @@ let init = (app) => {
       axios.get(get_reviews_url).then(function (response) {
           app.vue.reviews = response.data.reviews
       })
-      axios.get(get_rating_url)
-            .then((result) => {
-              app.vue.defaultstars = result.data.rating;
-              app.vue.display = result.data.rating;
-            });
+      if (hasUsername) { // equivalent to isPersonalized
+        axios.get(get_rating_url)
+        .then((result) => {
+          app.vue.defaultstars = result.data.rating;
+          app.vue.display = result.data.rating;
+        });
+      }
     };
 
     app.init();

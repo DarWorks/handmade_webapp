@@ -603,13 +603,13 @@ def getUsername():
 @action.uses('personalization.html', db, auth, url_signer)
 def add_personalization():
     email = get_user_email()
-
+    redirectReason = request.params.get("reason")
     return dict(
         #signed? URL for the callbacks
         add_personalization_url = URL('add_personalization_info'),
         load_users_url = URL('load_users', signer=url_signer),
         email = email,
-
+        reason = redirectReason,
     )
 
 

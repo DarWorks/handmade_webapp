@@ -8,6 +8,12 @@
 
 <div class="section " id="vue-target">
 
+    [[if reason is not None:]]
+    <div class="notification is-warning">
+      <center>[[=reason]]</center>
+    </div>
+    [[pass]]
+
     <div class="column is-half is-offset-one-quarter is-vcentered ">
 
         <div v-if="!submitted" class="container block">
