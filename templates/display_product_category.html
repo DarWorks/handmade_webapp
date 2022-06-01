@@ -13,7 +13,6 @@
 
 }
 
-
 .product-image:not(:last-child){
   padding-right: 8%;
 }
@@ -23,12 +22,20 @@
   height: 250px;
 }
 
-
 .scrollable-element {
   scrollbar-color: red ;
 }
 
+.responsiveCard {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: .4s;
+}
 
+.responsiveCard:hover{
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translate(0px, -8px);
+    transition: .6s;
+}
 
 </style>
 
@@ -40,7 +47,7 @@
     <nav class="level is-mobile product-images-container scroller scrollable-element">
       [[for product in rows:]]
       <div class="level-item level-left product-image">
-        <div class="card " style=" border-style: solid; border-color: #f1641e;">
+        <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
           <div class="card-image">
               <div class ="card-image has centered px-6">
               <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">

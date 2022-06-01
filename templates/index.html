@@ -9,7 +9,6 @@
   opacity: 1;
 }
 
-
 .notification-corner{
     position: fixed;
 	right:0;
@@ -32,7 +31,6 @@
   height: 600px;
 
 }
-
 
 .product-image:not(:last-child){
   padding-right: 8%;
@@ -66,9 +64,21 @@
   border-radius: 10px;
 }
 
-.notification-display{
+.responsiveCard {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: .4s;
+}
+
+.responsiveCard:hover{
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translate(0px, -8px);
+    transition: .6s;
+}
+
+.notification-display {
 <!--    position: absolute;-->
 <!--$('#draggable').draggable();-->
+  position: fixed;
 }
 
 </style>
@@ -166,7 +176,7 @@
       [[for product in firstProductRow:]]
 
         <div class="level-item level-left product-image">
-            <div class="card "  style=" border-style: solid; border-color: #f1641e;">
+            <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
               <div class="card-image pt-6">
                <div class ="card-image has centered px-6">
                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
@@ -213,7 +223,7 @@
 
       [[for product in trendingProducts:]]
           <div class="level-item level-left product-image ">
-            <div class="card  ">
+            <div class="card responsiveCard">
               <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">
                     <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
