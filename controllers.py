@@ -437,8 +437,9 @@ def product(username=None, product_id=None):
     ausername = ""
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
-        ausername = u.username
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+        if hasUsername:
+            ausername = u.username
     # check if user has purchased this before to allow them to review the item
     hasPurchasedBefore = False
 
@@ -602,13 +603,13 @@ def getUsername():
 @action.uses('personalization.html', db, auth, url_signer)
 def add_personalization():
     email = get_user_email()
-
+    redirectReason = request.params.get("reason")
     return dict(
         #signed? URL for the callbacks
         add_personalization_url = URL('add_personalization_info'),
         load_users_url = URL('load_users', signer=url_signer),
         email = email,
-
+        reason = redirectReason,
     )
 
 

@@ -44,17 +44,6 @@
   }
 </style>
 
-[[if isAuthenticated == "true":]]
-<div id="rating-target">
-  <span @mouseout="stars_out()">
-    <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
-      <i v-if="star_idx <= display" class="fa fa-star"></i>
-      <i v-if="star_idx > display" class="fa fa-star-o"></i>
-    </span>
-  </span>
-</div>
-[[pass]]
-
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
   <div class="columns block is-mobile">
     <div class="column is-half">
@@ -94,6 +83,14 @@
         <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
       <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
       <div>[[=product.get("description", "")]]</div>
+    </div>
+    <div>
+      <span @mouseout="stars_out()">
+        <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
+          <i v-if="star_idx <= display" class="fa fa-star"></i>
+          <i v-if="star_idx > display" class="fa fa-star-o"></i>
+        </span>
+      </span>
     </div>
   </div>
 
@@ -225,7 +222,4 @@
   ]
 </script>
 <script src="js/product.js"></script>
-[[if isAuthenticated == "true":]]
-<script src="js/rating.js"></script>
-[[pass]]
 [[end]]

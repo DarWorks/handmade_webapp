@@ -1,7 +1,6 @@
 let app = {};
 
 let init = (app) => {
-
     app.data = {
       cart: [],
       product_id: 0,
@@ -14,6 +13,33 @@ let init = (app) => {
       reviews: [],
       new_comment: "",
       new_review: "",
+      defaultstars: 0,
+      display: 0,
+    };
+
+    app.set_stars = function(num_stars) {
+      if (hasUsername) { // equivalent to isPersonalized
+        app.vue.defaultstars = num_stars;
+        axios.post(set_rating_url, {rating: num_stars});
+      } else if (isAuthenticated) { // redirect to personalization page if not personalized
+        window.location.href = personalization_url + "?reason=You+need+a+username+before+you+can+rate+a+product";
+      } else { // redirect to login if not logged in
+        window.location.href = login_url;
+      }
+    };
+
+    app.stars_out = function() {
+      app.vue.display = app.vue.defaultstars;
+    };
+
+    app.stars_over = function(num_stars) {
+      app.vue.display = num_stars;
+    };
+
+    app.methods = {
+        set_stars: app.set_stars,
+        stars_out: app.stars_out,
+        stars_over: app.stars_over,
     };
 
     app.enumerate = (a) => {
@@ -24,10 +50,10 @@ let init = (app) => {
 
     app.can_comment = function () {
       if (!isAuthenticated) {
-       window.location.replace(login_url);
+       window.location.href = login_url;
        return false;
      } else if (!hasUsername) {
-       window.location.replace(personalization_url);
+       window.location.href = personalization_url + "?reason=You+need+a+username+before+you+can+comment";
        return false;
      }
      return true;
@@ -51,11 +77,11 @@ let init = (app) => {
       if (!isAuthenticated) {
        window.location.replace(login_url);
        return false;
+     } else if (!hasUsername) {
+       window.location.href = personalization_url+"?reason=You+need+a+username+before+you+can+leave+a+review";
+       return false;
      } else if (!hasPurchasedBefore) {
        app.vue.showReviewWarning = true;
-       return false;
-     } else if (!hasUsername) {
-       window.location.replace(personalization_url);
        return false;
      }
      return true;
@@ -109,6 +135,9 @@ let init = (app) => {
         add_review: app.add_review,
         can_review: app.can_review,
         add_to_cart: app.add_to_cart,
+        set_stars: app.set_stars,
+        stars_out: app.stars_out,
+        stars_over: app.stars_over,
     };
 
     app.vue = new Vue({
@@ -126,6 +155,13 @@ let init = (app) => {
       axios.get(get_reviews_url).then(function (response) {
           app.vue.reviews = response.data.reviews
       })
+      if (hasUsername) { // equivalent to isPersonalized
+        axios.get(get_rating_url)
+        .then((result) => {
+          app.vue.defaultstars = result.data.rating;
+          app.vue.display = result.data.rating;
+        });
+      }
     };
 
     app.init();
