@@ -466,6 +466,13 @@ def product(username=None, product_id=None):
     # check if user has purchased this before to allow them to review the item
     hasPurchasedBefore = False
 
+    if (prod.ratingnum == 0):
+        existrating = False
+        avgrating = 0
+    else:
+        existrating = True
+        avgrating = prod.ratingtotal / prod.ratingnum
+
     return dict(
         app_name = APP_NAME,
         get_product_url = URL('get_product'),
@@ -481,13 +488,15 @@ def product(username=None, product_id=None):
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
         hasPurchasedBefore="true" if hasPurchasedBefore else "false",
+        avgrating=avgrating,
+        existrating=existrating,
         product = dict(
             name=prod.name,
             seller=sellerProfile.username,
             description=prod.description,
             images=images,
             price=prod.price,
-            amount=prod.amount
+            amount=prod.amount,
         )
     )
 

@@ -71,8 +71,20 @@
                 </figure>
               </div>
             </div>
-
-
+          </div>
+          <div class="block mt-5 mb-1">
+            You Rated:
+            <span @mouseout="stars_out()">
+              <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
+                <i v-if="star_idx <= display" class="fa fa-star"></i>
+                <i v-if="star_idx > display" class="fa fa-star-o"></i>
+              </span>
+            </span>
+          </div>
+          <div class="block pull-left">
+            [[if existrating:]]
+            Rating: [[=avgrating]] out of 5.0 </p>
+            [[pass]]
           </div>
         </div>
       </div>
@@ -84,14 +96,7 @@
       <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
       <div>[[=product.get("description", "")]]</div>
     </div>
-    <div>
-      <span @mouseout="stars_out()">
-        <span @mouseover="stars_over(star_idx)" v-for="star_idx in [1, 2, 3, 4, 5]" @click="set_stars(star_idx)">
-          <i v-if="star_idx <= display" class="fa fa-star"></i>
-          <i v-if="star_idx > display" class="fa fa-star-o"></i>
-        </span>
-      </span>
-    </div>
+    
   </div>
 
   <section class="section margin-center-max-width-1000px">
