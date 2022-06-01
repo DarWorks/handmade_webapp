@@ -54,8 +54,15 @@
                            Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
+
+                        [[if product['ratingPresent'] == True:]]
                        <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
                         [[=product['aggegateRating']]] out of 5.0 </p>
+                        [[else:]]
+                                 <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
+                        Not Rated Yet :(</p>
+                        [[pass]]
+
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>

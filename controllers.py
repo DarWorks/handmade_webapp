@@ -59,22 +59,25 @@ def full_url(u):
 
 # Helper functions for the index / homepage and displaying product categories
 
-def ratingAndNamesHelper(query, db):
+def ratingAndNamesHelper(query):
     """
     A helper function to query the first name, last name, username, aggregate rating,
     product name (capitalise initials) , price (change in datatype)
 
     NOTE: for better displaying purposes, the first name and last name of the user and the product name
             have their initials capitalised using the title() function. The changes are not reflected in the database
+        Same with other modifications in the function
     """
 
     for row in query:
-        row["price"] = int(row["price"])
+        row["price"] = "{:.2f}".format(row["price"])
         row["name"] = row["name"].title()
         if row["ratingtotal"] == 0 or row["ratingnum"] == 0:
             row["aggegateRating"] = 0
+            row["ratingPresent"] = False
         else:
             row["aggegateRating"] = row["ratingtotal"] / row["ratingnum"]
+            row["ratingPresent"] = True
         sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
         for seller in sellerQuery:
             row["first_name"] = seller["first_name"].title()
@@ -82,7 +85,7 @@ def ratingAndNamesHelper(query, db):
             row["username"] = seller["username"]
 
 
-def productLinkHelper(query, db):
+def productLinkHelper(query):
     """
        A helper function to add product link
     """
@@ -176,12 +179,12 @@ def index():
             firstProductRow = l
 
     # calls helper function to add product link
-    productLinkHelper(firstProductRow, db)
-    productLinkHelper(trendingProducts, db)
+    productLinkHelper(firstProductRow)
+    productLinkHelper(trendingProducts)
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(firstProductRow, db)
-    ratingAndNamesHelper(trendingProducts, db)
+    ratingAndNamesHelper(firstProductRow)
+    ratingAndNamesHelper(trendingProducts)
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
@@ -679,8 +682,8 @@ def display_product_category(product_type=None):
 
     # calls helper functions to add product link
     # and query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(rows, db)
-    productLinkHelper(rows, db)
+    ratingAndNamesHelper(rows)
+    productLinkHelper(rows)
 
     return dict(rows=rows, product_type=product_type)
 

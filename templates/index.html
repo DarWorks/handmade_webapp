@@ -99,9 +99,7 @@
          [[pass]]
   </div>
 
-
     <div>
-
         [[if globals().get('user'):]]
                 <div class="column has-text-right">
                     [[if personalized == True:]]
@@ -119,12 +117,7 @@
                 </div>
         [[pass]]
 
-
      </div>
-
-
-
-
 
       <section class="section">
          <div class="columns block is-variable is-8">
@@ -153,7 +146,6 @@
                       [[pass]]
 
                     <ul>
-
                       <a href="[[=URL('display_product_category/Jewelry and Accessories')]]"><li>Jewelry & Accessories</li></a>
                       <a href="[[=URL('display_product_category/Clothing and Shoes')]]"><li>Clothing & Shoes</li></a>
                       <a href="[[=URL('display_product_category/Home and Living')]]"><li>Home & Living</li></a>
@@ -188,8 +180,15 @@
                            Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
+
+                        [[if product['ratingPresent'] == True:]]
                        <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
                         [[=product['aggegateRating']]] out of 5.0 </p>
+                        [[else:]]
+                             <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
+                        Not Rated Yet :(</p>
+                        [[pass]]
+
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
@@ -228,8 +227,15 @@
                            Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
+
+                        [[if product['ratingPresent'] == True:]]
                        <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
                         [[=product['aggegateRating']]] out of 5.0 </p>
+                        [[else:]]
+                            <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
+                        Not Rated Yet :(</p>
+                        [[pass]]
+
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
