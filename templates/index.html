@@ -9,7 +9,6 @@
   opacity: 1;
 }
 
-
 .notification-corner{
     position: fixed;
 	right:0;
@@ -32,7 +31,6 @@
   height: 600px;
 
 }
-
 
 .product-image:not(:last-child){
   padding-right: 8%;
@@ -66,6 +64,22 @@
   border-radius: 10px;
 }
 
+.responsiveCard {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: .4s;
+}
+
+.responsiveCard:hover{
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translate(0px, -8px);
+    transition: .6s;
+}
+
+.notification-display {
+<!--    position: absolute;-->
+<!--$('#draggable').draggable();-->
+  position: fixed;
+}
 
 </style>
 
@@ -95,9 +109,7 @@
          [[pass]]
   </div>
 
-
     <div>
-
         [[if globals().get('user'):]]
                 <div class="column has-text-right">
                     [[if personalized == True:]]
@@ -115,12 +127,7 @@
                 </div>
         [[pass]]
 
-
      </div>
-
-
-
-
 
       <section class="section">
          <div class="columns block is-variable is-8">
@@ -128,7 +135,7 @@
              <div class="column is-one-third">
 
 
-                <div  class="notification has-text-white " style="background-color: #F9A276; ">
+                <div  class="notification has-text-white notification-display" style="background-color: #F9A276; ">
                   <div class="content is-medium ">
                       <h1 class="title">Store Navigation</h1>
                       [[if globals().get('user'):]]
@@ -149,7 +156,6 @@
                       [[pass]]
 
                     <ul>
-
                       <a href="[[=URL('display_product_category/Jewelry and Accessories')]]"><li>Jewelry & Accessories</li></a>
                       <a href="[[=URL('display_product_category/Clothing and Shoes')]]"><li>Clothing & Shoes</li></a>
                       <a href="[[=URL('display_product_category/Home and Living')]]"><li>Home & Living</li></a>
@@ -170,7 +176,7 @@
       [[for product in firstProductRow:]]
 
         <div class="level-item level-left product-image">
-            <div class="card "  style=" border-style: solid; border-color: #f1641e;">
+            <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
               <div class="card-image pt-6">
                <div class ="card-image has centered px-6">
                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
@@ -178,13 +184,21 @@
                      </a>
                   </div>
                   <div class="card-content">
-                       <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
-                       <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
+                   <p class= "title is-size-3 has-text-centered">[[=product['name']]]</p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                       <p class= "title is-size-6 has-text-centered">
+                           Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
+
+                        [[if product['ratingPresent'] == True:]]
+                       <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
+                        [[=product['aggegateRating']]] out of 5.0 </p>
+                        [[else:]]
+                             <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
+                        Not Rated Yet :(</p>
+                        [[pass]]
+
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
@@ -192,7 +206,7 @@
                       <!--view now will send user to product page, must receiv & set in controller-->
                      <!--<a href="[[=URL('product',  )]] "> View Now </a>-->
                     <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
-                    <a href="#" class="card-footer-item">Add to Cart</a>
+<!--                    <a href="#" class="card-footer-item">Add to Cart</a>-->
                   </footer>
               </div>
             </div>
@@ -209,7 +223,7 @@
 
       [[for product in trendingProducts:]]
           <div class="level-item level-left product-image ">
-            <div class="card  ">
+            <div class="card responsiveCard">
               <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">
                     <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
@@ -217,19 +231,27 @@
                   </a>
                   </div>
                   <div class="card-content ">
-                      <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
-                      <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
-                      <p class="mb-4"> </p>
-                         <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                      <p class= "title is-size-3 has-text-centered">[[=product['name']]]</p>
+                       <p class="mb-4"> </p>
+                       <p class= "title is-size-6 has-text-centered">
+                           Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
-                      <p class="mb-4"> </p>
-                      <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
-                      <p class="mb-3"> </p>
-                      <p class= "has-text-centered">$[[=product['price']]]</p>
+                       <p class="mb-4"> </p>
+
+                        [[if product['ratingPresent'] == True:]]
+                       <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
+                        [[=product['aggegateRating']]] out of 5.0 </p>
+                        [[else:]]
+                            <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
+                        Not Rated Yet :(</p>
+                        [[pass]]
+
+                       <p class="mb-3"> </p>
+                       <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
                   <footer class="card-footer">
                     <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
-                    <a href="#" class="card-footer-item">Add to Cart</a>
+<!--                    <a href="#" class="card-footer-item">Add to Cart</a>-->
                   </footer>
               </div>
             </div>
