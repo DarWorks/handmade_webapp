@@ -48,19 +48,18 @@
               </a>
               </div>
               <div class="card-content">
-                  <p class= "title is-size-1 has-text-centered">[[=product['name']]]</p>
-                  <p class= "title is-size-4 has-text-centered">[[=product['description']]]</p>
-                  <p class="mb-4"> </p>
-                     <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                   <p class= "title is-size-2 has-text-centered">[[=product['name']]]</p>
+                       <p class="mb-4"> </p>
+                       <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
-                  <p class="mb-4"> </p>
-                  <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
-                  <p class="mb-3"> </p>
-                  <p class= "has-text-centered">$[[=product['price']]]</p>
-              </div>
-              <footer class="card-footer">
-                <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
-                <a href="#" class="card-footer-item">Add to Cart</a>
+                       <p class="mb-4"> </p>
+                       <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
+                       <p class="mb-3"> </p>
+                       <p class= "has-text-centered">$[[=product['price']]]</p>
+                  </div>
+                  <footer class="card-footer">
+                    <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
+<!--                    <a href="#" class="card-footer-item">Add to Cart</a>-->
               </footer>
           </div>
         </div>

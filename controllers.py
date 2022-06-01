@@ -149,6 +149,7 @@ def index():
         prod["prodURL"] = URL("product", u["username"], prod["id"])
 
     for row in firstProductRow:
+        row["price"] = int(row["price"])
         sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
         for seller in sellerQuery:
             row["first_name"] = seller["first_name"]
@@ -156,6 +157,7 @@ def index():
             row["username"] = seller["username"]
 
     for row in trendingProducts:
+        row["price"] = int(row["price"])
         sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
         for seller in sellerQuery:
             row["first_name"] = seller["first_name"]
@@ -653,11 +655,12 @@ def load_users():
 
 @action('display_product_category/<product_type>')
 @action.uses('display_product_category.html', db, auth, url_signer)
-def test(product_type=None):
+def display_product_category(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
 
     for row in rows:
+        row["price"] = int(row["price"])
         sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
         for seller in sellerQuery:
             row["first_name"] = seller["first_name"]
