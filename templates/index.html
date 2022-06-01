@@ -112,13 +112,16 @@
     <div>
         [[if globals().get('user'):]]
                 <div class="column has-text-right">
-                    [[if personalized == True:]]
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
                             <i class="fa fa-fw fa-user "></i>
                         </a>
 
                     [[else:]]
-                     [[if display == True:]]
+                     [[if isPersonalized == False:]]
                          <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
                              <i class="fa fa-fw fa-user"></i>
                          </a>
@@ -128,6 +131,7 @@
         [[pass]]
 
      </div>
+
 
       <section class="section">
          <div class="columns block is-variable is-8">
