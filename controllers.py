@@ -54,6 +54,43 @@ def full_url(u):
     p = request.urlparts
     return p.scheme + "://" + p.netloc + u
 
+
+###############################################################################
+
+# Helper functions for the index / homepage and displaying product categories
+
+def ratingAndNamesHelper(query, db):
+    """
+    A helper function to query the first name, last name, username, aggregate rating,
+    product name (capitalise initials) , price (change in datatype)
+
+    NOTE: for better displaying purposes, the first name and last name of the user and the product name
+            have their initials capitalised using the title() function. The changes are not reflected in the database
+    """
+
+    for row in query:
+        row["price"] = int(row["price"])
+        row["name"] = row["name"].title()
+        if row["ratingtotal"] == 0 or row["ratingnum"] == 0:
+            row["aggegateRating"] = 0
+        else:
+            row["aggegateRating"] = row["ratingtotal"] / row["ratingnum"]
+        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
+        for seller in sellerQuery:
+            row["first_name"] = seller["first_name"].title()
+            row["last_name"] = seller["last_name"].title()
+            row["username"] = seller["username"]
+
+
+def productLinkHelper(query, db):
+    """
+       A helper function to add product link
+    """
+    for prod in query:
+        u = db(db.userProfile.id == prod["sellerid"]).select().first()
+        prod["prodURL"] = URL("product", u["username"], prod["id"])
+
+
 ###############################################################################
 
 
@@ -85,9 +122,6 @@ def index():
     #  (currently this displays random products)
     #  Also need to display seller info here
     trendingProducts = db(db.products).select(orderby='<random>').as_list()
-    for prod in trendingProducts:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"])
 
     # TODO: for this query later on display the most recently added prodcuts
     #  (currently this displays all products in reverse order with no limits)
@@ -98,9 +132,7 @@ def index():
     customerID = 0
     display = False
     firstProductRow = newProducts
-    for prod in firstProductRow:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"]);
+
     firstRowText = "New Items"
 
 
@@ -143,27 +175,13 @@ def index():
 
             firstProductRow = l
 
+    # calls helper function to add product link
+    productLinkHelper(firstProductRow, db)
+    productLinkHelper(trendingProducts, db)
 
-    for prod in firstProductRow:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"])
-
-    for row in firstProductRow:
-        row["price"] = int(row["price"])
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
-
-    for row in trendingProducts:
-        row["price"] = int(row["price"])
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
-
+    # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
+    ratingAndNamesHelper(firstProductRow, db)
+    ratingAndNamesHelper(trendingProducts, db)
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
@@ -659,17 +677,10 @@ def display_product_category(product_type=None):
     assert product_type is not None
     rows = db(db.products.type == product_type).select().as_list()
 
-    for row in rows:
-        row["price"] = int(row["price"])
-        sellerQuery = db(db.userProfile.id == row["sellerid"]).select()
-        for seller in sellerQuery:
-            row["first_name"] = seller["first_name"]
-            row["last_name"] = seller["last_name"]
-            row["username"] = seller["username"]
-
-    for prod in rows:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"])
+    # calls helper functions to add product link
+    # and query the first name, last name, username, aggregate rating, price (change in datatype)
+    ratingAndNamesHelper(rows, db)
+    productLinkHelper(rows, db)
 
     return dict(rows=rows, product_type=product_type)
 

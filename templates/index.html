@@ -66,6 +66,10 @@
   border-radius: 10px;
 }
 
+.notification-display{
+<!--    position: absolute;-->
+<!--$('#draggable').draggable();-->
+}
 
 </style>
 
@@ -128,7 +132,7 @@
              <div class="column is-one-third">
 
 
-                <div  class="notification has-text-white " style="background-color: #F9A276; ">
+                <div  class="notification has-text-white notification-display" style="background-color: #F9A276; ">
                   <div class="content is-medium ">
                       <h1 class="title">Store Navigation</h1>
                       [[if globals().get('user'):]]
@@ -178,12 +182,14 @@
                      </a>
                   </div>
                   <div class="card-content">
-                       <p class= "title is-size-2 has-text-centered">[[=product['name']]]</p>
+                   <p class= "title is-size-3 has-text-centered">[[=product['name']]]</p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                       <p class= "title is-size-6 has-text-centered">
+                           Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
+                       <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
+                        [[=product['aggegateRating']]] out of 5.0 </p>
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
@@ -216,12 +222,14 @@
                   </a>
                   </div>
                   <div class="card-content ">
-                       <p class= "title is-size-2 has-text-centered">[[=product['name']]]</p>
+                      <p class= "title is-size-3 has-text-centered">[[=product['name']]]</p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-6 has-text-centered">Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
+                       <p class= "title is-size-6 has-text-centered">
+                           Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
                            [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-7 has-text-centered">Rating: [[=product['rating']]]</p>
+                       <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
+                        [[=product['aggegateRating']]] out of 5.0 </p>
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">$[[=product['price']]]</p>
                   </div>
