@@ -19,7 +19,10 @@ let init = (app) => {
         add_preference2:"",
         add_preference3:"",
         add_balance:"",
-        validUsername: true,
+
+        validUsername: true, 
+        emptyUserName: true, 
+        error_flag: false, 
         submitted: false,
         rows: [],
     };
@@ -32,30 +35,44 @@ let init = (app) => {
     };
 
 
+      app.check_empty = function () { 
+
+        let emptyUserName = false;  
+          if (app.vue.add_user_userName === "") { 
+                app.vue.error_flag = true;
+                emptyUserName = true; 
+          }  
+            return emptyUserName; 
+     };   
+
+
    app.add_personalization = function() {
         //TODO: add row into userProfile DB with  user app.data collected w/vue form
-        axios.post(add_personalization_url,
-            {
-                user_first_name: app.vue.add_first_name,
-                user_last_name: app.vue.add_last_name,
-                user_userName: app.vue.add_user_userName,
-                user_email: app.vue.add_user_Email,
-                user_preference1: app.vue.add_preference1,
-                user_preference2: app.vue.add_preference2,
-                user_preference3: app.vue.add_preference3,
+      if (!app.check_empty()) {
+            axios.post(add_personalization_url,
+                {
+                    user_first_name: app.vue.add_first_name,
+                    user_last_name: app.vue.add_last_name,
+                    user_userName: app.vue.add_user_userName,
+                    user_email: app.vue.add_user_Email,
+                    user_preference1: app.vue.add_preference1,
+                    user_preference2: app.vue.add_preference2,
+                    user_preference3: app.vue.add_preference3,
 
-            }).then(function (r) {
-                app.vue.submitted = true;
-                app.vue.user_userName = true;
-                app.vue.validUsername= false;
-                let x = document.referrer;
-                window.location.href = x;
+                }).then(function (r) {
+                    app.vue.submitted = true;
+                    app.vue.user_userName = true;
+                    app.vue.validUsername= false;
+                    let x = document.referrer;
+                    window.location.href = x;
 
-            }).catch(function(error){
-                 app.vue.user_userName = false;
-                 app.vue.validUsername = false;
+                }).catch(function(error){
+                     app.vue.user_userName = false;
+                     app.vue.validUsername = false;
 
-            });
+                });
+
+            }
 
 
 
@@ -65,6 +82,7 @@ let init = (app) => {
     app.methods = {
         // Complete as you see fit
         add_personalization: app.add_personalization,
+         check_empty: app.check_empty,
     };
 
     // This creates the Vue instance.

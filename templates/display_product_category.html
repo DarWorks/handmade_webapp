@@ -40,7 +40,32 @@
 </style>
 
 
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == False:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 <section class="section">
+
 <div class="section" id="vue-target" v-cloak>
   <div>
     <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
@@ -48,7 +73,7 @@
       [[for product in rows:]]
       <div class="level-item level-left product-image">
         <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
-          <div class="card-image">
+          <div class="card-image pt-6">
               <div class ="card-image has centered px-6">
               <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
                   <img src="[[=product['image1']]]" width="600" height="600">

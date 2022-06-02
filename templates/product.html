@@ -44,7 +44,33 @@
   }
 </style>
 
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == False:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
+
+
   <div class="columns block is-mobile">
     <div class="column is-half">
       <div class="columns block is-mobile">

@@ -8,12 +8,6 @@
 
 <div class="section " id="vue-target">
 
-    [[if reason is not None:]]
-    <div class="notification is-warning">
-      <center>[[=reason]]</center>
-    </div>
-    [[pass]]
-
     <div class="column is-half is-offset-one-quarter is-vcentered ">
 
         <div v-if="!submitted" class="container block">
@@ -28,6 +22,7 @@
                   <input type="text" v-model="add_user_userName" class="input">
                 </div>
                   <h2 class="has-text-danger" v-if="!validUsername">Choose a unique username!</h2>
+                  <h2 class="has-text-danger" v-if="error_flag">Choose a  username!</h2>
 
 
               </div>
