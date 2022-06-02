@@ -10,7 +10,8 @@ from pkg_resources import require
 from .common import db, Field, auth
 from pydal.validators import *
 
-
+def get_user_id():
+    return auth.current_user.get("id") if auth.current_user else None
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 def get_user_FirstName():

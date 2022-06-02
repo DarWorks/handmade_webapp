@@ -105,9 +105,9 @@ let init = (app) => {
     // Reads initial contents of shopping cart
     app.read_cart = function () {
 
-      if (localStorage[app_name]) {
+      if (localStorage[app_name + user_id]) {
           try {
-              app.vue.cart = JSON.parse(localStorage[app_name]).cart;
+              app.vue.cart = JSON.parse(localStorage[app_name + user_id]).cart;
           } catch (error) {
               console.error(error);
               app.vue.cart = [];
@@ -122,8 +122,7 @@ let init = (app) => {
     app.add_to_cart = function () {
       axios.get(get_product_url, { params: { id: product_id } }).then(function (response) {
           app.vue.cart.push(response.data.row);
-          localStorage[app_name] = JSON.stringify({ cart: app.vue.cart });
-
+          localStorage[app_name + user_id] = JSON.stringify({ cart: app.vue.cart });
           app.vue.product_added = true;
       });
   };

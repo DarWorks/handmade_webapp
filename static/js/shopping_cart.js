@@ -13,14 +13,14 @@ let init = (app) => {
     app.stripe_session_id = null;
 
     app.store_cart = function () {
-        localStorage[app_name] = JSON.stringify({ cart: app.vue.cart });
+        localStorage[app_name + user_id] = JSON.stringify({ cart: app.vue.cart });
     };
 
     app.read_cart = function () {
 
-        if (localStorage[app_name]) {
+        if (localStorage[app_name + user_id]) {
             try {
-                app.vue.cart = JSON.parse(localStorage[app_name]).cart;
+                app.vue.cart = JSON.parse(localStorage[app_name + user_id]).cart;
 
             } catch (error) {
                 console.error(error);

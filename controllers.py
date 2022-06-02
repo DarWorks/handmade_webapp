@@ -35,6 +35,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
+from .models import get_user_id
 from .models import get_user_email
 from .models import get_user_FirstName
 from .models import get_user_LastName
@@ -223,7 +224,9 @@ def faq():
 @action('shopping_cart')
 @action.uses('shopping_cart.html', db, auth, url_signer)
 def shopping_cart():
+    user_id = get_user_id()
     return dict(
+        user_id = user_id,
         pay_url = URL('pay', signer=url_signer),
         stripe_key = STRIPE_KEY_INFO['test_public_key'],
         app_name = APP_NAME,
@@ -441,6 +444,9 @@ def add_product_info(username=None):
 def product(username=None, product_id=None):
     assert product_id is not None
     assert username is not None
+
+    user_id = get_user_id()
+
     data = db(db.products.id == product_id).select()
     prod = data.first()
     if prod is None:
@@ -478,6 +484,7 @@ def product(username=None, product_id=None):
 
     return dict(
         app_name = APP_NAME,
+        user_id = user_id,
         get_product_url = URL('get_product'),
         product_id=product_id,
         login_url= URL("auth", "login"),
