@@ -267,8 +267,8 @@ def shopping_cart():
         currentUserName = None
         isPersonalized = False
 
-    user_id = get_user_id()  
-     
+    user_id = get_user_id()
+
     return dict(
             user_id=user_id,
             currentUserName=currentUserName,
@@ -421,6 +421,7 @@ def edit_product_page(product_id=None):
         description=data.description,
         price=data.price,
         add_product_info_url = URL('edit_product_info', user.username, data.id, signer=url_signer),
+        product_quantity=data.quantity,
         username=user.username,
         url_signer=url_signer,
         delete_prod_url=URL('delete_product', data.id, signer=url_signer),
@@ -436,6 +437,7 @@ def add_product_info(product_id=None, username=None):
         type=request.json.get('product_type'),
         description=request.json.get('product_description'),
         price=request.json.get('product_price'),
+        quantity=request.json.get('product_quantity'),
     )
     image1=request.json.get('product_image1')
     image2=request.json.get('product_image2')
@@ -630,7 +632,7 @@ def product(username=None, product_id=None):
             description=prod.description,
             images=images,
             price=prod.price,
-            amount=prod.amount,
+            amount=prod.quantity,
         )
     )
 

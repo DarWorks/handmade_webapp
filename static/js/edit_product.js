@@ -6,6 +6,7 @@ let init = (app) => {
         add_product_name: add_product_name,
         add_product_type: add_product_type,
         add_product_description: add_product_description,
+        add_product_quantity: product_quantity,
         add_product_price: add_product_price,
         product_image1: "",
         product_image2: "",
@@ -47,6 +48,11 @@ let init = (app) => {
             checker = true;
         }
 
+        if (app.vue.add_product_quantity < 1) {
+            app.vue.quantity_flag = true;
+            checker = true;
+        }
+
         if (app.vue. add_product_price < 1) {
             app.vue.price_flag = true;
             checker = true;
@@ -61,6 +67,7 @@ let init = (app) => {
                     product_name: app.vue.add_product_name,
                     product_type: app.vue.add_product_type,
                     product_description: app.vue.add_product_description,
+                    product_quantity: app.vue.add_product_quantity,
                     product_price: app.vue.add_product_price,
                     product_image1: app.vue.product_image1,
                     product_image2: app.vue.product_image2,

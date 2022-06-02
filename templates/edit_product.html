@@ -72,6 +72,22 @@
     </div>
   </div>
 
+  <!-- Quantity -->
+  <div class="field is-horizontal">
+   <div class="field-label is-normal">
+     <label class="label">Quantity</label>
+   </div>
+   <div class="field-body">
+
+     <div class="field has-addons">
+       <p class="control">
+         <input class="input" value="[[=product_quantity]]" type="number" v-model="add_product_quantity" placeholder="Number Available to Sell">
+         <p v-if="quantity_flag" class="has-text-danger ml-2">Invalid Amount!</p>
+       </p>
+     </div>
+   </div>
+ </div>
+
   <!-- Price -->
   <div class="field is-horizontal">
     <div class="field-label is-normal">
@@ -177,6 +193,7 @@
   let add_product_name = "[[=product_name]]";
   let add_product_type = "[[=type]]";
   let add_product_description = "[[=description]]";
+  let product_quantity = [[=product_quantity]];
   let add_product_price = [[=price]];
   let delete_prod_url = "[[=XML(delete_prod_url)]]";
   let on_delete_url = "[[=on_delete_url]]";
