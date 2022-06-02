@@ -75,10 +75,14 @@
     transition: .6s;
 }
 
-.notification-display {
-<!--    position: absolute;-->
-<!--$('#draggable').draggable();-->
-  position: fixed;
+.imageContainer {
+  width: 100px;
+  height: 250px;
+}
+
+.imagesContainer img{
+  width: 200px;
+  height: 125px;
 }
 
 </style>
@@ -139,7 +143,7 @@
              <div class="column is-one-third">
 
 
-                <div  class="notification has-text-white notification-display" style="background-color: #F9A276; ">
+                <div  class="notification has-text-white" style="background-color: #F9A276; ">
                   <div class="content is-medium ">
                       <h1 class="title">Store Navigation</h1>
                       [[if globals().get('user'):]]
@@ -174,17 +178,22 @@
             <!-- Second Half of page -->
             <div class="column is-two-thirds">
             <!-- First Scroller -->
-            <h1 class="title has-text-weight-bold " style="color: #f1641e">[[=firstRowText]]</h1>
-             <nav class="level is-mobile product-images-container scroller" >
+                 <div class="block">
+                     <div class="mb-6">
+                    <h1 class="title has-text-weight-bold" style="color: #f1641e">[[=firstRowText]] &#128515;</h1>
+                     </div>
+                     <p> &nbsp;</p>
+                </div>
+             <nav class="level is-mobile imageContainer">
 
       [[for product in firstProductRow:]]
 
-        <div class="level-item level-left product-image">
-            <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
-              <div class="card-image pt-6">
+        <div class="level-item level-left imagesContainer">
+            <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
+              <div class="card-image pt-4">
                <div class ="card-image has centered px-6">
                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
-                         <img src="[[=product['image1']]]" width="600" height="600">
+                         <img src="[[=product['image1']]]">
                      </a>
                   </div>
                   <div class="card-content">
@@ -221,17 +230,25 @@
     </nav>
 
       <!-- Second Scroller -->
-    <p class="mt-6"></p>
-    <h1 class="title has-text-weight-bold" style="color: #f1641e">Trending Items</h1>
-    <nav class="level is-mobile product-images-container scroller" >
+        <p class="mt-6"></p>
+                 <div class="block">
+                      <p> &nbsp;</p>
+                     <p> &nbsp;</p>
+                    <div class="mt-6">
+                        <h1 class="title has-text-weight-bold" style="color: #f1641e">Trending Items &#128293;</h1>
+                         <p> &nbsp;</p>
+                         <p> &nbsp;</p>
+                     </div>
+                </div>
+       <nav class="level is-mobile imageContainer">
 
       [[for product in trendingProducts:]]
-          <div class="level-item level-left product-image ">
+          <div class="level-item level-left imagesContainer">
             <div class="card responsiveCard">
               <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">
                     <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
-                    <img src="[[=product['image1']]]" width="600" height="600">
+                    <img src="[[=product['image1']]]">
                   </a>
                   </div>
                   <div class="card-content ">
@@ -267,6 +284,10 @@
 </section>
 </div>
 
+<div class="block">
+    <p> &nbsp;</p>
+    <p> &nbsp;</p>
+</div>
 
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->

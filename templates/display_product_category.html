@@ -7,10 +7,9 @@
 
 .product-images-container {
   overflow-x: scroll;
-   scrollbar-color: red ;
+  scrollbar-color: red ;
   overflow-y: hidden;
   height: 600px;
-
 }
 
 .product-image:not(:last-child){
@@ -35,6 +34,15 @@
     box-shadow: 0 0 11px rgba(33,33,33,.2);
     transform: translate(0px, -8px);
     transition: .6s;
+}
+
+.imageContainer {
+  height: 300px;
+}
+
+.imagesContainer img{
+  width: 200px;
+  height: 120px;
 }
 
 </style>
@@ -65,18 +73,17 @@
 
 
 <section class="section">
-
+ <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
 <div class="section" id="vue-target" v-cloak>
   <div>
-    <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
-    <nav class="level is-mobile product-images-container scroller scrollable-element">
+    <nav class="level is-mobile imageContainer">
       [[for product in rows:]]
-      <div class="level-item level-left product-image">
-        <div class="card responsiveCard" style=" border-style: solid; border-color: #f1641e;">
-          <div class="card-image pt-6">
+      <div class="level-item level-left imagesContainer">
+        <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
+          <div class="card-image pt-4">
               <div class ="card-image has centered px-6">
               <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
-                  <img src="[[=product['image1']]]" width="600" height="600">
+                  <img src="[[=product['image1']]]">
               </a>
               </div>
               <div class="card-content">
