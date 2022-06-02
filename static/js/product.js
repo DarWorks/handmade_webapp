@@ -105,9 +105,9 @@ let init = (app) => {
     // Reads initial contents of shopping cart
     app.read_cart = function () {
 
-      if (localStorage[app_name]) {
+      if (localStorage[app_name + user_id]) {
           try {
-              app.vue.cart = JSON.parse(localStorage[app_name]).cart;
+              app.vue.cart = JSON.parse(localStorage[app_name + user_id]).cart;
           } catch (error) {
               console.error(error);
               app.vue.cart = [];
@@ -122,12 +122,18 @@ let init = (app) => {
     app.add_to_cart = function () {
       axios.get(get_product_url, { params: { id: product_id } }).then(function (response) {
           app.vue.cart.push(response.data.row);
-          localStorage[app_name] = JSON.stringify({ cart: app.vue.cart });
-
+          localStorage[app_name + user_id] = JSON.stringify({ cart: app.vue.cart });
           app.vue.product_added = true;
       });
   };
 
+    app.check_added = function () {
+      for (let i = 0; i < app.vue.cart.length; i += 1) {
+        if (app.vue.cart[i].id == product_id) {
+          app.vue.product_added = true;
+        }
+      }
+    }
 
     app.methods = {
         add_comment: app.add_comment,
@@ -148,6 +154,7 @@ let init = (app) => {
 
     app.init = () => {
       app.read_cart();
+      app.check_added();
 
       axios.get(get_comments_url).then(function (response) {
           app.vue.comments = response.data.comments
@@ -162,6 +169,7 @@ let init = (app) => {
           app.vue.display = result.data.rating;
         });
       }
+
     };
 
     app.init();

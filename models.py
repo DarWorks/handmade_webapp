@@ -10,7 +10,8 @@ from pkg_resources import require
 from .common import db, Field, auth
 from pydal.validators import *
 
-
+def get_user_id():
+    return auth.current_user.get("id") if auth.current_user else None
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 def get_user_FirstName():
@@ -46,6 +47,7 @@ db.define_table(
     Field('sellerid', 'reference userProfile', requires = IS_NOT_EMPTY()),
     Field('type'),
     Field('description', requires = IS_NOT_EMPTY()),
+    Field('quantity', 'integer'),
     Field('image1', requires=IS_NOT_EMPTY(), default=""),
     Field('image2'),
     Field('image3'),
@@ -58,8 +60,10 @@ db.define_table(
 )
 
 db.define_table('customer_order',
+    Field('user_email', default=get_user_email, requires=IS_NOT_EMPTY()),
     Field('order_date', default=get_time),
     Field('ordered_items', 'text'),
+    Field('ordered_items_ids', 'text'),
     Field('fulfillment', 'text'),
     Field('paid', 'boolean', default=False),
     Field('created_on', 'datetime', default=get_time),
