@@ -61,7 +61,7 @@ let init = (app) => {
     };
 
     app.decrease_amount = function (available, desired, product) {
-        if (desired - 1 < 0) {
+        if (desired - 1 < 1) {
             return;
         }
 

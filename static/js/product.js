@@ -127,6 +127,13 @@ let init = (app) => {
       });
   };
 
+    app.check_added = function () {
+      for (let i = 0; i < app.vue.cart.length; i += 1) {
+        if (app.vue.cart[i].id == product_id) {
+          app.vue.product_added = true;
+        }
+      }
+    }
 
     app.methods = {
         add_comment: app.add_comment,
@@ -147,6 +154,7 @@ let init = (app) => {
 
     app.init = () => {
       app.read_cart();
+      app.check_added();
 
       axios.get(get_comments_url).then(function (response) {
           app.vue.comments = response.data.comments
@@ -161,6 +169,7 @@ let init = (app) => {
           app.vue.display = result.data.rating;
         });
       }
+
     };
 
     app.init();
