@@ -60,9 +60,39 @@ let init = (app) => {
         });
     };
 
+    app.decrease_amount = function (available, desired, product) {
+        if (desired - 1 < 0) {
+            return;
+        }
+
+        let i = app.vue.cart.indexOf(product);
+
+        app.vue.cart[i].amount_desired -= 1;
+        
+        app.store_cart();
+
+        console.log(app.vue.cart);
+    }
+
+    app.increase_amount = function (available, desired, product) {
+        if (available < desired + 1) {
+            return;
+        }
+
+        let i = app.vue.cart.indexOf(product);
+
+        app.vue.cart[i].amount_desired += 1;
+        
+        app.store_cart();
+
+        console.log(app.vue.cart);
+    }
+
     app.methods = {
         pay: app.pay,
         delete_item: app.delete_item,
+        decrease_amount: app.decrease_amount,
+        increase_amount: app.increase_amount,
     };
 
     app.vue = new Vue({

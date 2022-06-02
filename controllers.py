@@ -239,7 +239,23 @@ def get_product():
     id = request.params.get('id')
 
     row = db(db.products.id == id).select().first()
+    row["amount_desired"] = 1
     return dict(row=row)
+
+
+def check_enough(items):
+    have_enough = True
+    for it in items:
+        p = db.products(it['id'])
+        print(p)
+        if p is None:
+            have_enough = False
+            break
+        if p.quantity < it['amount_desired']:
+            have_enough = False
+            break
+    return have_enough
+
 
 @action('pay', method="POST")
 @action.uses(db, url_signer)
@@ -247,11 +263,17 @@ def pay():
     items = request.json.get('cart')
     fulfillment = request.json.get('fulfillment')
 
+    if not check_enough(items):
+        return dict(ok=False)
+
     line_items = []
     item_names = []
     item_ids = []
     for it in items:
         p = db.products(it['id'])
+
+        p.quantity -= it['amount_desired']
+        p.update_record()
 
         line_item = {
                 'quantity': 1,
@@ -267,6 +289,7 @@ def pay():
         line_items.append(line_item)
         item_names.append(p.name)
         item_ids.append(p.id)
+
 
     order_id = db.customer_order.insert(
         ordered_items= item_names,
@@ -428,6 +451,7 @@ def add_product_info(username=None):
         sellerid=seller.id,
         type=request.json.get('product_type'),
         description=request.json.get('product_description'),
+        quantity=request.json.get('product_quantity'),
         price=request.json.get('product_price'),
         image1=request.json.get('product_image1'),
     )

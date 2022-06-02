@@ -36,9 +36,9 @@
                         </div>
 
                         <div class="buttons has-addons mt-3">
-                            <button class="button is-small"><i class="fa fa-minus"></i></button>
-                            <button class="button is-small is-static">2</button>
-                            <button class="button is-small"><i class="fa fa-plus"></i></button>
+                            <button class="button is-small" @click="decrease_amount(product.quantity, product.amount_desired, product)"><i class="fa fa-minus"></i></button>
+                            <button class="button is-small is-static">{{product.amount_desired}}</button>
+                            <button class="button is-small" @click="increase_amount(product.quantity, product.amount_desired, product)"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
 
