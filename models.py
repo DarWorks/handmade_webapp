@@ -58,8 +58,10 @@ db.define_table(
 )
 
 db.define_table('customer_order',
+    Field('user_email', default=get_user_email, requires=IS_NOT_EMPTY()),
     Field('order_date', default=get_time),
     Field('ordered_items', 'text'),
+    Field('ordered_items_ids', 'text'),
     Field('fulfillment', 'text'),
     Field('paid', 'boolean', default=False),
     Field('created_on', 'datetime', default=get_time),

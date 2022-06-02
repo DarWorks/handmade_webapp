@@ -246,6 +246,7 @@ def pay():
 
     line_items = []
     item_names = []
+    item_ids = []
     for it in items:
         p = db.products(it['id'])
 
@@ -262,9 +263,11 @@ def pay():
 
         line_items.append(line_item)
         item_names.append(p.name)
+        item_ids.append(p.id)
 
     order_id = db.customer_order.insert(
         ordered_items= item_names,
+        ordered_items_ids = item_ids,
         fulfillment=json.dumps(fulfillment),
     )
 
@@ -304,7 +307,7 @@ def cancelled_payment(order_id=None):
 @action.uses('view_order.html', db, auth, session)
 def view_orders(path=None):
     grid = Grid(path,
-                query= db.customer_order.id > 0,
+                query= db.customer_order.user_email == get_user_email(),
                 editable=False, deletable=False, details=False, create=False,
                 grid_class_style=GridClassStyleBulma,
                 formstyle=FormStyleBulma,
