@@ -323,7 +323,7 @@ def pay():
         p.update_record()
 
         line_item = {
-                'quantity': 1,
+                'quantity': it['amount_desired'],
                 'price_data': {
                     'currency': 'usd',
                     'unit_amount': int(p.price * 100),
@@ -363,8 +363,10 @@ def successful_payment(order_id=None):
     order.paid_on = datetime.datetime.utcnow()
     order.update_record()
 
+    user_id = get_user_id()
+
     fulfillment = json.loads(order.fulfillment)
-    return dict(name=fulfillment["name"], address=fulfillment["address"], app_name = APP_NAME, url_signer=url_signer)
+    return dict(name=fulfillment["name"], address=fulfillment["address"], app_name = APP_NAME, user_id=user_id, url_signer=url_signer)
 
 @action('cancelled_payment/<order_id:int>')
 @action.uses(db, auth)

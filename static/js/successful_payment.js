@@ -12,7 +12,7 @@ let init = (app) => {
     };
 
     app.clear_cart = function () {
-        localStorage[app_name] = JSON.stringify({ cart: [] });
+        localStorage[app_name + user_id] = JSON.stringify({ cart: [] });
     }
 
     app.methods = {

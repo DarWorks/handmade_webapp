@@ -37,6 +37,8 @@ let init = (app) => {
             app.vue.cart.splice(i, 1);
         }
         app.store_cart();
+
+        app.calculate_cost();
     };
 
     app.checkout = function () {
@@ -60,7 +62,7 @@ let init = (app) => {
         });
     };
 
-    app.decrease_amount = function (available, desired, product) {
+    app.decrease_amount = function (desired, product) {
         if (desired - 1 < 1) {
             return;
         }
@@ -71,7 +73,7 @@ let init = (app) => {
         
         app.store_cart();
 
-        console.log(app.vue.cart);
+        app.calculate_cost();
     }
 
     app.increase_amount = function (available, desired, product) {
@@ -85,7 +87,15 @@ let init = (app) => {
         
         app.store_cart();
 
-        console.log(app.vue.cart);
+        app.calculate_cost();
+    }
+
+    app.calculate_cost = function () {
+        app.vue.cart_total = 0;
+
+        for (let i = 0; i < app.vue.cart.length; i += 1) {
+            app.vue.cart_total += app.vue.cart[i].amount_desired * app.vue.cart[i].price
+        }
     }
 
     app.methods = {
@@ -103,6 +113,8 @@ let init = (app) => {
 
     app.init = () => {
         app.read_cart();
+
+        app.calculate_cost();
     };
 
     app.init();
