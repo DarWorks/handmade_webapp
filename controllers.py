@@ -318,10 +318,10 @@ def pay():
     item_ids = []
     for it in items:
         p = db.products(it['id'])
+        u = db(db.userProfile.user_email==get_user_email()).select().first()
         db.order_history.insert(
-            sellerid,
-            buyerid,
-            productid,
+            buyerid=u.id if u is not None else -1,
+            productid=p.id,
         )
         p.quantity -= it['amount_desired']
         p.update_record()
@@ -590,6 +590,7 @@ def product(username=None, product_id=None):
     if prod.image4 is not None and len(prod.image4) > 0:
         images.append({"id":4, "src":prod.image4})
     # check if user has username
+    hasPurchasedBefore = False
     hasUsername = False
     ausername = ""
     if auth.get_user():
@@ -597,8 +598,11 @@ def product(username=None, product_id=None):
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
         if hasUsername:
             ausername = u.username
-    # check if user has purchased this before to allow them to review the item
-    hasPurchasedBefore = False
+            # check if has purchased item before
+            history = db(db.order_history.buyerid==u.id).select()
+            for it in history:
+                if it.productid == product_id:
+                    hasPurchasedBefore = True
 
     if (prod.ratingnum == 0):
         existrating = False
