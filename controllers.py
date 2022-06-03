@@ -267,8 +267,8 @@ def shopping_cart():
         currentUserName = None
         isPersonalized = False
 
-    user_id = get_user_id()  
-     
+    user_id = get_user_id()
+
     return dict(
             user_id=user_id,
             currentUserName=currentUserName,
@@ -317,7 +317,11 @@ def pay():
     item_ids = []
     for it in items:
         p = db.products(it['id'])
-
+        u = db(db.userProfile.user_email==get_user_email()).select().first()
+        db.order_history.insert(
+            buyerid=u.id if u is not None else -1,
+            productid=p.id,
+        )
         p.quantity -= it['amount_desired']
         p.update_record()
 
@@ -587,15 +591,19 @@ def product(username=None, product_id=None):
     if prod.image4 is not None and len(prod.image4) > 0:
         images.append({"id":4, "src":prod.image4})
     # check if user has username
+    hasPurchasedBefore = False
     hasUsername = False
-    ausername = ""
+    ausername = None
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
         if hasUsername:
             ausername = u.username
-    # check if user has purchased this before to allow them to review the item
-    hasPurchasedBefore = False
+            # check if has purchased item before
+            history = db(db.order_history.buyerid==u.id).select()
+            for it in history:
+                if it.productid == product_id:
+                    hasPurchasedBefore = True
 
     if (prod.ratingnum == 0):
         existrating = False
@@ -618,8 +626,8 @@ def product(username=None, product_id=None):
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
-        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer),
-        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
+        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer) if ausername is not None else "/",
+        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer) if ausername is not None else "/",
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
         hasPurchasedBefore="true" if hasPurchasedBefore else "false",
