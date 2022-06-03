@@ -267,8 +267,8 @@ def shopping_cart():
         currentUserName = None
         isPersonalized = False
 
-    user_id = get_user_id()  
-     
+    user_id = get_user_id()
+
     return dict(
             user_id=user_id,
             currentUserName=currentUserName,
@@ -318,7 +318,11 @@ def pay():
     item_ids = []
     for it in items:
         p = db.products(it['id'])
-
+        db.order_history.insert(
+            sellerid,
+            buyerid,
+            productid,
+        )
         p.quantity -= it['amount_desired']
         p.update_record()
 
