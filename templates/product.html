@@ -1,5 +1,9 @@
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Product</title>
+[[end]]
+
 <style>
   [v-cloak] {
     display: none;
@@ -122,7 +126,7 @@
       <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
       <div>[[=product.get("description", "")]]</div>
     </div>
-    
+
   </div>
 
   <section class="section margin-center-max-width-1000px">
@@ -188,8 +192,7 @@
               <div class="control is-small">
                 <div class="columns block is-mobile">
                   <div class="column is-two-thirds">
-                    <input class="input is-small" v-model="new_review" @click="can_review" type="text"
-                      placeholder="Add a review">
+                    <textarea class="textarea" v-model="new_review" @click="can_review"  placeholder="Add a review"></textarea>
                   </div>
                   <div class="column is-one-third">
                     <button class="button is-primary" @click="add_review">Add</button>

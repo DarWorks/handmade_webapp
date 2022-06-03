@@ -492,12 +492,12 @@ def profile(username=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         if u is not None and u.username == username:
             isAccountOwner = True
-    selling = map(lambda x: dict(
+    selling = list(map(lambda x: dict(
         id=x["id"],
         seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
         image=x["image1"],
         editURL=URL('edit_product', x["id"]),
-    ), db(db.products.sellerid == userProfile.id).select().as_list())
+    ), db(db.products.sellerid == userProfile.id).select().as_list()))
     return dict(
         isPersonalized =isPersonalized,
         currentUserName=currentUserName,
@@ -508,8 +508,8 @@ def profile(username=None):
             username= username,
             profile_pic= "images/profile/default.jpg"
         ),
-        selling = selling,
-        purchased = []
+        selling1 = selling[len(selling) // 2:],
+        selling2 = selling[:len(selling) // 2],
     )
 
 @action('add_product/<username>')

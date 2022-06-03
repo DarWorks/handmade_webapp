@@ -1,6 +1,10 @@
 
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Profile</title>
+[[end]]
+
 <style>
 [v-cloak] {
      display: none;
@@ -11,12 +15,10 @@
 }
 
 .product-images-container {
-  overflow-x: scroll;
-  overflow-y: hidden;
   height: 220px;
 }
 
-.product-image:not(:last-child){
+.product-image{
   padding-right: 8%;
 }
 
@@ -99,26 +101,48 @@
 
   <div class="column is-two-thirds">
     <h1 class="title">Selling</h1>
-    <nav class="level is-mobile has-text-white product-images-container" >
 
-      [[for prod in selling:]]
-      <div class="level-item level-left product-image">
-        <div class="card">
-          <div class="card-image">
-            [[if isAccountOwner:]]
-              <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
-            [[pass]]
-            <!-- <figure class="image is-1by1"> -->
-              <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
-                <img src="[[=prod.get('image', '')]]" />
-              </a>
-            <!-- </figure> -->
+    <div class="columns">
+
+      <div class="column is-one half">
+        [[for prod in selling1:]]
+        <div class="level-item level-left product-image">
+          <div class="card">
+            <div class="card-image">
+              [[if isAccountOwner:]]
+                <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
+              [[pass]]
+              <!-- <figure class="image is-1by1"> -->
+                <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                  <img src="[[=prod.get('image', '')]]" />
+                </a>
+              <!-- </figure> -->
+            </div>
           </div>
         </div>
+        [[pass]]
       </div>
-      [[pass]]
 
-    </nav>
+      <div class="column is-one half">
+        [[for prod in selling2:]]
+        <div class="level-item level-left product-image">
+          <div class="card">
+            <div class="card-image">
+              [[if isAccountOwner:]]
+                <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
+              [[pass]]
+              <!-- <figure class="image is-1by1"> -->
+                <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                  <img src="[[=prod.get('image', '')]]" />
+                </a>
+              <!-- </figure> -->
+            </div>
+          </div>
+        </div>
+        [[pass]]
+      </div>
+
+    </div>
 
   </div>
 </div>
