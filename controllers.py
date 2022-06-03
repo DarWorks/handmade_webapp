@@ -35,6 +35,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
+from .models import get_user_id
 from .models import get_user_email
 from .models import get_user_FirstName
 from .models import get_user_LastName
@@ -108,7 +109,6 @@ def index():
     theDB = db(db.userProfile).select().as_list()
     currentUser = db(
         db.userProfile.user_email == get_user_email()).select().first()
-
     isPersonalized = False
     currentUserName=""
 
@@ -207,13 +207,43 @@ def index():
 @action('about')
 @action.uses('about.html', db, auth, url_signer)
 def about():
-    return dict()
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+    return dict(isPersonalized=isPersonalized, currentUserName=currentUserName, url_signer = url_signer)
 
 
 @action('faq')
 @action.uses('faq.html', db, auth, url_signer)
 def faq():
-    return dict()
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+    return dict(isPersonalized=isPersonalized, currentUserName=currentUserName, url_signer = url_signer)
 
 
 #//////////////////////////////////////////////////////////
@@ -221,14 +251,34 @@ def faq():
 #//////////////////////////////////////////////////////////
 
 @action('shopping_cart')
-@action.uses('shopping_cart.html', db, auth, url_signer)
+@action.uses('shopping_cart.html', db, auth, url_signer.verify())
 def shopping_cart():
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+    user_id = get_user_id()  
+     
     return dict(
-        pay_url = URL('pay', signer=url_signer),
-        stripe_key = STRIPE_KEY_INFO['test_public_key'],
-        app_name = APP_NAME,
-        get_product_url = URL('get_product')
-    )
+            user_id=user_id,
+            currentUserName=currentUserName,
+            isPersonalized=isPersonalized,
+            url_signer=url_signer,
+            pay_url = URL('pay', signer=url_signer),
+            stripe_key = STRIPE_KEY_INFO['test_public_key'],
+            app_name = APP_NAME,
+            get_product_url = URL('get_product')
+        )
 
 @action('get_product')
 @action.uses(db, auth)
@@ -236,7 +286,23 @@ def get_product():
     id = request.params.get('id')
 
     row = db(db.products.id == id).select().first()
+    row["amount_desired"] = 1
     return dict(row=row)
+
+
+def check_enough(items):
+    have_enough = True
+    for it in items:
+        p = db.products(it['id'])
+        print(p)
+        if p is None:
+            have_enough = False
+            break
+        if p.quantity < it['amount_desired']:
+            have_enough = False
+            break
+    return have_enough
+
 
 @action('pay', method="POST")
 @action.uses(db, url_signer)
@@ -244,10 +310,17 @@ def pay():
     items = request.json.get('cart')
     fulfillment = request.json.get('fulfillment')
 
+    if not check_enough(items):
+        return dict(ok=False)
+
     line_items = []
     item_names = []
+    item_ids = []
     for it in items:
         p = db.products(it['id'])
+
+        p.quantity -= it['amount_desired']
+        p.update_record()
 
         line_item = {
                 'quantity': 1,
@@ -262,9 +335,12 @@ def pay():
 
         line_items.append(line_item)
         item_names.append(p.name)
+        item_ids.append(p.id)
+
 
     order_id = db.customer_order.insert(
         ordered_items= item_names,
+        ordered_items_ids = item_ids,
         fulfillment=json.dumps(fulfillment),
     )
 
@@ -288,7 +364,7 @@ def successful_payment(order_id=None):
     order.update_record()
 
     fulfillment = json.loads(order.fulfillment)
-    return dict(name=fulfillment["name"], address=fulfillment["address"], app_name = APP_NAME,)
+    return dict(name=fulfillment["name"], address=fulfillment["address"], app_name = APP_NAME, url_signer=url_signer)
 
 @action('cancelled_payment/<order_id:int>')
 @action.uses(db, auth)
@@ -301,15 +377,32 @@ def cancelled_payment(order_id=None):
 
 @action('view_orders')
 @action('view_orders/<path:path>', method=['POST', 'GET'])
-@action.uses('view_order.html', db, auth, session)
+@action.uses('view_order.html', db, auth, session, url_signer.verify())
 def view_orders(path=None):
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+
     grid = Grid(path,
-                query= db.customer_order.id > 0,
+                query= db.customer_order.user_email == get_user_email(),
                 editable=False, deletable=False, details=False, create=False,
                 grid_class_style=GridClassStyleBulma,
                 formstyle=FormStyleBulma,
                 )
-    return dict(grid=grid)
+    return dict(grid=grid, isPersonalized=isPersonalized, currentUserName=currentUserName, url_signer=url_signer)
+
 
 @action('edit_product/<product_id:int>', method=['GET'])
 @action.uses('edit_product.html', db, auth.user, session, url_signer)
@@ -373,6 +466,21 @@ def delete_product(product_id=None):
 @action('profile/<username>')
 @action.uses('profile.html', auth)
 def profile(username=None):
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
     assert username is not None
     user = auth.get_user()
     userProfile = db(db.userProfile.username == username).select().first()
@@ -384,13 +492,15 @@ def profile(username=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         if u is not None and u.username == username:
             isAccountOwner = True
-    selling = map(lambda x: dict(
+    selling = list(map(lambda x: dict(
         id=x["id"],
         seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
         image=x["image1"],
         editURL=URL('edit_product', x["id"]),
-    ), db(db.products.sellerid == userProfile.id).select().as_list())
+    ), db(db.products.sellerid == userProfile.id).select().as_list()))
     return dict(
+        isPersonalized =isPersonalized,
+        currentUserName=currentUserName,
         url_signer=url_signer,
         my_callback_url = URL('my_callback', signer=url_signer),
         isAccountOwner = isAccountOwner,
@@ -398,8 +508,8 @@ def profile(username=None):
             username= username,
             profile_pic= "images/profile/default.jpg"
         ),
-        selling = selling,
-        purchased = []
+        selling1 = selling[len(selling) // 2:],
+        selling2 = selling[:len(selling) // 2],
     )
 
 @action('add_product/<username>')
@@ -422,6 +532,7 @@ def add_product_info(username=None):
         sellerid=seller.id,
         type=request.json.get('product_type'),
         description=request.json.get('product_description'),
+        quantity=request.json.get('product_quantity'),
         price=request.json.get('product_price'),
         image1=request.json.get('product_image1'),
     )
@@ -436,8 +547,27 @@ def add_product_info(username=None):
 @action('product/<username>/<product_id:int>')
 @action.uses('product.html', auth, url_signer)
 def product(username=None, product_id=None):
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+
     assert product_id is not None
     assert username is not None
+
+    user_id = get_user_id()
+
     data = db(db.products.id == product_id).select()
     prod = data.first()
     if prod is None:
@@ -474,7 +604,11 @@ def product(username=None, product_id=None):
         avgrating = prod.ratingtotal / prod.ratingnum
 
     return dict(
+        isPersonalized =isPersonalized,
+        currentUserName =currentUserName,
+        url_signer=url_signer,
         app_name = APP_NAME,
+        user_id = user_id,
         get_product_url = URL('get_product'),
         product_id=product_id,
         login_url= URL("auth", "login"),
@@ -687,6 +821,22 @@ def load_users():
 @action.uses('display_product_category.html', db, auth, url_signer)
 def display_product_category(product_type=None):
     assert product_type is not None
+
+    # getting current user info for the profile/cart buttons
+    theDB = db(db.userProfile).select().as_list()
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+
     rows = db(db.products.type == product_type).select().as_list()
 
     # calls helper functions to add product link
@@ -694,7 +844,11 @@ def display_product_category(product_type=None):
     ratingAndNamesHelper(rows)
     productLinkHelper(rows)
 
-    return dict(rows=rows, product_type=product_type)
+    return dict(rows=rows, product_type=product_type,
+                isPersonalized=isPersonalized,
+                currentUserName=currentUserName,
+                url_signer=url_signer,
+                )
 
 
 #//////////////////////////////////////////////////////////

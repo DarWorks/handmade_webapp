@@ -1,6 +1,10 @@
 
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Profile</title>
+[[end]]
+
 <style>
 [v-cloak] {
      display: none;
@@ -11,12 +15,10 @@
 }
 
 .product-images-container {
-  overflow-x: scroll;
-  overflow-y: hidden;
   height: 220px;
 }
 
-.product-image:not(:last-child){
+.product-image{
   padding-right: 8%;
 }
 
@@ -31,6 +33,32 @@
 </style>
 
 <!-- Body -->
+
+
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == True:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 <div class="section margin-center-max-width-1000px" id="vue-target" v-cloak>
   <div class="columns block is-mobile is-variable is-8">
     <div class="column is-one-third">
@@ -61,7 +89,7 @@
           </center>
           <br/>
           <center>
-            <a class="button is-info" href="[[=URL('view_orders')]]">
+            <a class="button is-info" href="[[=URL('view_orders', signer=url_signer)]]">
               <span>View Orders</span>
             </a>
           </center>
@@ -73,26 +101,48 @@
 
   <div class="column is-two-thirds">
     <h1 class="title">Selling</h1>
-    <nav class="level is-mobile has-text-white product-images-container" >
 
-      [[for prod in selling:]]
-      <div class="level-item level-left product-image">
-        <div class="card">
-          <div class="card-image">
-            [[if isAccountOwner:]]
-              <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
-            [[pass]]
-            <!-- <figure class="image is-1by1"> -->
-              <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
-                <img src="[[=prod.get('image', '')]]" />
-              </a>
-            <!-- </figure> -->
+    <div class="columns">
+
+      <div class="column is-one half">
+        [[for prod in selling1:]]
+        <div class="level-item level-left product-image">
+          <div class="card">
+            <div class="card-image">
+              [[if isAccountOwner:]]
+                <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
+              [[pass]]
+              <!-- <figure class="image is-1by1"> -->
+                <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                  <img src="[[=prod.get('image', '')]]" />
+                </a>
+              <!-- </figure> -->
+            </div>
           </div>
         </div>
+        [[pass]]
       </div>
-      [[pass]]
 
-    </nav>
+      <div class="column is-one half">
+        [[for prod in selling2:]]
+        <div class="level-item level-left product-image">
+          <div class="card">
+            <div class="card-image">
+              [[if isAccountOwner:]]
+                <a class="button is-warning in-image-btn" href="[[=URL(prod.get('editURL', ''))]]">Edit</a>
+              [[pass]]
+              <!-- <figure class="image is-1by1"> -->
+                <a href="[[=URL('product', prod.get('seller', ''), prod.get('id', ''))]]">
+                  <img src="[[=prod.get('image', '')]]" />
+                </a>
+              <!-- </figure> -->
+            </div>
+          </div>
+        </div>
+        [[pass]]
+      </div>
+
+    </div>
 
   </div>
 </div>

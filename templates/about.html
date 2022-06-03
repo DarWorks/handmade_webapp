@@ -1,5 +1,33 @@
 [[extend 'layout.html']]
 
+    [[block page_head]]
+      <title>About</title>
+    [[end]]
+
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == False:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 <div>
     <div class="title m-6">
         About Us
@@ -8,7 +36,7 @@
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
                 <img src="images\headshot.png">
-            </div> 
+            </div>
             <div class="section has-text-centered">
                 Aaron Chen
             </div>
@@ -27,7 +55,7 @@
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
                 <img src="images\headshot.png">
-            </div> 
+            </div>
             <div class="section has-text-centered">
                 Amaan Sheikh
             </div>
@@ -46,7 +74,7 @@
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
                 <img src="images\headshot.png">
-            </div> 
+            </div>
             <div class="section has-text-centered">
                 Darien Cruz
             </div>
@@ -65,7 +93,7 @@
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
                 <img src="images\headshot.png">
-            </div> 
+            </div>
             <div class="section has-text-centered">
                 Jonathan Muniz-Murguia
             </div>
@@ -84,7 +112,7 @@
         <div class="column has-text-centered">
             <div class ="card-image has-centered px-6">
                 <img src="images\headshot.png">
-            </div> 
+            </div>
             <div class="section has-text-centered">
                 Yashaswi Bathula
             </div>

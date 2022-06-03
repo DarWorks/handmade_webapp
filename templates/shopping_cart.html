@@ -1,10 +1,40 @@
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Cart</title>
+[[end]]
+
 <style>
     [v-cloak] {
         display: none;
     }
 </style>
+
+
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == False:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 
 <div class="section" id="vue-target" v-cloak>
 
@@ -36,9 +66,9 @@
                         </div>
 
                         <div class="buttons has-addons mt-3">
-                            <button class="button is-small"><i class="fa fa-minus"></i></button>
-                            <button class="button is-small is-static">2</button>
-                            <button class="button is-small"><i class="fa fa-plus"></i></button>
+                            <button class="button is-small" @click="decrease_amount(product.quantity, product.amount_desired, product)"><i class="fa fa-minus"></i></button>
+                            <button class="button is-small is-static">{{product.amount_desired}}</button>
+                            <button class="button is-small" @click="increase_amount(product.quantity, product.amount_desired, product)"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
 
@@ -91,6 +121,7 @@
     let pay_url = "[[=XML(pay_url)]]";
     let stripe_key = "[[=XML(stripe_key)]]";
     let app_name = "[[=XML(app_name)]]";
+    let user_id = "[[=XML(user_id)]]";
     let get_product_url = "[[XML(get_product_url)]]"
 </script>
 <script src="https://js.stripe.com/v3/"></script>

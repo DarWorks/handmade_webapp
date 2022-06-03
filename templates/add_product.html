@@ -1,5 +1,9 @@
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Insert Product</title>
+[[end]]
+
 <style>
   [v-cloak] {
     display: none;
@@ -66,6 +70,22 @@
             placeholder="Provide a descirption of the product"></textarea>
           <p v-if="desc_flag" class="has-text-danger">Please provide a description!</p>
         </div>
+      </div>
+    </div>
+  </div>
+
+   <!-- Quantity -->
+   <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Quantity</label>
+    </div>
+    <div class="field-body">
+
+      <div class="field has-addons">
+        <p class="control">
+          <input class="input" type="number" v-model="add_product_quantity" placeholder="Number Available to Sell">
+          <p v-if="quantity_flag" class="has-text-danger ml-2">Invalid Amount!</p>
+        </p>
       </div>
     </div>
   </div>

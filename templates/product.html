@@ -1,5 +1,9 @@
 [[extend 'layout.html']]
 
+[[block page_head]]
+  <title>Product</title>
+[[end]]
+
 <style>
   [v-cloak] {
     display: none;
@@ -44,7 +48,33 @@
   }
 </style>
 
+    <div>
+        [[if globals().get('user'):]]
+                <div class="column has-text-right">
+                    <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('shopping_cart', signer=url_signer)]]">
+                        <i class="fa  fa-shopping-cart "></i>
+                    </a>
+                    [[if isPersonalized == True:]]
+                        <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('profile', currentUserName, signer=url_signer)]]">
+                            <i class="fa fa-fw fa-user "></i>
+                        </a>
+
+                    [[else:]]
+                     [[if isPersonalized == False:]]
+                         <a style="color:#f1641e;" class="button  has-text-centered" href="[[=URL('add_user_personalization', signer=url_signer)]] ">
+                             <i class="fa fa-fw fa-user"></i>
+                         </a>
+                        [[pass]]
+                    [[pass]]
+                </div>
+        [[pass]]
+
+     </div>
+
+
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
+
+
   <div class="columns block is-mobile">
     <div class="column is-half">
       <div class="columns block is-mobile">
@@ -96,7 +126,7 @@
       <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
       <div>[[=product.get("description", "")]]</div>
     </div>
-    
+
   </div>
 
   <section class="section margin-center-max-width-1000px">
@@ -162,8 +192,7 @@
               <div class="control is-small">
                 <div class="columns block is-mobile">
                   <div class="column is-two-thirds">
-                    <input class="input is-small" v-model="new_review" @click="can_review" type="text"
-                      placeholder="Add a review">
+                    <textarea class="textarea" v-model="new_review" @click="can_review"  placeholder="Add a review"></textarea>
                   </div>
                   <div class="column is-one-third">
                     <button class="button is-primary" @click="add_review">Add</button>
@@ -207,6 +236,7 @@
 [[block page_scripts]]
 <script type="text/javascript">
   let app_name = "[[=XML(app_name)]]";
+  let user_id = "[[=XML(user_id)]]";
   let get_product_url = "[[=XML(get_product_url)]]"
   let product_id = [[=product_id]]
   let get_comments_url = "[[=XML(get_comments_url)]]"
