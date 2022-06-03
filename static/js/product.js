@@ -15,6 +15,7 @@ let init = (app) => {
       new_review: "",
       defaultstars: 0,
       display: 0,
+      product_available: true,
     };
 
     app.set_stars = function(num_stars) {
@@ -135,6 +136,14 @@ let init = (app) => {
       }
     }
 
+    app.check_available = function () {
+      axios.get(get_product_url, { params: { id: product_id } }).then(function (response) {
+        if (response.data.row['quantity'] == 0) {
+          app.data.product_available = false;
+        }  
+    })
+    }
+
     app.methods = {
         add_comment: app.add_comment,
         can_comment: app.can_comment,
@@ -144,6 +153,7 @@ let init = (app) => {
         set_stars: app.set_stars,
         stars_out: app.stars_out,
         stars_over: app.stars_over,
+        available: app.check_available,
     };
 
     app.vue = new Vue({
@@ -155,6 +165,7 @@ let init = (app) => {
     app.init = () => {
       app.read_cart();
       app.check_added();
+      app.check_available();
 
       axios.get(get_comments_url).then(function (response) {
           app.vue.comments = response.data.comments
