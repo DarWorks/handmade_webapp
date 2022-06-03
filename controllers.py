@@ -592,7 +592,7 @@ def product(username=None, product_id=None):
     # check if user has username
     hasPurchasedBefore = False
     hasUsername = False
-    ausername = ""
+    ausername = None
     if auth.get_user():
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
@@ -625,8 +625,8 @@ def product(username=None, product_id=None):
         get_reviews_url = URL('reviews', product_id),
         post_comment_url = URL('comment', product_id),
         post_reviews_url = URL('review', product_id),
-        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer),
-        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer),
+        set_rating_url = URL('set_rating', ausername, product_id, signer=url_signer) if ausername is not None else "/",
+        get_rating_url = URL('get_rating', ausername, product_id, signer=url_signer) if ausername is not None else "/",
         isAuthenticated = "true" if auth.get_user() else "false",
         hasUsername= "true" if hasUsername else "false",
         hasPurchasedBefore="true" if hasPurchasedBefore else "false",
