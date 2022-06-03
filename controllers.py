@@ -294,7 +294,6 @@ def check_enough(items):
     have_enough = True
     for it in items:
         p = db.products(it['id'])
-        print(p)
         if p is None:
             have_enough = False
             break
@@ -630,6 +629,7 @@ def product(username=None, product_id=None):
             name=prod.name,
             seller=sellerProfile.username,
             description=prod.description,
+            quantity=prod.quantity,
             images=images,
             price=prod.price,
             amount=prod.amount,

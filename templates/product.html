@@ -74,7 +74,6 @@
 
 <div id="vue-target" class="section margin-center-max-width-1000px" v-cloak>
 
-
   <div class="columns block is-mobile">
     <div class="column is-half">
       <div class="columns block is-mobile">
@@ -123,7 +122,7 @@
     <div class="column is-half">
       <div><b>[[=product.get("name", "n/a")]]
         <a href="[[=URL('profile', product.get('seller', ''))]]">([[=product.get("seller", "n/a")]])</a></b></div>
-      <div><b>Price $[[=product.get("price", "n/a")]], In Stock: [[=product.get('amount', '0')]]</b></div>
+      <div><b>Price $[[=product.get("price", "n/a")]]</b></div>
       <div>[[=product.get("description", "")]]</div>
     </div>
 
@@ -178,7 +177,11 @@
         <center>
 
           <!-- ADD TO CART -->
-          <button v-if="!product_added" class="button buy-button" @click="add_to_cart(product_id)">Add to Cart</button>
+          <button v-if="!product_added && product_available" class="button buy-button" @click="add_to_cart(product_id)">Add to Cart</button>
+
+          <button v-if="!product_added && !product_available" class="button is-static buy-button">
+            <span class="icon"><i class="fa fa-check"></i></span> <span>Unavailable</span>
+          </button>
 
           <button v-if="product_added" class="button is-static buy-button">
             <span class="icon"><i class="fa fa-check"></i></span> <span>Added</span>
