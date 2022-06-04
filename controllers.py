@@ -123,12 +123,12 @@ def index():
     # TODO: for this query later on display the most sold / most searched products
     #  (currently this displays random products)
     #  Also need to display seller info here
-    trendingProducts = db(db.products).select(orderby='<random>').as_list()
+    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
 
     # TODO: for this query later on display the most recently added prodcuts
     #  (currently this displays all products in reverse order with no limits)
     #  Also need to display seller info here
-    newProducts = db(db.products).select(orderby=~db.products.id).as_list()
+    newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
 
     # user session variables to be used in index.html
     customerID = 0
@@ -162,7 +162,6 @@ def index():
             l1 = db(db.products.type == currentUser.preference1).select().as_list()
             l2 = db(db.products.type == currentUser.preference2).select().as_list()
             l3 = db(db.products.type == currentUser.preference3).select().as_list()
-
 
             if (l1 == l2 == l3):
                 l = l1

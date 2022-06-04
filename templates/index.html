@@ -80,7 +80,12 @@
   height: 250px;
 }
 
-.imagesContainer img{
+.imagesSize {
+  width: 230px;
+  height: 150px;
+}
+
+.imagesSize img{
   width: 200px;
   height: 125px;
 }
@@ -91,7 +96,7 @@
 
   <div>
 
-    [[ personalized =isPersonalized]]
+    [[ personalized = isPersonalized]]
     [[ if personalized == True:]]
 
      [[else: ]]
@@ -141,8 +146,6 @@
          <div class="columns block is-variable is-8">
               <!-- First Half of page -->
              <div class="column is-one-third">
-
-
                 <div  class="notification has-text-white" style="background-color: #F9A276; ">
                   <div class="content is-medium ">
                       <h1 class="title">Store Navigation</h1>
@@ -188,7 +191,7 @@
 
       [[for product in firstProductRow:]]
 
-        <div class="level-item level-left imagesContainer">
+        <div class="level-item level-left imagesSize">
             <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
               <div class="card-image pt-4">
                <div class ="card-image has centered px-6">
@@ -235,7 +238,7 @@
                       <p> &nbsp;</p>
                      <p> &nbsp;</p>
                     <div class="mt-6">
-                        <h1 class="title has-text-weight-bold" style="color: #f1641e">Trending Items &#128293;</h1>
+                        <h1 class="title has-text-weight-bold" style="color: #f1641e">Some other great products for sale &#128293;</h1>
                          <p> &nbsp;</p>
                          <p> &nbsp;</p>
                      </div>
@@ -243,7 +246,7 @@
        <nav class="level is-mobile imageContainer">
 
       [[for product in trendingProducts:]]
-          <div class="level-item level-left imagesContainer">
+          <div class="level-item level-left imagesSize">
             <div class="card responsiveCard">
               <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-6">

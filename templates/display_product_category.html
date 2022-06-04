@@ -40,7 +40,7 @@
   height: 300px;
 }
 
-.imagesContainer img{
+.imagesSize img{
   width: 200px;
   height: 120px;
 }
@@ -77,8 +77,8 @@
 <div class="section" id="vue-target" v-cloak>
   <div>
     <nav class="level is-mobile imageContainer">
-      [[for product in rows:]]
-      <div class="level-item level-left imagesContainer">
+  [[for product in rows:]]
+      <div class="level-item level-left imagesSize">
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
           <div class="card-image pt-4">
               <div class ="card-image has centered px-6">
@@ -111,7 +111,9 @@
               </footer>
           </div>
         </div>
+
       </div>
+
       [[pass]]
     </nav>
   </div>

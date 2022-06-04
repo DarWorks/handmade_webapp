@@ -10,6 +10,7 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
+        rows: [],
     };
 
     app.enumerate = (a) => {
