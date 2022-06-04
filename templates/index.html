@@ -76,7 +76,7 @@
 }
 
 .imageContainer {
-  width: 100px;
+  width: 250px;
   height: 250px;
 }
 
@@ -86,7 +86,7 @@
 }
 
 .imagesSize img{
-  width: 200px;
+  width: 230px;
   height: 125px;
 }
 
@@ -194,7 +194,7 @@
         <div class="level-item level-left imagesSize">
             <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
               <div class="card-image pt-4">
-               <div class ="card-image has centered px-6">
+               <div class ="card-image has centered px-3">
                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
                          <img src="[[=product['image1']]]">
                      </a>
@@ -248,8 +248,8 @@
       [[for product in trendingProducts:]]
           <div class="level-item level-left imagesSize">
             <div class="card responsiveCard">
-              <div class="card-image pt-6"  style=" border-style: solid; border-color: #f1641e;">
-               <div class ="card-image has centered px-6">
+              <div class="card-image pt-4"  style=" border-style: solid; border-color: #f1641e;">
+               <div class ="card-image has centered px-3">
                     <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
                     <img src="[[=product['image1']]]">
                   </a>
