@@ -34,7 +34,7 @@ db.define_table(
     Field('preference1', 'text', default=""),
     Field('preference2', 'text', default=""),
     Field('preference3', 'text', default=""),
-
+    Field('contract', 'boolean', default=False),
 )
 
 db.userProfile.username.requires = (IS_NOT_IN_DB(db, 'userProfile.username'))

@@ -492,11 +492,13 @@ def profile(username=None):
     if userProfile is None:
         return "404 profile not found"
     isAccountOwner = False
+    isContractor = userProfile.contract
     # check if this person is the account owner to display currency
     if user is not None:
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         if u is not None and u.username == username:
             isAccountOwner = True
+    
     selling = list(map(lambda x: dict(
         id=x["id"],
         seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
@@ -505,6 +507,7 @@ def profile(username=None):
     ), db(db.products.sellerid == userProfile.id).select().as_list()))
     return dict(
         isPersonalized =isPersonalized,
+        isContractor=isContractor,
         currentUserName=currentUserName,
         url_signer=url_signer,
         my_callback_url = URL('my_callback', signer=url_signer),
@@ -799,7 +802,6 @@ def add_personalization_info():
     firstName = get_user_FirstName()
     lastName = get_user_LastName()
 
-
     # inserting into DB & storing id to be returned as dictionary
     id = db.userProfile.insert(
         first_name= firstName,
@@ -809,6 +811,7 @@ def add_personalization_info():
         preference1= request.json.get('user_preference1'),
         preference2= request.json.get('user_preference2'),
         preference3= request.json.get('user_preference3'),
+        contract= request.json.get('contractor'),
         balance= 0.0,
         isPersonlized= True,
     )

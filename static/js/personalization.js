@@ -19,6 +19,7 @@ let init = (app) => {
         add_preference2:"",
         add_preference3:"",
         add_balance:"",
+        contractor:"",
 
         validUsername: true, 
         emptyUserName: true, 
@@ -48,7 +49,12 @@ let init = (app) => {
 
    app.add_personalization = function() {
         //TODO: add row into userProfile DB with  user app.data collected w/vue form
-      if (!app.check_empty()) {
+        let holder = false;
+        if (app.vue.contractor == "Yes") {
+            holder = true;
+        }
+
+        if (!app.check_empty()) {
             axios.post(add_personalization_url,
                 {
                     user_first_name: app.vue.add_first_name,
@@ -58,6 +64,7 @@ let init = (app) => {
                     user_preference1: app.vue.add_preference1,
                     user_preference2: app.vue.add_preference2,
                     user_preference3: app.vue.add_preference3,
+                    contractor: holder,
 
                 }).then(function (r) {
                     app.vue.submitted = true;
@@ -72,10 +79,7 @@ let init = (app) => {
 
                 });
 
-            }
-
-
-
+        }
    };
 
     // This contains all the methods.
