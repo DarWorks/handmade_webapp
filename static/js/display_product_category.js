@@ -37,6 +37,10 @@ let init = (app) => {
     app.init = () => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
+        axios.get(display_product_category_url).then(function (response) {
+                app.vue.rows = app.enumerate(response.data.rows);
+               //console.log(app.vue.rows)
+        });
     };
 
     // Call to the initializer.
