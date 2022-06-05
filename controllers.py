@@ -85,15 +85,14 @@ def ratingAndNamesHelper(query):
             row["username"] = seller["username"]
 
 
-def productLinkHelper(query):
+def productAndSellerLinkHelper(query):
     """
-       A helper function to add product link
+       A helper function to add product link and seller link
     """
-    for prod in query:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"])
-
-
+    for product in query:
+        u = db(db.userProfile.id == product["sellerid"]).select().first()
+        product["prodURL"] = URL("product", u["username"], product["id"])
+        product["sellerURL"] = URL("profile", u["username"])
 
 
 ###############################################################################
@@ -179,8 +178,8 @@ def index():
             firstProductRow = l
 
     # calls helper function to add product link
-    productLinkHelper(firstProductRow)
-    productLinkHelper(trendingProducts)
+    productAndSellerLinkHelper(firstProductRow)
+    productAndSellerLinkHelper(trendingProducts)
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(firstProductRow)
@@ -809,7 +808,7 @@ def display_product_category(product_type=None):
     # calls helper functions to add product link
     # and query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(rows)
-    productLinkHelper(rows)
+    productAndSellerLinkHelper(rows)
 
     return dict(rows=rows, product_type=product_type,
                 isPersonalized=isPersonalized,
@@ -828,7 +827,7 @@ def get_data():
     # calls helper functions to add product link
     # and query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(rows)
-    productLinkHelper(rows)
+    productAndSellerLinkHelper(rows)
 
     return dict(rows=rows)
 

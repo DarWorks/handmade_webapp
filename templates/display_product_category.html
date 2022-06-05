@@ -83,24 +83,29 @@
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
           <div class="card-image pt-4">
               <div class ="card-image centered px-6">
-
-                  <img :src=product.rows.image1>
-              </a>
+                  <a :href=product.rows.prodURL>
+                     <img :src=product.rows.image1>
+                  </a>
               </div>
               <div class="card-content">
                    <p class= "title is-size-3 has-text-centered">{{product.rows.name}}</p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-6 has-text-centered">
-                           Sold by:
-                           {{product.rows.first_name}} {{product.rows.last_name}} ({{product.rows.username}})</a></p>
-                       <p class="mb-4"> </p>
 
-                       <p class= "title is-size-7 has-text-centered has-text-weight-bold" v-if="product.rows.ratingPresent">Rating:
-                        {{product.rows.aggegateRating}} out of 5.0 </p>
-<!--                     <span v-for="star_idx in [1,2,3,4,5]"> &#9733;</span>-->
+                            <p class="title is-size-6 has-text-centered mb-4">
+                                Sold by:
+                              <a :href=product.rows.sellerURL>
+                                  {{product.rows.first_name}} {{product.rows.last_name}} ({{product.rows.username}})
+                              </a>
+                            </p>
 
-                                 <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger" v-else>Rating:
-                        Not Rated Yet :(</p>
+                       <p class="title is-size-7 has-text-centered has-text-weight-bold" v-if="product.rows.ratingPresent === true">
+                           Rating:
+                           <span v-for="star_idx in product.rows.aggegateRating"> <i class="fa fa-star"></i> </span>
+                           <span v-for="star_idx in (5 - product.rows.aggegateRating)"> <i class="fa fa-star-o"></i> </span>
+                       </p>
+
+                    <p class="title is-size-7 has-text-centered has-text-weight-bold has-text-danger" v-else>
+                        Rating: Not Rated Yet :( </p>
 
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">${{product.rows.price}}</p>
