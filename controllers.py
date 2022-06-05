@@ -711,7 +711,7 @@ def get_comments(product_id = None):
         comments.append({
             'username': userProfile.username,
             'text': e.text,
-            'profile_pic': URL('static', 'images', 'profile', 'default.jpg'),
+            'profile_pic': userProfile.profile_pic,
             'profile_link': URL('profile', userProfile.username),
         })
     return dict(comments=comments)
@@ -728,7 +728,7 @@ def get_reviews(product_id = None):
         reviews.append({
             'username': userProfile.username,
             'text': e.text,
-            'profile_pic': URL('static', 'images', 'profile', 'default.jpg'),
+            'profile_pic': userProfile.profile_pic,
             'profile_link': URL('profile', userProfile.username),
         })
     return dict(reviews=reviews)
