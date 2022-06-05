@@ -7,7 +7,7 @@ ready for all user purchases and sellings.
 
 Project for CSE183 Web Apps
 
-## **Developer Names: (WILL BE DONE SHORTLY)**
+## Developers: Darien Cruz Nguyen | Jonathan Muniz-Murguia | Aaron Chen | (INSERT NAME HERE) | (INSERT NAME HERE) 
 
 ### Homepage (TODO)
 
