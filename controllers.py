@@ -97,6 +97,75 @@ def productAndSellerLinkHelper(query):
         product["sellerURL"] = URL("profile", u["username"])
 
 
+def preferencesQueryHelper(p1, p2, p3):
+    """
+        A helper function for quering user preferences based products
+        If there are less products based on user preferences then this randomises
+    """
+
+    if (p1 == p2 == p3):
+        l = p1
+    elif p1 == p3:
+        l = p1 + p2
+    elif p1 == p2:
+        l = p1 + p3
+    elif p2 == p3:
+        l = p1
+    else:
+        l = p1 + p2 + p3
+
+    if len(l) > 4:
+        l = l[0:4]
+    elif len(l) < 4:
+        while True:
+            if len(l) == 4:
+                break
+
+            gap = 4 - len(l)
+
+            randomProducts = db(db.products.id).select(orderby='<random>', limitby=(0, gap)).as_list()
+
+            id_list = id_lister(l)
+
+            unqiueRandomProducts = []
+            for i in randomProducts:
+                if i["id"] not in id_list:
+                    unqiueRandomProducts.append(i)
+
+            l = l + unqiueRandomProducts
+
+        # randomProducts = db(db.products.id).select(orderby='<random>', limitby=(0, gap)).as_list()
+        #
+        # id_list = id_lister(l)
+        #
+        # unqiueRandomProducts = []
+        # for i in randomProducts:
+        #     if i["id"] not in id_list:
+        #         unqiueRandomProducts.append(i)
+        #
+        # l = l + unqiueRandomProducts
+        #
+        # id_list = id_lister(l)
+        #
+        # if len(unqiueRandomProducts) != gap:
+        #     anothergap = gap - len(unqiueRandomProducts)
+        #     print(anothergap)
+        #     randomAgain = db(db.products.id).select(orderby='<random>', limitby=(0, anothergap)).as_list()
+        #     r = []
+        #     for i in randomAgain:
+        #         if i["id"] not in id_list:
+        #             r.append(i)
+        #     l = l + r
+
+    return l
+
+
+def id_lister(l):
+    id_list = []
+    for i in l:
+        id_list.append(i["id"])
+    return id_list
+
 ###############################################################################
 
 
@@ -123,14 +192,8 @@ def index():
 
 
     # Queries for displaying products-
-    # TODO: for this query later on display the most sold / most searched products
-    #  (currently this displays random products)
-    #  Also need to display seller info here
     trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
 
-    # TODO: for this query later on display the most recently added prodcuts
-    #  (currently this displays all products in reverse order with no limits)
-    #  Also need to display seller info here
     newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
 
     # user session variables to be used in index.html
@@ -150,42 +213,25 @@ def index():
             isPersonalized = False
             display = True
         else:
-            # TODO: for this query display all products from the database which math the users preferences
-            #  (currently its just matching the first preference of the user since for
-            #  some reason "and" wasnt displaying the correct ones)
-            # preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
-            #                              (db.products.type == currentUser.preference2) and
-            #                              (db.products.type == currentUser.preference3)).select().as_list()
-            #
-            # firstProductRow = preferenceBasedProducts
             firstRowText = "For You"
 
-            # TODO: this works but this is inefficient and if there are two preferences
-            #  that are same then this displays products multiple times
             l1 = db(db.products.type == currentUser.preference1).select().as_list()
             l2 = db(db.products.type == currentUser.preference2).select().as_list()
             l3 = db(db.products.type == currentUser.preference3).select().as_list()
 
-            if (l1 == l2 == l3):
-                l = l1
-            elif l1 == l3:
-                l = l1 + l2
-            elif l1 == l2:
-                l = l1 + l3
-            elif l2 == l3:
-                l = l1
-            else:
-                l = l1 + l2 + l3
+            # calls preferences query helper
+            l = preferencesQueryHelper(l1, l2, l3)
 
             firstProductRow = l
 
     # calls helper function to add product link
-    productAndSellerLinkHelper(firstProductRow)
     productAndSellerLinkHelper(trendingProducts)
+    productAndSellerLinkHelper(firstProductRow)
+
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(firstProductRow)
     ratingAndNamesHelper(trendingProducts)
+    ratingAndNamesHelper(firstProductRow)
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.

@@ -77,15 +77,16 @@
 
      </div>
 
-
+<div class="block mt-4">
 <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
+</div>
 
 <section class="section">
 <div class="section mt-6" id="vue-target" v-cloak>
       <div class="block">
-       <nav class="level is-mobile imageContainer" v-for="rowIdx in Math.ceil(rows.length / 6)" >
+       <nav class="level is-mobile imageContainer mb-6" v-for="rowIdx in Math.ceil(rows.length / 6)" >
 
-      <div class="level-item level-left imagesSize"  v-for="product in rows.slice(6*(rowIdx - 1), 6 * rowIdx)">
+      <div class="level-item level-left imagesSize"  v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
 
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
               <div class ="card-image centered px-6 pt-4">
@@ -127,6 +128,7 @@
           </div>
         </div>
 </nav>
+              <p class="mb-6"></p>
     </div>
     </div>
 </section>
