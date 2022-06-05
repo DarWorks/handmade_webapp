@@ -68,7 +68,7 @@ def ratingAndNamesHelper(query):
             have their initials capitalised using the title() function. The changes are not reflected in the database
         Same with other modifications in the function
     """
-
+    i = 1
     for row in query:
         row["price"] = "{:.2f}".format(row["price"])
         row["name"] = row["name"].title()
@@ -83,6 +83,8 @@ def ratingAndNamesHelper(query):
             row["first_name"] = seller["first_name"].title()
             row["last_name"] = seller["last_name"].title()
             row["username"] = seller["username"]
+        row["queryRowID"] = i
+        i += 1
 
 
 def productAndSellerLinkHelper(query):

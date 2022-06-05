@@ -80,11 +80,12 @@
 <section class="section">
  <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
 <div class="section" id="vue-target" v-cloak>
+   
   <div>
-    <nav class="level is-mobile imageContainer">
+    <nav class="level is-mobile imageContainer" >
 
       <div class="level-item level-left imagesSize" v-for="product in rows">
-
+                {{product.rows.queryRowID}}
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
           <div class="card-image pt-4">
               <div class ="card-image centered px-6">
@@ -95,7 +96,6 @@
               <div class="card-content">
                    <p class= "title is-size-3 has-text-centered">{{product.rows.name}}</p>
                        <p class="mb-4"> </p>
-
                             <p class="title is-size-6 has-text-centered mb-4">
                                 Sold by:
                               <a :href=product.rows.sellerURL>

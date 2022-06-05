@@ -23,7 +23,6 @@ let init = (app) => {
     app.display = function() {
         axios.get(get_data_url, {params: {product_type: product_type}}).then(function (response) {
             for (let i = 0; i < response.data.rows.length; i++) {
-                  console.log(response.data.rows[i])
                   app.vue.rows.push({
                   rows: response.data.rows[i],
 
@@ -31,9 +30,6 @@ let init = (app) => {
             }
             });
             app.enumerate(app.vue.rows);
-
-            console.log(product_type);
-
     };
 
     // This contains all the methods.
