@@ -94,6 +94,8 @@ def productLinkHelper(query):
         prod["prodURL"] = URL("product", u["username"], prod["id"])
 
 
+
+
 ###############################################################################
 
 
