@@ -40,8 +40,13 @@
   height: 300px;
 }
 
+.imagesSize {
+  width: 230px;
+  height: 120px;
+}
+
 .imagesSize img{
-  width: 200px;
+  width: 220px;
   height: 120px;
 }
 
@@ -100,12 +105,17 @@
 
                        <p class="title is-size-7 has-text-centered has-text-weight-bold" v-if="product.rows.ratingPresent === true">
                            Rating:
-                           <span v-for="star_idx in product.rows.aggegateRating"> <i class="fa fa-star"></i> </span>
-                           <span v-for="star_idx in (5 - product.rows.aggegateRating)"> <i class="fa fa-star-o"></i> </span>
+                           <span v-for="star_idx in product.rows.aggegateRating" style="color:#ffdf00;">
+                               <i class="fa fa-star"></i>
+                           </span>
+                           <span v-for="star_idx in (5 - product.rows.aggegateRating)">
+                               <i class="fa fa-star-o"></i>
+                           </span>
                        </p>
 
                     <p class="title is-size-7 has-text-centered has-text-weight-bold has-text-danger" v-else>
-                        Rating: Not Rated Yet :( </p>
+                        Rating: Not Rated Yet :(
+                    </p>
 
                        <p class="mb-3"> </p>
                        <p class= "has-text-centered">${{product.rows.price}}</p>
