@@ -499,11 +499,13 @@ def profile(username=None):
         image=x["image1"],
         editURL=URL('edit_product', x["id"]),
     ), db(db.products.sellerid == userProfile.id).select().as_list()))
+    
     return dict(
         isPersonalized =isPersonalized,
         currentUserName=currentUserName,
         url_signer=url_signer,
-        my_callback_url = URL('my_callback', signer=url_signer),
+        add_profile_pic_url = URL('add_profile_pic', username, signer=url_signer),
+        get_profile_pic_url = URL('get_profile_pic', username, signer=url_signer),
         isAccountOwner = isAccountOwner,
         profile = dict(
             username= username,
@@ -512,6 +514,26 @@ def profile(username=None):
         selling1 = selling[len(selling) // 2:],
         selling2 = selling[:len(selling) // 2],
     )
+
+@action('get_profile_pic/<username>')
+@action.uses(db, auth)
+def get_profile_pic(username=None):
+    assert username is not None
+
+    row = db(db.userProfile.username == username).select().first()
+    
+    profile_pic = row.profile_pic
+
+    return dict(profile_pic=profile_pic)
+
+@action('add_profile_pic/<username>', method=['POST'])
+@action.uses(db, auth.user)
+def add_profile_pic(username=None):
+    pic = request.json.get('profile_pic')
+
+    db(db.userProfile.username == username).update(profile_pic = pic)
+
+    return dict()
 
 @action('add_product/<username>')
 @action.uses('add_product.html', db, auth, url_signer.verify())
