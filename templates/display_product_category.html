@@ -37,17 +37,22 @@
 }
 
 .imageContainer {
-  height: 300px;
+  width: 250px;
+  height: 150px;
 }
 
 .imagesSize {
   width: 230px;
-  height: 120px;
+  height: 130px;
 }
 
 .imagesSize img{
   width: 220px;
   height: 120px;
+}
+
+.row {
+  display: flex;
 }
 
 </style>
@@ -79,13 +84,11 @@
 
 <section class="section">
  <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
-<div class="section" id="vue-target" v-cloak>
-   
-  <div>
-    <nav class="level is-mobile imageContainer" >
 
-      <div class="level-item level-left imagesSize" v-for="product in rows">
-                {{product.rows.queryRowID}}
+<div class="section" id="vue-target" v-cloak>
+    <div class="row imageContainer" v-for="rowIdx in Math.ceil(rows.length / 4)">
+    <div class="one-fourth column imageSizes" v-for="product in rows.slice(4*(rowIdx - 1), 4 * rowIdx)">
+
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
           <div class="card-image pt-4">
               <div class ="card-image centered px-6">
@@ -127,11 +130,10 @@
           </div>
         </div>
 
-      </div>
 
-      [[pass]]
-    </nav>
+
   </div>
+        </div>
 </div>
 </section>
 
