@@ -51,10 +51,6 @@
   height: 120px;
 }
 
-.row {
-  display: flex;
-}
-
 </style>
 
 
@@ -82,16 +78,17 @@
      </div>
 
 
-<section class="section">
- <h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
+<h1 class="title has-text-weight-bold" style="color: #f1641e;" >Displaying results for the category: "[[=product_type]]"</h1>
 
-<div class="section" id="vue-target" v-cloak>
-    <div class="row imageContainer" v-for="rowIdx in Math.ceil(rows.length / 4)">
-    <div class="one-fourth column imageSizes" v-for="product in rows.slice(4*(rowIdx - 1), 4 * rowIdx)">
+<section class="section">
+<div class="section mt-6" id="vue-target" v-cloak>
+      <div class="block">
+       <nav class="level is-mobile imageContainer" v-for="rowIdx in Math.ceil(rows.length / 6)" >
+
+      <div class="level-item level-left imagesSize"  v-for="product in rows.slice(6*(rowIdx - 1), 6 * rowIdx)">
 
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
-          <div class="card-image pt-4">
-              <div class ="card-image centered px-6">
+              <div class ="card-image centered px-6 pt-4">
                   <a :href=product.rows.prodURL>
                      <img :src=product.rows.image1>
                   </a>
@@ -129,12 +126,9 @@
               </footer>
           </div>
         </div>
-
-
-
-  </div>
-        </div>
-</div>
+</nav>
+    </div>
+    </div>
 </section>
 
 [[block page_scripts]]
