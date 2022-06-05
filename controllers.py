@@ -134,33 +134,13 @@ def preferencesQueryHelper(p1, p2, p3):
 
             l = l + unqiueRandomProducts
 
-        # randomProducts = db(db.products.id).select(orderby='<random>', limitby=(0, gap)).as_list()
-        #
-        # id_list = id_lister(l)
-        #
-        # unqiueRandomProducts = []
-        # for i in randomProducts:
-        #     if i["id"] not in id_list:
-        #         unqiueRandomProducts.append(i)
-        #
-        # l = l + unqiueRandomProducts
-        #
-        # id_list = id_lister(l)
-        #
-        # if len(unqiueRandomProducts) != gap:
-        #     anothergap = gap - len(unqiueRandomProducts)
-        #     print(anothergap)
-        #     randomAgain = db(db.products.id).select(orderby='<random>', limitby=(0, anothergap)).as_list()
-        #     r = []
-        #     for i in randomAgain:
-        #         if i["id"] not in id_list:
-        #             r.append(i)
-        #     l = l + r
-
     return l
 
 
 def id_lister(l):
+    """
+        another helper function used in preferences helper
+    """
     id_list = []
     for i in l:
         id_list.append(i["id"])
@@ -215,9 +195,9 @@ def index():
         else:
             firstRowText = "For You"
 
-            l1 = db(db.products.type == currentUser.preference1).select().as_list()
-            l2 = db(db.products.type == currentUser.preference2).select().as_list()
-            l3 = db(db.products.type == currentUser.preference3).select().as_list()
+            l1 = db(db.products.type == currentUser.preference1).select(orderby='<random>').as_list()
+            l2 = db(db.products.type == currentUser.preference2).select(orderby='<random>').as_list()
+            l3 = db(db.products.type == currentUser.preference3).select(orderby='<random>').as_list()
 
             # calls preferences query helper
             l = preferencesQueryHelper(l1, l2, l3)
@@ -227,7 +207,6 @@ def index():
     # calls helper function to add product link
     productAndSellerLinkHelper(trendingProducts)
     productAndSellerLinkHelper(firstProductRow)
-
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(trendingProducts)
