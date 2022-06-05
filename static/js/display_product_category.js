@@ -21,11 +21,19 @@ let init = (app) => {
     };
 
     app.display = function() {
-        axios.get(display_product_category_url, {params: {rows: rows}}).then(function (response) {
-            for (let i = 0; i < rows.length; i++) {
-                  console.log(rows[i])
+        axios.get(get_data_url, {params: {product_type: product_type}}).then(function (response) {
+            for (let i = 0; i < response.data.rows.length; i++) {
+                  console.log(response.data.rows[i])
+                  app.vue.rows.push({
+                  rows: response.data.rows[i],
+
+                });
             }
             });
+            app.enumerate(app.vue.rows);
+
+            console.log(product_type);
+
     };
 
     // This contains all the methods.
@@ -45,10 +53,10 @@ let init = (app) => {
     // And this initializes it.
     app.init = () => {
       // Put here any initialization code.
-      // Typically this is a server GET call to load the data.
-        axios.get(display_product_category_url).then(function (response) {
+//      // Typically this is a server GET call to load the data.
+        axios.get(get_data_url).then(function (response) {
                 app.vue.rows = app.enumerate(response.data.rows);
-//               console.log(app.vue.rows)
+                app.display();
         });
     };
 
