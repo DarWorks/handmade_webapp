@@ -7,11 +7,19 @@ ready for all user purchases and sellings.
 
 Project for CSE183 Web Apps
 
-## Developers: Darien Cruz Nguyen | Jonathan Muniz-Murguia | Aaron Chen | (INSERT NAME HERE) | (INSERT NAME HERE) 
+## Developers: Darien Cruz Nguyen | Jonathan Muniz-Murguia | Aaron Chen | Yashaswi Bathula | (INSERT NAME HERE) 
 
 ### Homepage (TODO)
 
-### Personalization (TODO)
+### Personalization 
+
+The personalization page is the interface that allows new users to select a unique username and set shopping preferences that will allow a tailored experience within the website. Upon sign-in, a non-personalized user is presented with a pop-up notification in the bottom, right-hand corner of their screen. This notification greets the user using the first name that was chosen upon signing up for the website, along with a button labeled ‘Personalize!’ that, once clicked, will direct them to the personalization page. 
+The primary notification prompt is conditionally rendered to a user's screen given that the ‘isPersonalized’ attribute of an authenticated user is set to 'False'. Hovering over the notification initializes the 'hover' attribute, where the initial 60% opacity rendering of the notification is transitioned to 100% opacity. Once the ‘Personalize!’ button is clicked, the user is immediately taken to a new window where they can input their personalization information.
+The upper portion of the personalization page prompts the user to select a username. Here, the user can choose any username that is unique and non-empty. This cross-check validation is done by comparing the user's choice to the store's existing database, as well as by monitoring the contents of the entry box to ensure it is non-empty. Given that a username fails to meet the criteria of uniqueness or being non-empty, an error message is prompted upon submission and appears below the entry box to explain the specific issue. 
+The lower portion of the page, labeled “Top Three Product Preferences”, allows the user to choose three shop categories from those offered in the store. There are three drop-down entry boxes that each offer choice categories, “ Jewelry and Accessories”, “Clothing and Shoes”, “Home and Living”, “Toys and Entertainment”, and “Art and Collectibles”, and “Other”. 
+Once a user is satisfied with their choices, they are left to click the “Submit!” button, located at the bottom of the entry boxes. This button starts the cross-checking validation of the user’s entries and can result in two outcomes. One outcome is the successful acceptance of the user’s choice of username, which simply inserts the data into the store’s database and also redirects the user back to the home screen. The second outcome is the display of an error message prompting the user to choose a different username, this occurs given that the user’s initial choice fails the above-mentioned constraints. At this point, the user will be able to select another available username and, upon success, will be redirected to the home page. 
+The completion of the personalization feature sees that a user’s top three preferences and their username are inserted into the user profile database, this allows the rest of the site to tailor portions of the experience for the specific logged-in user (i.e the ‘for-you’ portion of the home page). Additionally, the ‘isPersonalized’ attribute of a user in the store database is set to ‘True’ upon successful customization, this characteristic allows further permissions on the website, such as selling items. 
+The personalization page can be arrived at in several other ways, given that a user needs to provide additional information to the site. These features, such as the 'Profile' page and the 'Sell and Item' page will redirect the user to the 'Personalization' page, given that the authenticated user attempting to use these features is non-personalized. 
 
 ### Layout
 
