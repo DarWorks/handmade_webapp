@@ -95,8 +95,11 @@
                        <p class="mb-4"> </p>
 
                         [[if product['ratingPresent'] == True:]]
+
                        <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
                         [[=product['aggegateRating']]] out of 5.0 </p>
+<!--                     <span v-for="star_idx in [1,2,3,4,5]"> &#9733;</span>-->
+
                         [[else:]]
                                  <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
                         Not Rated Yet :(</p>

@@ -812,7 +812,7 @@ def display_product_category(product_type=None):
     return dict(rows=rows, product_type=product_type,
                 isPersonalized=isPersonalized,
                 currentUserName=currentUserName,
-                url_signer=url_signer,
+                url_signer=url_signer, l=[1,2,3,4],
                 )
 
 

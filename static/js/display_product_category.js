@@ -20,10 +20,19 @@ let init = (app) => {
         return a;
     };
 
+    app.display = function() {
+        axios.get(display_product_category_url, {params: {rows: rows}}).then(function (response) {
+            for (let i = 0; i < rows.length; i++) {
+                  console.log(rows[i])
+            }
+            });
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        display: app.display,
+
     };
 
     // This creates the Vue instance.
@@ -39,7 +48,7 @@ let init = (app) => {
       // Typically this is a server GET call to load the data.
         axios.get(display_product_category_url).then(function (response) {
                 app.vue.rows = app.enumerate(response.data.rows);
-               //console.log(app.vue.rows)
+//               console.log(app.vue.rows)
         });
     };
 
