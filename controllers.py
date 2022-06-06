@@ -545,6 +545,7 @@ def add_product(username=None):
     assert username is not None
     return dict(
         add_product_info_url = URL('add_product_info', username),
+        profile_url = URL('profile', username),
         username=username,
         url_signer=url_signer,
     )
