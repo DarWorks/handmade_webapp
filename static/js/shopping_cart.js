@@ -31,6 +31,10 @@ let init = (app) => {
         }
     };
 
+    app.clear_cart = function () {
+        localStorage[app_name + user_id] = JSON.stringify({ cart: [] });
+    };
+
     app.delete_item = function (product) {
         let i = app.vue.cart.indexOf(product);
         if (i > -1) {
@@ -59,6 +63,11 @@ let init = (app) => {
                     Q.flash(result.error.message);
                 });
             }
+            else {
+                app.clear_cart();
+                Q.flash("Someone has purchased the last stock on one of your items!")
+            }
+
         });
     };
 
@@ -70,7 +79,7 @@ let init = (app) => {
         let i = app.vue.cart.indexOf(product);
 
         app.vue.cart[i].amount_desired -= 1;
-        
+
         app.store_cart();
 
         app.calculate_cost();
@@ -84,7 +93,7 @@ let init = (app) => {
         let i = app.vue.cart.indexOf(product);
 
         app.vue.cart[i].amount_desired += 1;
-        
+
         app.store_cart();
 
         app.calculate_cost();
