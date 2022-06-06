@@ -29,6 +29,7 @@ import datetime
 import json
 import os
 import stripe
+import random
 from functools import reduce
 
 from py4web import action, request, abort, redirect, URL
@@ -114,8 +115,10 @@ def preferencesQueryHelper(p1, p2, p3):
     else:
         l = p1 + p2 + p3
 
+    length = len(l) - 1
+    random_index = random.randint(4, length)
     if len(l) > 4:
-        l = l[0:4]
+        l = l[random_index-4:random_index]
     elif len(l) < 4:
         while True:
             if len(l) == 4:
@@ -833,12 +836,13 @@ def display_product_category(product_type=None):
                 isPersonalized=isPersonalized,
                 currentUserName=currentUserName,
                 url_signer=url_signer,
-                get_data_url=URL('get_data'),
+                get_product_category_data_url=URL('get_product_category_data'),
                 )
 
-@action('get_data')
+
+@action('get_product_category_data')
 @action.uses(db, auth)
-def get_data():
+def get_product_category_data():
     product_type = request.params.get("product_type")
     rows = db(db.products.type == product_type).select().as_list()
 

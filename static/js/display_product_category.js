@@ -21,7 +21,7 @@ let init = (app) => {
     };
 
     app.display = function() {
-        axios.get(get_data_url, {params: {product_type: product_type}}).then(function (response) {
+        axios.get(get_product_category_data_url, {params: {product_type: product_type}}).then(function (response) {
             for (let i = 0; i < response.data.rows.length; i++) {
                   app.vue.rows.push({
                   rows: response.data.rows[i],
@@ -50,7 +50,7 @@ let init = (app) => {
     app.init = () => {
       // Put here any initialization code.
 //      // Typically this is a server GET call to load the data.
-        axios.get(get_data_url).then(function (response) {
+        axios.get(get_product_category_data_url).then(function (response) {
                 app.vue.rows = app.enumerate(response.data.rows);
                 app.display();
         });
