@@ -167,15 +167,7 @@
     <div class="field-body">
       <div class="field has-addons has-addons-right">
 
-        <div class="control" v-if="!submitted">
-          <input type="submit" @click="add_product_info" value="Submit Here" class="button is-info">
-        </div>
-
-        <div v-if="submitted">
-          <a class="button is-success" href="[[=URL('profile', username, signer=url_signer)]]">
-            Return to Profile
-          </a>
-        </div>
+        <input type="submit" @click="add_product_info" value="Submit Here" class="button is-info">
 
       </div>
     </div>
@@ -187,6 +179,7 @@
 [[block page_scripts]]
 <script>
   let add_product_info_url = "[[=XML(add_product_info_url)]]";
+  let profile_url = "[[=XML(profile_url)]]";
 </script>
 <script src="js/add_product.js"></script>
 [[end]]

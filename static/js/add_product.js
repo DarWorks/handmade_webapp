@@ -13,8 +13,6 @@ let init = (app) => {
         product_image3: "",
         product_image4: "",
 
-        submitted: false,
-
         name_flag: false,
         type_flag: false,
         desc_flag: false,
@@ -79,8 +77,8 @@ let init = (app) => {
                     product_image2: app.vue.product_image2,
                     product_image3: app.vue.product_image3,
                     product_image4: app.vue.product_image4,
-                }).then(function (r) {
-                    app.vue.submitted = true;
+                }).then(function () {
+                    window.location.href = profile_url;
                 });
         }
     }
