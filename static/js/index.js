@@ -24,16 +24,16 @@ let init = (app) => {
         app.vue.hover = hoverBool;
     };
 
-//    app.secondRowDisplay = function() {
-//        axios.get(get_index_data_url).then(function (result) {
-//            for (let i = 0; i < result.data.trendingProducts.length; i++) {
-//                  app.vue.trendingProducts.push({
-//                    trendingProducts: result.data.trendingProducts[i],
-//                });
-//            }
-//            });
-//            app.enumerate(app.vue.trendingProducts);
-//    };
+    app.secondRowDisplay = function() {
+        axios.get(get_index_data_url).then( function(response) {
+            for (let i = 0; i < response.data.trendingProducts.length; i++) {
+                  app.vue.trendingProducts.push({
+                    trendingProducts: response.data.trendingProducts[i],
+                });
+            }
+            });
+            app.enumerate(app.vue.trendingProducts);
+    };
 
     // This contains all the methods.
     app.methods = {
@@ -53,8 +53,8 @@ let init = (app) => {
     app.init = () => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
-            axios.get(get_index_data_url).then(function (response) {
-                app.vue.trendingProducts = app.enumerate(response.data.trendingProducts);
+            axios.get(get_index_data_url).then((result) => {
+                app.vue.trendingProducts = app.enumerate(result.data.trendingProducts);
 //                app.secondRowDisplay();
         });
     };
