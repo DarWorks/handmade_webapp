@@ -11,6 +11,7 @@ let init = (app) => {
     app.data = {
         hover: false,
         trendingProducts: [],
+        firstProductRow: [],
     };
 
     app.enumerate = (a) => {
