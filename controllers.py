@@ -829,15 +829,7 @@ def display_product_category(product_type=None):
         currentUserName = None
         isPersonalized = False
 
-
-    rows = db(db.products.type == product_type).select().as_list()
-
-    # calls helper functions to add product link
-    # and query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(rows)
-    productAndSellerLinkHelper(rows)
-
-    return dict(rows=rows, product_type=product_type,
+    return dict(product_type=product_type,
                 isPersonalized=isPersonalized,
                 currentUserName=currentUserName,
                 url_signer=url_signer,
@@ -847,7 +839,6 @@ def display_product_category(product_type=None):
 @action('get_data')
 @action.uses(db, auth)
 def get_data():
-    #rows = db(db.products.type == product_type).select().as_list()
     product_type = request.params.get("product_type")
     rows = db(db.products.type == product_type).select().as_list()
 
