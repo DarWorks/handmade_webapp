@@ -234,53 +234,59 @@
 
       <!-- Second Scroller -->
         <p class="mt-6"></p>
-                 <div class="block">
-                      <p> &nbsp;</p>
-                     <p> &nbsp;</p>
-                    <div class="mt-6">
-                        <h1 class="title has-text-weight-bold" style="color: #f1641e">Some other great products for sale &#128293;</h1>
-                         <p> &nbsp;</p>
-                         <p> &nbsp;</p>
-                     </div>
-                </div>
+         <div class="block">
+              <p> &nbsp;</p>
+             <p> &nbsp;</p>
+            <div class="mt-6">
+                <h1 class="title has-text-weight-bold" style="color: #f1641e">Some other great products for sale &#128293;</h1>
+                 <p> &nbsp;</p>
+                 <p> &nbsp;</p>
+             </div>
+        </div>
        <nav class="level is-mobile imageContainer">
 
-      [[for product in trendingProducts:]]
-          <div class="level-item level-left imagesSize">
+          <div class="level-item level-left imagesSize" v-for="product in trendingProducts.slice(0,4)">
             <div class="card responsiveCard">
               <div class="card-image pt-4"  style=" border-style: solid; border-color: #f1641e;">
                <div class ="card-image has centered px-3">
-                    <a href="[[=URL('product', product.get('username', ''), product.get('id', ''))]]">
-                    <img src="[[=product['image1']]]">
+                       <a :href=product.prodURL>
+                              <img :src=product.image1>
                   </a>
                   </div>
                   <div class="card-content ">
-                      <p class= "title is-size-3 has-text-centered">[[=product['name']]]</p>
+                      <p class= "title is-size-3 has-text-centered">{{product.name}}</p>
                        <p class="mb-4"> </p>
-                       <p class= "title is-size-6 has-text-centered">
-                           Sold by: <a href="[[=URL('profile', product.get('username', ''))]]">
-                           [[=product['first_name']]] [[=product['last_name']]] ([[=product['username']]])</a></p>
-                       <p class="mb-4"> </p>
+                         <p class="title is-size-6 has-text-centered mb-4">
+                                Sold by:
+                              <a :href=product.sellerURL>
+                                  {{product.first_name}} {{product.last_name}} ({{product.username}})
+                              </a>
+                            </p>
 
-                        [[if product['ratingPresent'] == True:]]
-                       <p class= "title is-size-7 has-text-centered has-text-weight-bold">Rating:
-                        [[=product['aggegateRating']]] out of 5.0 </p>
-                        [[else:]]
-                            <p class= "title is-size-7 has-text-centered has-text-weight-bold has-text-danger">Rating:
-                        Not Rated Yet :(</p>
-                        [[pass]]
+                      <p class="title is-size-7 has-text-centered has-text-weight-bold" v-if="product.ratingPresent === true">
+                           Rating:
+                           <span v-for="star_idx in product.aggegateRating" style="color:#ffdf00;">
+                               <i class="fa fa-star"></i>
+                           </span>
+                           <span v-for="star_idx in (5 - product.aggegateRating)">
+                               <i class="fa fa-star-o"></i>
+                           </span>
+                       </p>
+
+                    <p class="title is-size-7 has-text-centered has-text-weight-bold has-text-danger" v-else>
+                        Rating: Not Rated Yet :(
+                    </p>
 
                        <p class="mb-3"> </p>
-                       <p class= "has-text-centered">$[[=product['price']]]</p>
+                       <p class= "has-text-centered">${{product.price}}</p>
                   </div>
                   <footer class="card-footer">
-                    <a href="[[=product['prodURL']]]" class="card-footer-item">View</a>
+                           <a :href=product.prodURL  class="card-footer-item">View</a>
 <!--                    <a href="#" class="card-footer-item">Add to Cart</a>-->
                   </footer>
               </div>
             </div>
          </div>
-      [[pass]]
     </nav>
   </div>
  </div>
@@ -295,7 +301,8 @@
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
 <script>
-  let my_callback_url = "[[=XML(my_callback_url)]]";
+  let get_index_data_url = "[[=XML(get_index_data_url)]]";
+   let my_callback_url = "[[=XML(my_callback_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

@@ -175,8 +175,6 @@ def index():
 
 
     # Queries for displaying products-
-    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
-
     newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
 
     # user session variables to be used in index.html
@@ -208,11 +206,9 @@ def index():
             firstProductRow = l
 
     # calls helper function to add product link
-    productAndSellerLinkHelper(trendingProducts)
     productAndSellerLinkHelper(firstProductRow)
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(trendingProducts)
     ratingAndNamesHelper(firstProductRow)
 
     # sending userSession data to conditionally render index.html
@@ -225,12 +221,26 @@ def index():
         display=display,
         theDB=theDB,
         firstProductRow=firstProductRow,
-        trendingProducts=trendingProducts,
         firstRowText=firstRowText,
         url_signer = url_signer,
         currentUserName =currentUserName,
-
+        get_index_data_url=URL('get_index_data'),
     )
+
+
+@action('get_index_data')
+@action.uses(db, auth)
+def get_index_data():
+    # Queries for displaying products-
+    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
+
+    # calls helper function to add product link
+    productAndSellerLinkHelper(trendingProducts)
+
+    # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
+    ratingAndNamesHelper(trendingProducts)
+
+    return dict(trendingProducts=trendingProducts)
 
 
 @action('about')

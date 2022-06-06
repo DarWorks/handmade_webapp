@@ -10,7 +10,7 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         hover: false,
-        // Complete as you see fit.
+        trendingProducts: [],
     };
 
 
@@ -26,11 +26,22 @@ let init = (app) => {
         app.vue.hover = hoverBool;
     };
 
+    app.display = function() {
+        axios.get(get_index_data_url).then(function (response) {
+            for (let i = 0; i < response.data.trendingProducts.length; i++) {
+                  app.vue.trendingProducts.push({
+                    trendingProducts: response.data.trendingProducts[i],
+                });
+            }
+            });
+            app.enumerate(app.vue.trendingProducts);
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
         setHover: app.setHover,
+        display: app.display,
     };
 
     // This creates the Vue instance.
@@ -44,6 +55,10 @@ let init = (app) => {
     app.init = () => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
+            axios.get(get_index_data_url).then(function (response) {
+                app.vue.trendingProducts = app.enumerate(response.data.trendingProducts);
+                app.display();
+        });
     };
 
     // Call to the initializer.
