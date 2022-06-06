@@ -231,6 +231,7 @@ def index():
 @action('get_index_data')
 @action.uses(db, auth)
 def get_index_data():
+
     # Queries for displaying 2nd row-
     trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
 
