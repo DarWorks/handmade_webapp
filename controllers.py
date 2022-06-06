@@ -103,41 +103,53 @@ def preferencesQueryHelper(p1, p2, p3):
         A helper function for quering user preferences based products
         If there are less products based on user preferences then this randomises
     """
-
-    if (p1 == p2 == p3):
-        l = p1
-    elif p1 == p3:
-        l = p1 + p2
-    elif p1 == p2:
-        l = p1 + p3
-    elif p2 == p3:
-        l = p1
-    else:
-        l = p1 + p2 + p3
-
-    length = len(l) - 1
-    if len(l) > 4:
-        random_index = random.randint(4, length)
-        l = l[random_index-4:random_index]
-    elif len(l) < 4:
-        while True:
-            if len(l) == 4:
-                break
-
-            gap = 4 - len(l)
-
-            randomProducts = db(db.products.id).select(orderby='<random>', limitby=(0, gap)).as_list()
-
-            id_list = id_lister(l)
-
-            unqiueRandomProducts = []
-            for i in randomProducts:
-                if i["id"] not in id_list:
-                    unqiueRandomProducts.append(i)
-
-            l = l + unqiueRandomProducts
-
-    return l
+    # if (p1 == p2 == p3):
+    #     l = p1
+    # elif p1 == p3:
+    #     l = p1 + p2
+    # elif p1 == p2:
+    #     l = p1 + p3
+    # elif p2 == p3:
+    #     l = p1
+    # else:
+    #     l = p1 + p2 + p3
+    #
+    # length = len(l) - 1
+    # if len(l) > 4:
+    #     random_index = random.randint(4, length)
+    #     l = l[random_index-4:random_index]
+    # elif len(l) < 4:
+    #     while True:
+    #         if len(l) == 4:
+    #             break
+    #
+    #         gap = 4 - len(l)
+    #
+    #         randomProducts = db(db.products.id).select(orderby='<random>', limitby=(0, gap)).as_list()
+    #
+    #         id_list = id_lister(l)
+    # 
+    #         unqiueRandomProducts = []
+    #         for i in randomProducts:
+    #             if i["id"] not in id_list:
+    #                 unqiueRandomProducts.append(i)
+    #
+    #         l = l + unqiueRandomProducts
+    l = p1 + p2 + p3
+    # filter duplicate product entries
+    used_ids = []
+    def productFilter(x):
+        pid = x["id"]
+        for id in used_ids:
+            if pid == id:
+                return False
+        used_ids.append(pid)
+        return True
+    l = list(filter(productFilter, l))
+    # randomize product order
+    random.shuffle(l)
+    # only return 4 products or less
+    return l[:4]
 
 
 def id_lister(l):
@@ -244,9 +256,7 @@ def get_index_data():
             l3 = db(db.products.type == currentUser.preference3).select(orderby='<random>').as_list()
 
             # calls preferences query helper
-            l = preferencesQueryHelper(l1, l2, l3)
-
-            firstProductRow = l
+            firstProductRow = preferencesQueryHelper(l1, l2, l3)
 
     # Queries for displaying 2nd row-
     trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
