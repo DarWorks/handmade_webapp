@@ -97,4 +97,11 @@ db.define_table(
     Field('text', requires=IS_NOT_EMPTY())
 )
 
+db.define_table(
+    'chat',
+    Field('user1', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('user2', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('text', requires=IS_NOT_EMPTY())
+)
+
 db.commit()

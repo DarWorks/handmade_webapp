@@ -518,6 +518,8 @@ def profile(username=None):
         ),
         selling1 = selling[len(selling) // 2:],
         selling2 = selling[:len(selling) // 2],
+        get_chat_url=URL('comments', currentUser.id),
+        post_chat_url=URL('comment', currentUser.id),
     )
 
 @action('add_product/<username>')
