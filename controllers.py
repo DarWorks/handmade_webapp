@@ -29,6 +29,7 @@ import datetime
 import json
 import os
 import stripe
+import random
 from functools import reduce
 
 from py4web import action, request, abort, redirect, URL
@@ -69,7 +70,7 @@ def ratingAndNamesHelper(query):
             have their initials capitalised using the title() function. The changes are not reflected in the database
         Same with other modifications in the function
     """
-
+    i = 1
     for row in query:
         row["price"] = "{:.2f}".format(row["price"])
         row["name"] = row["name"].title()
@@ -84,16 +85,50 @@ def ratingAndNamesHelper(query):
             row["first_name"] = seller["first_name"].title()
             row["last_name"] = seller["last_name"].title()
             row["username"] = seller["username"]
+        row["queryRowID"] = i
+        i += 1
 
 
-def productLinkHelper(query):
+def productAndSellerLinkHelper(query):
     """
-       A helper function to add product link
+       A helper function to add product link and seller link
     """
-    for prod in query:
-        u = db(db.userProfile.id == prod["sellerid"]).select().first()
-        prod["prodURL"] = URL("product", u["username"], prod["id"])
+    for product in query:
+        u = db(db.userProfile.id == product["sellerid"]).select().first()
+        product["prodURL"] = URL("product", u["username"], product["id"])
+        product["sellerURL"] = URL("profile", u["username"])
 
+
+def preferencesQueryHelper(p1, p2, p3):
+    """
+        A helper function for quering user preferences based products
+        If there are less products based on user preferences then this randomises
+    """
+    l = p1 + p2 + p3
+    # filter duplicate product entries
+    used_ids = []
+    def productFilter(x):
+        pid = x["id"]
+        for id in used_ids:
+            if pid == id:
+                return False
+        used_ids.append(pid)
+        return True
+    l = list(filter(productFilter, l))
+    # randomize product order
+    random.shuffle(l)
+    # only return 4 products or less
+    return l[:4]
+
+
+def id_lister(l):
+    """
+        another helper function used in preferences helper
+    """
+    id_list = []
+    for i in l:
+        id_list.append(i["id"])
+    return id_list
 
 ###############################################################################
 
@@ -119,25 +154,9 @@ def index():
         currentUserName=None
         isPersonalized = False
 
-
-    # Queries for displaying products-
-    # TODO: for this query later on display the most sold / most searched products
-    #  (currently this displays random products)
-    #  Also need to display seller info here
-    trendingProducts = db(db.products).select(orderby='<random>').as_list()
-
-    # TODO: for this query later on display the most recently added prodcuts
-    #  (currently this displays all products in reverse order with no limits)
-    #  Also need to display seller info here
-    newProducts = db(db.products).select(orderby=~db.products.id).as_list()
-
     # user session variables to be used in index.html
     customerID = 0
     display = False
-    firstProductRow = newProducts
-
-    firstRowText = "New Items"
-
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -148,43 +167,7 @@ def index():
             isPersonalized = False
             display = True
         else:
-            # TODO: for this query display all products from the database which math the users preferences
-            #  (currently its just matching the first preference of the user since for
-            #  some reason "and" wasnt displaying the correct ones)
-            # preferenceBasedProducts = db((db.products.type == currentUser.preference1) and
-            #                              (db.products.type == currentUser.preference2) and
-            #                              (db.products.type == currentUser.preference3)).select().as_list()
-            #
-            # firstProductRow = preferenceBasedProducts
-            firstRowText = "For You"
-
-            # TODO: this works but this is inefficient and if there are two preferences
-            #  that are same then this displays products multiple times
-            l1 = db(db.products.type == currentUser.preference1).select().as_list()
-            l2 = db(db.products.type == currentUser.preference2).select().as_list()
-            l3 = db(db.products.type == currentUser.preference3).select().as_list()
-
-
-            if (l1 == l2 == l3):
-                l = l1
-            elif l1 == l3:
-                l = l1 + l2
-            elif l1 == l2:
-                l = l1 + l3
-            elif l2 == l3:
-                l = l1
-            else:
-                l = l1 + l2 + l3
-
-            firstProductRow = l
-
-    # calls helper function to add product link
-    productLinkHelper(firstProductRow)
-    productLinkHelper(trendingProducts)
-
-    # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(firstProductRow)
-    ratingAndNamesHelper(trendingProducts)
+            pass
 
     # sending userSession data to conditionally render index.html
     # note, can access as currentUsers['isPersonalized'] etc.
@@ -195,13 +178,69 @@ def index():
         customerID=customerID,
         display=display,
         theDB=theDB,
-        firstProductRow=firstProductRow,
-        trendingProducts=trendingProducts,
-        firstRowText=firstRowText,
         url_signer = url_signer,
         currentUserName =currentUserName,
-
+        get_index_data_url=URL('get_index_data'),
     )
+
+
+@action('get_index_data')
+@action.uses(db, auth)
+def get_index_data():
+    # querying DB to see if a user with the current email exists in the DB
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
+
+    # Queries for displaying products-
+    newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
+
+    # user session variables to be used in index.html
+    display = False
+    firstProductRow = newProducts
+
+    firstRowText = "New Items"
+
+    # if no active user session set display = false
+    # active session, but no DB entry --> prompt customization
+    if get_user_email() == None:
+        display = False
+    else:
+        if currentUser == None:
+            isPersonalized = False
+            display = True
+        else:
+            firstRowText = "For You"
+
+            l1 = db(db.products.type == currentUser.preference1).select(orderby='<random>').as_list()
+            l2 = db(db.products.type == currentUser.preference2).select(orderby='<random>').as_list()
+            l3 = db(db.products.type == currentUser.preference3).select(orderby='<random>').as_list()
+
+            # calls preferences query helper
+            firstProductRow = preferencesQueryHelper(l1, l2, l3)
+
+    # Queries for displaying 2nd row-
+    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
+
+    # calls helper function to add product link
+    productAndSellerLinkHelper(trendingProducts)
+    productAndSellerLinkHelper(firstProductRow)
+
+    # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
+    ratingAndNamesHelper(trendingProducts)
+    ratingAndNamesHelper(firstProductRow)
+
+    return dict(trendingProducts=trendingProducts,
+                firstRowText=firstRowText,
+                firstProductRow=firstProductRow)
 
 
 @action('about')
@@ -850,7 +889,10 @@ def load_users():
     return dict(rows=rows)
 
 
-# DISPLAYING PRODUCT CATEGORIES-
+#//////////////////////////////////////////////////////////
+# PRODUCT CATEGORIES-
+#//////////////////////////////////////////////////////////
+
 
 @action('display_product_category/<product_type>')
 @action.uses('display_product_category.html', db, auth, url_signer)
@@ -871,19 +913,26 @@ def display_product_category(product_type=None):
         currentUserName = None
         isPersonalized = False
 
+    return dict(product_type=product_type,
+                isPersonalized=isPersonalized,
+                currentUserName=currentUserName,
+                url_signer=url_signer,
+                get_product_category_data_url=URL('get_product_category_data'),
+                )
 
+
+@action('get_product_category_data')
+@action.uses(db, auth)
+def get_product_category_data():
+    product_type = request.params.get("product_type")
     rows = db(db.products.type == product_type).select().as_list()
 
     # calls helper functions to add product link
     # and query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(rows)
-    productLinkHelper(rows)
+    productAndSellerLinkHelper(rows)
 
-    return dict(rows=rows, product_type=product_type,
-                isPersonalized=isPersonalized,
-                currentUserName=currentUserName,
-                url_signer=url_signer,
-                )
+    return dict(rows=rows)
 
 
 #//////////////////////////////////////////////////////////

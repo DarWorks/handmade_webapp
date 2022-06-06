@@ -10,6 +10,7 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
+        rows: [],
     };
 
     app.enumerate = (a) => {
@@ -19,10 +20,22 @@ let init = (app) => {
         return a;
     };
 
+    app.display = function() {
+        axios.get(get_product_category_data_url, {params: {product_type: product_type}}).then(function (response) {
+            for (let i = 0; i < response.data.rows.length; i++) {
+                  app.vue.rows.push({
+                  rows: response.data.rows[i],
+                });
+            }
+            });
+            app.enumerate(app.vue.rows);
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        display: app.display,
+
     };
 
     // This creates the Vue instance.
@@ -35,7 +48,11 @@ let init = (app) => {
     // And this initializes it.
     app.init = () => {
       // Put here any initialization code.
-      // Typically this is a server GET call to load the data.
+//      // Typically this is a server GET call to load the data.
+        axios.get(get_product_category_data_url).then(function (response) {
+                app.vue.rows = app.enumerate(response.data.rows);
+                app.display();
+        });
     };
 
     // Call to the initializer.
