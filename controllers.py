@@ -811,7 +811,10 @@ def load_users():
     return dict(rows=rows)
 
 
-# DISPLAYING PRODUCT CATEGORIES-
+#//////////////////////////////////////////////////////////
+# PRODUCT CATEGORIES-
+#//////////////////////////////////////////////////////////
+
 
 @action('display_product_category/<product_type>')
 @action.uses('display_product_category.html', db, auth, url_signer)
@@ -852,6 +855,7 @@ def get_product_category_data():
     productAndSellerLinkHelper(rows)
 
     return dict(rows=rows)
+
 
 #//////////////////////////////////////////////////////////
 # Layout PAGE
