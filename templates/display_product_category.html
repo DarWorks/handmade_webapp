@@ -77,13 +77,13 @@
 <div class="block">
 <h1 class="title has-text-weight-bold" style="color: #f1641e;" > &nbsp; &nbsp; Displaying results for the category: "[[=product_type]]"</h1>
 </div>
-      <div class="block" v-for="rowIdx in Math.ceil(rows.length / 6)">
-      <div class="level is-mobile mb-3">
-          <div class="block" v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
-      <div class="level-item level-left imagesSize">
 
+      <div class="block" v-for="rowIdx in Math.ceil(rows.length / 6)">
+            <div class="level is-mobile">
+          <div v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
+                <div class="level-item level-left imagesSize">
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
-              <div class ="card-image centered px-6 pt-4">
+              <div class ="card-image centered px-6 pt-4 ">
                   <a :href=product.rows.prodURL>
                      <img :src=product.rows.image1>
                   </a>
@@ -101,10 +101,10 @@
                        <p class="title is-size-7 has-text-centered has-text-weight-bold" v-if="product.rows.ratingPresent === true">
                            Rating:
                            <span v-for="star_idx in product.rows.aggegateRating" style="color:#ffdf00;">
-                               <i class="fa fa-star"></i>
+                               <i class="fa fa-star px-1"></i>
                            </span>
                            <span v-for="star_idx in (5 - product.rows.aggegateRating)">
-                               <i class="fa fa-star-o"></i>
+                               <i class="fa fa-star-o px-1"></i>
                            </span>
                        </p>
 
