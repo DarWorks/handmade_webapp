@@ -121,6 +121,11 @@ let init = (app) => {
 
     // Puts item into shopping cart
     app.add_to_cart = function () {
+      if (!isAuthenticated) {
+        window.location.href = login_url;
+        return false;
+      }
+
       axios.get(get_product_url, { params: { id: product_id } }).then(function (response) {
           app.vue.cart.push(response.data.row);
           localStorage[app_name + user_id] = JSON.stringify({ cart: app.vue.cart });

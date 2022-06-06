@@ -594,6 +594,8 @@ def product(username=None, product_id=None):
     assert username is not None
 
     user_id = get_user_id()
+    if user_id is None:
+        user_id = ""
 
     data = db(db.products.id == product_id).select()
     prod = data.first()
