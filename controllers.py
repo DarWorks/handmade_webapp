@@ -173,17 +173,60 @@ def index():
         currentUserName=None
         isPersonalized = False
 
+    # user session variables to be used in index.html
+    customerID = 0
+    display = False
+
+    # if no active user session set display = false
+    # active session, but no DB entry --> prompt customization
+    if get_user_email() == None:
+        display = False
+    else:
+        if currentUser == None:
+            isPersonalized = False
+            display = True
+        else:
+            pass
+
+    # sending userSession data to conditionally render index.html
+    # note, can access as currentUsers['isPersonalized'] etc.
+    return dict(
+        # COMPLETE: return here any signed URLs you need.
+        my_callback_url=URL('my_callback', signer=url_signer),
+        isPersonalized=isPersonalized,
+        customerID=customerID,
+        display=display,
+        theDB=theDB,
+        url_signer = url_signer,
+        currentUserName =currentUserName,
+        get_index_data_url=URL('get_index_data'),
+    )
+
+
+@action('get_index_data')
+@action.uses(db, auth)
+def get_index_data():
+    # querying DB to see if a user with the current email exists in the DB
+    currentUser = db(
+        db.userProfile.user_email == get_user_email()).select().first()
+    isPersonalized = False
+    currentUserName = ""
+
+    if currentUser is not None and currentUser.username is not None:
+        currentUserName = currentUser.username
+        isPersonalized = currentUser.isPersonlized
+    else:
+        currentUserName = None
+        isPersonalized = False
 
     # Queries for displaying products-
     newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
 
     # user session variables to be used in index.html
-    customerID = 0
     display = False
     firstProductRow = newProducts
 
     firstRowText = "New Items"
-
 
     # if no active user session set display = false
     # active session, but no DB entry --> prompt customization
@@ -205,43 +248,20 @@ def index():
 
             firstProductRow = l
 
-    # calls helper function to add product link
-    productAndSellerLinkHelper(firstProductRow)
-
-    # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
-    ratingAndNamesHelper(firstProductRow)
-
-    # sending userSession data to conditionally render index.html
-    # note, can access as currentUsers['isPersonalized'] etc.
-    return dict(
-        # COMPLETE: return here any signed URLs you need.
-        my_callback_url=URL('my_callback', signer=url_signer),
-        isPersonalized=isPersonalized,
-        customerID=customerID,
-        display=display,
-        theDB=theDB,
-        firstProductRow=firstProductRow,
-        firstRowText=firstRowText,
-        url_signer = url_signer,
-        currentUserName =currentUserName,
-        get_index_data_url=URL('get_index_data'),
-    )
-
-
-@action('get_index_data')
-@action.uses(db, auth)
-def get_index_data():
-
     # Queries for displaying 2nd row-
     trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
 
     # calls helper function to add product link
     productAndSellerLinkHelper(trendingProducts)
+    productAndSellerLinkHelper(firstProductRow)
 
     # calls helper function to query the first name, last name, username, aggregate rating, price (change in datatype)
     ratingAndNamesHelper(trendingProducts)
+    ratingAndNamesHelper(firstProductRow)
 
-    return dict(trendingProducts=trendingProducts)
+    return dict(trendingProducts=trendingProducts,
+                firstRowText=firstRowText,
+                firstProductRow=firstProductRow)
 
 
 @action('about')
