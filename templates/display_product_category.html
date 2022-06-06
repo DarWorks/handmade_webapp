@@ -69,7 +69,6 @@
                     [[pass]]
                 </div>
         [[pass]]
-
      </div>
 
 
@@ -77,11 +76,10 @@
 <div class="block">
 <h1 class="title has-text-weight-bold" style="color: #f1641e;" > &nbsp; &nbsp; Displaying results for the category: "[[=product_type]]"</h1>
 </div>
-
       <div class="block" v-for="rowIdx in Math.ceil(rows.length / 6)">
             <div class="level is-mobile">
           <div v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
-                <div class="level-item level-left imagesSize">
+            <div class="level-item level-left imagesSize">
         <div class="card responsiveCard" style="border-style: solid; border-color: #f1641e;">
               <div class ="card-image centered px-6 pt-4 ">
                   <a :href=product.rows.prodURL>

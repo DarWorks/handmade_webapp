@@ -116,8 +116,8 @@ def preferencesQueryHelper(p1, p2, p3):
         l = p1 + p2 + p3
 
     length = len(l) - 1
-    random_index = random.randint(4, length)
     if len(l) > 4:
+        random_index = random.randint(4, length)
         l = l[random_index-4:random_index]
     elif len(l) < 4:
         while True:
