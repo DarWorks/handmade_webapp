@@ -545,6 +545,7 @@ def add_product(username=None):
     assert username is not None
     return dict(
         add_product_info_url = URL('add_product_info', username),
+        profile_url = URL('profile', username),
         username=username,
         url_signer=url_signer,
     )
@@ -594,6 +595,8 @@ def product(username=None, product_id=None):
     assert username is not None
 
     user_id = get_user_id()
+    if user_id is None:
+        user_id = ""
 
     data = db(db.products.id == product_id).select()
     prod = data.first()
