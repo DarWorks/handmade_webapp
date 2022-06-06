@@ -602,6 +602,10 @@ def add_product_info(username=None):
         quantity=request.json.get('product_quantity'),
         price=request.json.get('product_price'),
         image1=request.json.get('product_image1'),
+        image2=request.json.get('product_image2'),
+        image3=request.json.get('product_image3'),
+        image4=request.json.get('product_image4'),
+
     )
 
     return dict(username=username, url_signer=url_signer,)
