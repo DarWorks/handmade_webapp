@@ -77,7 +77,8 @@
 <h1 class="title has-text-weight-bold" style="color: #f1641e;" > &nbsp; &nbsp; Displaying results for the category: "[[=product_type]]"</h1>
 </div>
       <nav class="level is-mobile" v-for="rowIdx in Math.ceil(rows.length / 6)">
-          <div class="level-item level-left" v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
+          <div class="level-left level-item" v-for="product in rows.slice(6 * (rowIdx - 1), 6 * rowIdx)">
+
         <div class="card responsiveCard imagesSize" style="border-style: solid; border-color: #f1641e;">
               <div class ="card-image centered px-6 pt-4 ">
                   <a :href=product.rows.prodURL>
