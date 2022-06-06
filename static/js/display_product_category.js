@@ -25,7 +25,6 @@ let init = (app) => {
             for (let i = 0; i < response.data.rows.length; i++) {
                   app.vue.rows.push({
                   rows: response.data.rows[i],
-
                 });
             }
             });
