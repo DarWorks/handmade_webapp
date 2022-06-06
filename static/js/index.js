@@ -26,11 +26,11 @@ let init = (app) => {
         app.vue.hover = hoverBool;
     };
 
-    app.display = function() {
-        axios.get(get_index_data_url).then(function (response) {
-            for (let i = 0; i < response.data.trendingProducts.length; i++) {
+    app.secondRowDisplay = function() {
+        axios.get(get_index_data_url).then(function (result) {
+            for (let i = 0; i < result.data.trendingProducts.length; i++) {
                   app.vue.trendingProducts.push({
-                    trendingProducts: response.data.trendingProducts[i],
+                    trendingProducts: result.data.trendingProducts[i],
                 });
             }
             });
@@ -41,7 +41,7 @@ let init = (app) => {
     app.methods = {
         // Complete as you see fit.
         setHover: app.setHover,
-        display: app.display,
+        secondRowDisplay: app.secondRowDisplay,
     };
 
     // This creates the Vue instance.
@@ -57,7 +57,7 @@ let init = (app) => {
       // Typically this is a server GET call to load the data.
             axios.get(get_index_data_url).then(function (response) {
                 app.vue.trendingProducts = app.enumerate(response.data.trendingProducts);
-                app.display();
+                app.secondRowDisplay();
         });
     };
 
