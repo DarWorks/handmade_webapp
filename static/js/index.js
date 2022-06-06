@@ -56,9 +56,9 @@ let init = (app) => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
             axios.get(get_index_data_url).then((result) => {
-                app.vue.trendingProducts = app.enumerate(result.data.trendingProducts);
-                app.vue.firstProductRow = app.enumerate(result.data.firstProductRow);
-                app.vue.firstRowText = result.data.firstRowText;
+//                app.vue.trendingProducts = app.enumerate(result.data.trendingProducts);
+//                app.vue.firstProductRow = app.enumerate(result.data.firstProductRow);
+//                app.vue.firstRowText = result.data.firstRowText;
 //                app.secondRowDisplay();
         });
     };
