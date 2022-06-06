@@ -21,14 +21,9 @@ The main body of the page displays 2 product rows each displaying 4 products.
 The second row of the section will always contain randomised products from the database. 
 The point of displaying randomised products is to give users an overview of some other products that are available on the site.
 The type of information displayed on the first row is dependent on whether a user is logged in or not. 
-When a user is logged in, the products that match the users preferences will be displayed on the first row.  
-When a user is not logged in, the products that have been recently added to the database will be displayed. 
-The homepage has product focused cards which display the most appropriate or most relevant information that would be matter to a user exploring the products on the site.
-The cards contain information like product name, product seller name, the current rating of the product, price. 
-An image of the product is also displayed and when any user clicks on the image, they will be redirected to the products page.
-The view button on the bottom of the cards also has the same functionality.
-Similarly, when a user clicks on the sellers name, they will be redirected to the seller profiles page. 
-Additionally, the rating displayed on the cards is based on the aggregate rating from all the users who rated the product.
+When a user is logged in, the products that match the users preferences will be displayed on the first row. When a user is not logged in, the products that have been recently added to the database will be displayed. 
+
+The homepage has product focused cards which display the most appropriate or most relevant information that would be matter to a user exploring the products on the site. The cards contain information like product name, product seller name, the current rating of the product, price. An image of the product is also displayed and when any user clicks on the image, they will be redirected to the products page. The view button on the bottom of the cards also has the same functionality. Similarly, when a user clicks on the sellers name, they will be redirected to the seller profiles page. Additionally, the rating displayed on the cards is based on the aggregate rating from all the users who rated the product.
  
 
 ### Product Categories
