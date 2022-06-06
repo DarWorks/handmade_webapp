@@ -118,7 +118,7 @@ def preferencesQueryHelper(p1, p2, p3):
     # randomize product order
     random.shuffle(l)
     # only return 4 products or less
-    return l[:4]
+    return l[:3]
 
 
 def id_lister(l):
@@ -201,7 +201,7 @@ def get_index_data():
         isPersonalized = False
 
     # Queries for displaying products-
-    newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 4)).as_list()
+    newProducts = db(db.products).select(orderby=~db.products.id, limitby=(0, 3)).as_list()
 
     # user session variables to be used in index.html
     display = False
@@ -228,7 +228,7 @@ def get_index_data():
             firstProductRow = preferencesQueryHelper(l1, l2, l3)
 
     # Queries for displaying 2nd row-
-    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 4)).as_list()
+    trendingProducts = db(db.products).select(orderby='<random>', limitby=(0, 3)).as_list()
 
     # calls helper function to add product link
     productAndSellerLinkHelper(trendingProducts)
