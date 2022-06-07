@@ -38,16 +38,17 @@
 
 .chat-text {
     text-align: left;
-  }
-
-.message-seller {
-  background: #73A5C6;
-  color: white;
 }
 
-.message-buyer {
-  background: #F1F0F0;
-  color: black;
+.responsiveCard {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: .4s;
+}
+
+.responsiveCard:hover{
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translate(0px, -8px);
+    transition: .6s;
 }
 
 </style>
@@ -118,43 +119,60 @@
           [[if isPersonalized and isContractor:]]
             <center>
             <br />
-          <button @click="chatButtonClicked = !chatButtonClicked" class="button chat-button is-success">Chat with Seller</button>
+          <button @click="set_add_status(true)" class="button chat-button is-success">Chat with Seller</button>
 
           <br />
-                <div v-if="chatButtonClicked">
-            <h1 class="subtitle subtitle-margin mt-6">Chat</h1>
-            <div class="field">
-              <div class="control is-small">
-                <div class="columns block is-mobile">
-                  <div class="column is-two-thirds">
-                    <input class="input is-small" v-model="new_chat" @click="can_chat" type="text"
-                      placeholder="Type something">
-                  </div>
-                  <div class="column is-one-third">
-                    <button class="button is-primary" @click="add_chat">Enter</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <div v-if="chatButtonClicked" class="mt-6">
 
-            <div v-for="chat in chats" class="block">
-              <div class="columns block is-mobile">
-                <div class="column is-one-quarter">
+                    <button class="button mb-6 is-link responsiveCard" @click="scrollBottom()">
+                <span>Scroll to Bottom to chat</span> <span class="icon is-small">
+                <i class="fa fa-arrow-down fa-cog"></i></span>
+             </button>
+
+            <h1 class="subtitle subtitle-margin">Chat-</h1>
+
+
+            <div v-for="chat in chats" class="block mt-6">
+              <div class="columns block is-mobile mt-6">
+                <div class="column is-half">
                   <div class="card">
                     <div class="card-image">
                       <figure class="image is-1by1">
                         <img :src="chat.profile_pic">
                       </figure>
                     </div>
+                      <div v-if="chat.isProfileOwner === true"> <a :href="chat.profile_link">@{{chat.username}} (seller)</a></div>
+                        <div v-else><a :href="chat.profile_link">@{{chat.username}}</a></div>
                   </div>
                 </div>
-                <div class="column is-two-quarters chat-text">
+                <div class="column is-full chat-text">
                     <div v-if="chat.isProfileOwner === true" class="message-seller">
-                            <a :href="chat.profile_link">@{{chat.username}} (seller)</a> {{chat.text}}
+                        <div class="notification is-link">
+                        <p class="has-text-right has-text-white"> {{chat.text}} </p>
+                            </div>
                         </div>
                     <div v-else class="message-buyer">
-                        <a :href="chat.profile_link">@{{chat.username}}</a> {{chat.text}}
+                        <div class="notification is-primary">
+                        <p class="has-text-right has-text-black"> {{chat.text}} </p>
+                        </div>
                     </div>
+                </div>
+              </div>
+            </div>
+
+                    <div class="field">
+              <div class="control is-small">
+                <div class="columns block is-mobile">
+                  <div class="column is-two-thirds">
+                    <input class="input" v-model="new_chat" @click="can_chat" type="text"
+                      placeholder="Type something">
+
+                  </div>
+                  <div class="column is-full">
+                     <button class="button is-primary mr-4" @click="add_chat">Send message</button>
+                      <button @click="set_add_status(false)" class="button is-warning ml-2">
+                      Close Chat</button>
+                  </div>
                 </div>
               </div>
             </div>

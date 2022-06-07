@@ -48,11 +48,21 @@ let init = (app) => {
       }
     };
 
+     app.set_add_status = function (new_status) {
+        app.vue.chatButtonClicked = new_status;
+    };
+
+    app.scrollBottom = function () {
+        window.scrollTo(0,document.body.scrollHeight);
+    }
+
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
         add_chat: app.add_chat,
         can_chat: app.can_chat,
+        set_add_status: app.set_add_status,
+        scrollBottom: app.scrollBottom,
     };
 
     // This creates the Vue instance.
