@@ -539,16 +539,17 @@ def profile(username=None):
 @action.uses(db)
 def get_chats(userProfile_id = None):
     assert userProfile_id is not None
-    data = db(db.chats.seller == userProfile_id).select()
+    chat_data = db(db.chats.seller == userProfile_id).select()
     chats = []
-    print(data)
-    for e in data:
-        dbq = db(db.userProfile.id == e.user).select()
+    print(chat_data)
+    for i in chat_data:
+        dbq = db(db.userProfile.id == i.buyer).select()
+        # print(dbq)
         userProfile = dbq.first()
         chats.append({
             'username': userProfile.username,
-            'text': e.text,
-            'profile_pic': userProfile.profile_pic,
+            'text': i.text,
+            # 'profile_pic': userProfile.profile_pic,
             'profile_link': URL('profile', userProfile.username),
         })
     return dict(chats=chats)
