@@ -41,6 +41,7 @@ let init = (app) => {
             axios.get(get_chats_url).then(function (response) {
                 app.vue.chats = response.data.chats
                 app.vue.new_chat = ""
+//              window.location.reload();
             })
           })
         }
@@ -66,7 +67,7 @@ let init = (app) => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
       axios.get(get_chats_url).then(function (response) {
-          app.vue.chats = response.data.chats
+          app.vue.chats = response.data.chats;
       })
     };
 

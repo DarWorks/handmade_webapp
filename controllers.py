@@ -540,18 +540,22 @@ def profile(username=None):
 def get_chats(userProfile_id = None):
     assert userProfile_id is not None
     chat_data = db(db.chats.seller == userProfile_id).select()
-    chats = []
     print(chat_data)
-    for i in chat_data:
-        dbq = db(db.userProfile.id == i.buyer).select()
+
+    chats = []
+
+    for chat_record in chat_data:
+        dbq = db(db.userProfile.id == chat_record.buyer).select()
         # print(dbq)
         userProfile = dbq.first()
         chats.append({
             'username': userProfile.username,
-            'text': i.text,
+            'text': chat_record.text,
             # 'profile_pic': userProfile.profile_pic,
             'profile_link': URL('profile', userProfile.username),
+            'isProfileOwner': chat_record.isProfileOwner,
         })
+        print(chat_record)
     return dict(chats=chats)
 
 
@@ -561,10 +565,17 @@ def post_chat(userProfile_id = None):
     assert userProfile_id is not None
     text = request.json["chat"]
     userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
+
+    if userProfile_id == userProfile.id:
+        flag = True
+    else:
+        flag = False
+
     db.chats.insert(
         text=text,
         seller=userProfile_id,
         buyer=userProfile.id,
+        isProfileOwner=flag,
     )
     return "ok"
 

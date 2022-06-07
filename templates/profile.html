@@ -34,12 +34,22 @@
 .chat-button {
     width: 150px;
     color: white;
-    background-color: red;
   }
 
 .chat-text {
     text-align: left;
   }
+
+.message-seller {
+  background: #73A5C6;
+  color: white;
+}
+
+.message-buyer {
+  background: #F1F0F0;
+  color: black;
+}
+
 </style>
 
 <!-- Body -->
@@ -108,7 +118,7 @@
           [[if isPersonalized and isContractor:]]
             <center>
             <br />
-          <button @click="chatButtonClicked = !chatButtonClicked" class="button chat-button">Chat with Seller</button>
+          <button @click="chatButtonClicked = !chatButtonClicked" class="button chat-button is-success">Chat with Seller</button>
 
           <br />
                 <div v-if="chatButtonClicked">
@@ -139,7 +149,12 @@
                   </div>
                 </div>
                 <div class="column is-two-quarters chat-text">
-                  <a :href="chat.profile_link">@{{chat.username}}</a> {{chat.text}}
+                    <div v-if="chat.isProfileOwner === true" class="message-seller">
+                            <a :href="chat.profile_link">@{{chat.username}} (seller)</a> {{chat.text}}
+                        </div>
+                    <div v-else class="message-buyer">
+                        <a :href="chat.profile_link">@{{chat.username}}</a> {{chat.text}}
+                    </div>
                 </div>
               </div>
             </div>

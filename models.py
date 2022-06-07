@@ -101,6 +101,7 @@ db.define_table(
     'chats',
     Field('seller', 'reference userProfile', requires=IS_NOT_EMPTY()),
     Field('buyer', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('isProfileOwner', 'boolean', requires=IS_NOT_EMPTY()),
     Field('text', requires=IS_NOT_EMPTY()),
 )
 
