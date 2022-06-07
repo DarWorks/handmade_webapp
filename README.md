@@ -72,7 +72,7 @@ Users also have profile pages. The profile page includes the username of the use
 
 A signed user can sell a crafted or unique item from the Profile page or the Home page by listing it for sale on the Handmade Platform.  With this page, the user can input information relating to the item they want to put up for sale.  Input such as Product name, type, description, quantity, price, and images are collected.  The user can choose up to four files to use in their product listing.  Each of these input tags is important and plays a crucial role in the website functionality; therefore, if a user does not provide a piece of information for any of these fields, the page prompts them to do so before allowing them to submit.  Once submitted, the user is free to return to their profile page.  
 
-### Messaging
+### Messaging (not in production) (see branch messaginglinking) 
 
 Our website also has a system that allows for users to connect with a seller that does contract art in which the seller and all buyers can communicate with each other to buy custom art. This is a feature that a seller can gain during personalization and the messaging system that connects the buyers to the seller is employed on the sellers profile page. The messaging system has all buyers and the seller connected to one message board.
 
