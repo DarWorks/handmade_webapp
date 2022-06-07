@@ -571,6 +571,10 @@ def post_chat(userProfile_id = None):
     else:
         flag = False
 
+    # to handle weird text
+    if ' ' not in text and len(text) > 27:
+        text = text[:27]
+
     db.chats.insert(
         text=text,
         seller=userProfile_id,
