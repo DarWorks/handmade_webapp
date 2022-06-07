@@ -30,6 +30,16 @@
   position: absolute;
   right: 0;
 }
+
+.chat-button {
+    width: 150px;
+    color: white;
+    background-color: red;
+  }
+
+.chat-text {
+    text-align: left;
+  }
 </style>
 
 <!-- Body -->
@@ -97,9 +107,43 @@
 
           [[if isPersonalized and isContractor:]]
             <center>
-              <a class="button is-danger" href="">
-                <span>Chat</span>
-              </a>
+            <br />
+          <button @click="chatButtonClicked = !chatButtonClicked" class="button chat-button">Chat with Seller</button>
+
+          <br />
+                <div v-if="chatButtonClicked">
+            <h1 class="subtitle subtitle-margin mt-6">Chat</h1>
+            <div class="field">
+              <div class="control is-small">
+                <div class="columns block is-mobile">
+                  <div class="column is-two-thirds">
+                    <input class="input is-small" v-model="new_chat" @click="can_chat" type="text"
+                      placeholder="Type something">
+                  </div>
+                  <div class="column is-one-third">
+                    <button class="button is-primary" @click="add_chat">Enter</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-for="chat in chats" class="block">
+              <div class="columns block is-mobile">
+                <div class="column is-one-quarter">
+                  <div class="card">
+                    <div class="card-image">
+                      <figure class="image is-1by1">
+                        <img :src="chat.profile_pic">
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-two-quarters chat-text">
+                  <a :href="chat.profile_link">@{{chat.username}}</a> {{chat.text}}
+                </div>
+              </div>
+            </div>
+          </div>
             </center>
           [[pass]]
 
@@ -161,6 +205,12 @@
 <!-- Loads the index-specific js for Vue -->
 <script>
   let my_callback_url = "[[=XML(my_callback_url)]]";
+  let get_chats_url = "[[=XML(get_chats_url)]]";
+  let post_chat_url = "[[=XML(post_chat_url)]]";
+  let login_url = "[[=login_url]]";
+  let personalization_url = "[[=personalization_url]]";
+  let isAuthenticated = [[=isAuthenticated]];
+  let hasUsername = [[=hasUsername]];
 </script>
 <script src="js/profile.js"></script>
 [[end]]

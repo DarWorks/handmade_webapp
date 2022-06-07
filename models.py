@@ -98,10 +98,10 @@ db.define_table(
 )
 
 db.define_table(
-    'chat',
-    Field('user1', 'reference userProfile', requires=IS_NOT_EMPTY()),
-    Field('user2', 'reference userProfile', requires=IS_NOT_EMPTY()),
-    Field('text', requires=IS_NOT_EMPTY())
+    'chats',
+    Field('seller', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('buyer', 'reference userProfile', requires=IS_NOT_EMPTY()),
+    Field('text', requires=IS_NOT_EMPTY()),
 )
 
 db.commit()

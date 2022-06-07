@@ -10,6 +10,9 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
+        chatButtonClicked: false,
+        new_chat: "",
+        chats: [],
     };
 
     app.enumerate = (a) => {
@@ -19,10 +22,36 @@ let init = (app) => {
         return a;
     };
 
+    app.can_chat = function () {
+      if (!isAuthenticated) {
+       window.location.href = login_url;
+       return false;
+     } else if (!hasUsername) {
+       window.location.href = personalization_url + "?reason=Please+select+a+username+before+you+can+chat";
+       return false;
+     }
+     return true;
+    }
+
+    app.add_chat = function () {
+      if (app.vue.can_chat()) {
+        if (app.vue.new_chat.trim().length > 0) {
+          let data = {"chat": app.vue.new_chat};
+          axios.post(post_chat_url, data).then(function (response) {
+            axios.get(get_chats_url).then(function (response) {
+                app.vue.chats = response.data.chats
+                app.vue.new_chat = ""
+            })
+          })
+        }
+      }
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        add_chat: app.add_chat,
+        can_chat: app.can_chat,
     };
 
     // This creates the Vue instance.
@@ -36,6 +65,9 @@ let init = (app) => {
     app.init = () => {
       // Put here any initialization code.
       // Typically this is a server GET call to load the data.
+      axios.get(get_chats_url).then(function (response) {
+          app.vue.chats = response.data.chats
+      })
     };
 
     // Call to the initializer.

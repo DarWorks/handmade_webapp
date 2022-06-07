@@ -489,6 +489,7 @@ def profile(username=None):
     assert username is not None
     user = auth.get_user()
     userProfile = db(db.userProfile.username == username).select().first()
+
     if userProfile is None:
         return "404 profile not found"
     isAccountOwner = False
@@ -498,7 +499,15 @@ def profile(username=None):
         u = db(db.userProfile.user_email == get_user_email()).select().first()
         if u is not None and u.username == username:
             isAccountOwner = True
-    
+
+    hasUsername = False
+    if auth.get_user():
+        u = db(db.userProfile.user_email == get_user_email()).select().first()
+        hasUsername = (u is not None) and (u.username is not None) and (len(u.username) > 0)
+        if hasUsername:
+            pass
+
+    print(db(db.chats).select().as_list())
     selling = list(map(lambda x: dict(
         id=x["id"],
         seller=db(db.userProfile.id==x["sellerid"]).select().first().username,
@@ -518,9 +527,45 @@ def profile(username=None):
         ),
         selling1 = selling[len(selling) // 2:],
         selling2 = selling[:len(selling) // 2],
-        get_chat_url=URL('comments', currentUser.id),
-        post_chat_url=URL('comment', currentUser.id),
+        get_chats_url=URL('chats', userProfile.id),
+        post_chat_url=URL('chat', userProfile.id),
+        login_url=URL("auth", "login"),
+        personalization_url=URL("add_user_personalization"),
+        isAuthenticated="true" if auth.get_user() else "false",
+        hasUsername="true" if hasUsername else "false",
     )
+
+@action('chats/<userProfile_id:int>', method=['GET'])
+@action.uses(db)
+def get_chats(userProfile_id = None):
+    assert userProfile_id is not None
+    data = db(db.chats.seller == userProfile_id).select()
+    chats = []
+    print(data)
+    for e in data:
+        dbq = db(db.userProfile.id == e.user).select()
+        userProfile = dbq.first()
+        chats.append({
+            'username': userProfile.username,
+            'text': e.text,
+            'profile_pic': userProfile.profile_pic,
+            'profile_link': URL('profile', userProfile.username),
+        })
+    return dict(chats=chats)
+
+
+@action('chat/<userProfile_id:int>', method=['POST'])
+@action.uses(db, auth.user)
+def post_chat(userProfile_id = None):
+    assert userProfile_id is not None
+    text = request.json["chat"]
+    userProfile = db(db.userProfile.user_email == get_user_email()).select().first()
+    db.chats.insert(
+        text=text,
+        seller=userProfile_id,
+        buyer=userProfile.id,
+    )
+    return "ok"
 
 @action('add_product/<username>')
 @action.uses('add_product.html', db, auth, url_signer.verify())
